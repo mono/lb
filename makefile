@@ -1,6 +1,6 @@
 
 lb.exe: lb.cs
-	mcs -g lb.cs -out:lb.exe -r:RSS.NET -r:System.Web
+	mcs -g lb.cs -out:lb.exe -r:RSS.NET.dll -r:System.Web
 
 b: lb.exe
 	mono --debug lb.exe

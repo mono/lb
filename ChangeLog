@@ -1,0 +1,8 @@
+2003-11-26  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* template: Fixed it so it validates against validator.w3.org
+	* lb.cs: Ditto
+	* makefile: Use the RSS.NET.dll supplied
+	* RSS.NET.dll: Added
+	* valid-xhtml10.png: Added
+

@@ -228,9 +228,9 @@ class Blog {
 	{
 		DayEntry d = (DayEntry) entries [idx];
 
-		string anchor = HttpUtility.UrlEncode (d.Date.ToString ());
+		string anchor = HttpUtility.UrlEncode (d.Date.ToString ()).Replace ('%','-').Replace ('+', '-');
 		o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
-		o.WriteLine ("<h2><a href=\"{2}{0}\" class=\"entryTitle\">{1}</a> <font size=-2>(<a href=\"{2}{0}\">Permalink</a>)</font></h2>",
+		o.WriteLine ("<h2><a href=\"{2}{0}\" class=\"entryTitle\">{1}</a> <font size=\"-2\">(<a href=\"{2}{0}\">Permalink</a>)</font></h2>",
 			     d.PermaLink, d.Caption, blog_base);
 		o.WriteLine (d.Body);
 	}
