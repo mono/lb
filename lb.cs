@@ -12,6 +12,10 @@
 //      @BLOG_ENTRIES@
 //          The blob entries rendered
 //
+// TODO:
+//   Add images, so I can do:
+//   @image file
+//   @caption Caption
 //
 
 using System;
@@ -173,7 +177,7 @@ class DayEntry : IComparable {
 					continue;
 				}
 				if (!output){
-					if (line == "<!--start--!>"){
+					if (line == "<!--start-->"){
 						output = true;
 						r.Append (String.Format ("<h3>{0}: (<a href=\"{2}{1}\">Article Permalink</a>)</h3>", caption, article_file, blog_base));
 					}
@@ -249,7 +253,7 @@ class Blog {
 	void RenderArticleList (StreamWriter o)
 	{
 		foreach (Article a in articles){
-			o.WriteLine ("<a href=\"{0}\">{1}</a><p>", a.url, a.caption);
+			o.WriteLine ("<a href=\"{0}\">{1}</a><br>", a.url, a.caption);
 		}
 	}
 	

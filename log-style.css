@@ -1,20 +1,18 @@
 
-  div#entries {
-       font-size: 12pt;
+  #entries {
+        font-size: 12pt;
 	margin-left: 2em;
-	margin-right: 35%;
-	float: left;
+	margin-right: 140pt;
   }
 
-  div#entries h2 {
+  #entries h2 {
 	background-color: #ddddff;
   }
 
   #sidebar {
-	position: absolute;
+	float: right;
 	right:10px;
-	left: 70%;
-	top: 6em;
+	width: 120pt;
   }
 
   #title {
@@ -36,4 +34,15 @@ color                 : 003382;
 A.entryTitle:visited {
 text-decoration       : none;
 color: black;
+}
+
+.code-xml, .code-csharp
+{
+	margin:15px;
+	padding:15px;
+	font-size: small;
+	font-family: "Courier New", Courier;
+	background:whitesmoke;
+	border: solid 1px silver;
+	line-height:110%;
 }
