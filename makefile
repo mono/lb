@@ -13,4 +13,6 @@ clean:
 push: b
 	chmod 644 archive/*/*.html
 	chmod 644 *html *rss2 *php
-	rsync -pr -v --rsh=ssh texts archive prettyprint.js log-style.css miguel.rss2 activity-log.php all.html primates.ximian.com:public_html
+	rsync -pr -v --rsh=ssh texts archive prettyprint.js	\
+	log-style.css *.rss2 *.php all.html 			\
+	primates.ximian.com:public_html

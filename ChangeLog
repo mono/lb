@@ -9,6 +9,8 @@
 	* config.cs: Ditto
 	* config.xml: Ditto
 	* TODO: Ditto
+	* makefile: Made more readable
+	* .cvsignore: Added, ignore *.exe files
 
 2003-11-27  Jackson Harper <jackson@ximian.com>
 
