@@ -37,6 +37,9 @@
 	<a href="http://primates.ximian.com/~duncan/blog/index.rdf"><img align="center" src="@BASEDIR@xml.gif"></a>
 	<a href="http://primates.ximian.com/~duncan/blog">Duncan Mak</a>
 	<br>
+	<a href="http://primates.ximian.com/~gonzalo/mono/blog/index.rss2"><img align="center" src="@BASEDIR@xml.gif"></a>
+	<a href="http://primates.ximian.com/~gonzalo/mono/blog/">Gonzalo Paniagua</a>
+	<br>
 	<a href="http://www.jacksonh.net/jackson/blog/jackson.rss2"><img align="center" src="@BASEDIR@xml.gif"></a> 
 	<a href="http://www.jacksonh.net/jackson/blog/">Jackson Harper</a>
 	<br>
@@ -51,7 +54,6 @@
 	<br>
 	<a href="http://pages.infinit.net/ctech/poupou.rss"><img align="center" src="@BASEDIR@xml.gif"></a>
 	<a href="http://pages.infinit.net/ctech/poupou.html">Sebastien Pouliot</a>
-
 
 <p>
 <a href="http://msdn.microsoft.com/events/pdc"><img src="http://weblog.ikvm.net/pdc2003.gif"></a>
