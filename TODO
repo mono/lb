@@ -1,0 +1,9 @@
+This TODO should not exist, since Lame Blog should not exist in the first 
+place.  Anyways, here it is:
+
+* Individual entries link to all.html, which is one directory above.
+
+* Probably use the template system used in monologue
+
+* Use an XmlSerializer to load config data, instead of being hardcoded
+  to use by miguel only
