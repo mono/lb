@@ -1,39 +1,85 @@
-
-  #entries {
-        font-size: 12pt;
-	margin-left: 2em;
-	margin-right: 140pt;
-  }
-
-  #entries h2 {
-	background-color: #ddddff;
-  }
-
-  #sidebar {
-	float: right;
-	right:10px;
-	width: 120pt;
-  }
-
-  #title {
-	background-color: #ccccff;
-  }
-
-  .code { border-style: solid; background: #ddddff;
-	border-width: 1px; padding: 2pt; }
-
-  .shell { border-style: solid; background: #000000; color: #bbbbbb;
-	#777777; border-width:
-	1px; padding: 2pt; }
-
-A.entryTitle:link {
-text-decoration       : none;
-color                 : 003382;
+h1 {
+	color: #efefef;
+	font-size: 14pt;
+	font-family: "Trebuchet MS";
+	border: 0;
+	margin: 0;
+	padding: 1em;
+	background: #666666;
 }
 
-A.entryTitle:visited {
-text-decoration       : none;
-color: black;
+h2, h3, h4, h5, h6 {
+	font-family: Verdana,sans-serif;
+	font-weight: bold;
+	margin: 9pt;
+}
+
+h2 {
+	font-size: 18px;
+}
+
+h3 {
+	font-size: 13px;
+	border-bottom: 2px solid #dddddd;
+}
+
+h3 a {
+	color: black;
+	text-decoration: none;
+}
+
+body, table {
+	background-color: #ffffff;
+	font-family: Verdana, sans-serif; font-size: 12px;
+	color: black;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.blogentry {
+	margin-left: 2em;
+	margin-right: 2em;
+}
+
+.blogentry h1, .blogentry h2, .blogentry h3 {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}	
+
+img {
+	border: 0;
+	vertical-align: top;
+}
+
+.code, .xml , .script
+{
+	margin:15px;
+	padding:15px;
+	font-size: small;
+	font-family: "Courier New", Courier;
+	background:whitesmoke;
+	border: solid 1px silver;
+	line-height:110%;
+}
+
+#blogs { 
+	margin-left: 2em;
+	margin-right: 140pt;
+}
+#bloggers {
+	float: right;
+	width: 120pt;
+}
+
+#bloggers h2 {
+	margin-left:0;
+	font-size: 12px;
+}
+#bloggers ul {
+	padding:0;
+	list-style-type:none;
 }
 
 .code-xml, .code-csharp

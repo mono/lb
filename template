@@ -1,30 +1,24 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-<head>
-<title>Miguel de Icaza's Activity Log</title>
-<link rel="stylesheet" href="@BASEDIR@log-style.css" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="@BASEDIR@miguel.rss2">
-<script src='prettyprint.js' type='text/javascript'> </script>
-</head>
-<body onload='paintColors();'>
-<div id="title"><h1>Miguel de Icaza's web log</h1></div>
+	<head>
+		<title>@TITLE@</title>
+		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css' />
+		<script src='@BASEDIR@prettyprint.js' type='text/javascript'>
+		</script>
+	</head>
+	
+	<body onload='paintColors();'>
+		<h1>@DESCRIPTION@</h1>
+		
+		<div id='bloggers'>
+			<h2>RSS</h2>
+		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif"></a>
 
-<div id="sidebar">
-<img src="http://www.go-mono.com/images/mono-contributor-static.gif" alt="mono-contributor-static.gif" />
-<p />
-<a href="miguel.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a> RSS feed<br />
-
-<p />Email: <a href="mailto:miguel@ximian.com">miguel@ximian.com</a>
-
-<p><b>Docs:</b></p>
-@BLOG_ARTICLES@
-
-<p><b>Mono Blogs:</b></p>
-
-	<a href="http://codeblogs.ximian.com/blogs/benm/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
-	<a href="http://codeblogs.ximian.com/blogs/benm/">Ben Maurer</a>
-	<br />
-	<a href="http://ada.fciencias.unam.mx/~olopez/jscript/cesar.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+                           			
+			<h2>Bloggers</h2>
+			<a href="http://codeblogs.ximian.com/blogs/benm/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+                                <a href="http://codeblogs.ximian.com/blogs/benm/">Ben Maurer</a>
+                                <br />
+                                <a href="http://ada.fciencias.unam.mx/~olopez/jscript/cesar.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://ada.fciencias.unam.mx/~olopez/jscript/">Cesar Nataren</a>
 	<br />
 	<a href="http://primates.ximian.com/~duncan/blog/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
@@ -47,17 +41,13 @@
 	<br />
 	<a href="http://pages.infinit.net/ctech/poupou.rss"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://pages.infinit.net/ctech/poupou.html">Sebastien Pouliot</a>
-</div>
-
-
-<div id="entries">
+			<p>
+			<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif"></a>
+		</div>
+		
+<div id='blogs'>
 @BLOG_ENTRIES@
-
-
-<p>
-<a href="all.html">All entries</a>
 </div>
-</p>
-
-</body>
+	</body>
 </html>
+

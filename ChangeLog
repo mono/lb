@@ -1,3 +1,9 @@
+2003-11-29  Jackson Harper <jackson@ximian.com>
+
+	* lb.cs: Some changes to get things going with the new template.
+	* template: Use monolog template. Use configuration settings
+	* log-style.css: Use monolog style
+	
 2003-11-27  Martin Willemoes Hansen  <mwh@sysrq.dk>
 
 	* valid-xhtml10.png: Removed

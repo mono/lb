@@ -9,8 +9,8 @@
 //
 // Template macros:
 //
-//      @BLOG_ENTRIES@
-//          The blob entries rendered
+//	@BLOG_ENTRIES@
+//	    The blob entries rendered
 //
 // TODO:
 //   Add images, so I can do:
@@ -102,6 +102,7 @@ class DayEntry : IComparable {
 	void Load (StreamReader i, bool is_html)
 	{
 		bool caption_found = false;
+		bool in_pre = false;
 		StringBuilder sb = new StringBuilder ();
 		string s;
 		
@@ -126,10 +127,14 @@ class DayEntry : IComparable {
 				}
 			}
 			if (!is_html){
-				if (s == "")
+				if (s == "" && !in_pre)
 					sb.Append ("<p>");
 				else if (s.StartsWith ("@"))
 					sb.Append (String.Format ("<h1>{0}</h1>", s.Substring (1)));
+				else if (s.StartsWith ("#pre"))
+					in_pre = true;
+				else if (s.StartsWith ("#endpre"))
+					in_pre = false;
 				else
 					sb.Append (s);
 			} else {
@@ -251,9 +256,9 @@ class Blog {
 
 		string anchor = HttpUtility.UrlEncode (d.Date.ToString ()).Replace ('%','-').Replace ('+', '-');
 		o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
-		o.WriteLine ("<h2><a href=\"{2}{0}\" class=\"entryTitle\">{1}</a> <font size=\"-2\">(<a href=\"{2}{0}\">Permalink</a>)</font></h2>",
+		o.WriteLine ("<h3><a href=\"{2}{0}\" class=\"entryTitle\">{1}</a> <font size=\"-2\">(<a href=\"{2}{0}\">Permalink</a>)</font></h3>",
 			     d.PermaLink, d.Caption, blog_base);
-		o.WriteLine (d.Body);
+		o.WriteLine ("<div class='blogentry'>" + d.Body + "</div>");
 	}
 		     
 	void Render (StreamWriter o, int start, int end, string blog_base)
@@ -293,6 +298,9 @@ class Blog {
 
 				default:
 					line = line.Replace ("@BASEDIR@", blog_base);
+					line = line.Replace ("@TITLE@", config.Title);
+					line = line.Replace ("@DESCRIPTION@", config.Description);
+					line = line.Replace ("@RSSFILENAME@", config.RSSFileName);
 					w.WriteLine (line);
 					break;
 				}
