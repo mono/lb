@@ -151,8 +151,8 @@ class DayEntry : IComparable {
 					
 					string filename = s.Substring (5, idx-5);
 					string caption = s.Substring (idx + 1);
-					sb.Append (String.Format ("<a href=\"{0}/pic.php?name={1}&caption={2}><img border=0 src=\"{1}\"></a>", blog_base, filename, caption));
-					break;
+					sb.Append (String.Format ("<p><center><a href=\"{0}pic.php?name={1}&caption={2}\"><img border=0 src=\"{0}/pictures/small-{1}\"></a><p>{2}</center></p>", blog_base, filename, caption));
+					continue;
 					
 				}
 				sb.Append (s);
