@@ -137,6 +137,18 @@ class DayEntry : IComparable {
 					string c;
 					sb.Append (Include (s.Substring (9), out c));
 					continue;
+				} else if (s.StartsWith ("#pic")){
+					int idx = s.IndexOf (",");
+					if (idx == -1){
+						Console.WriteLine ("Wrong #pic command");
+						continue;
+					}
+					
+					string filename = s.Substring (5, idx-5);
+					string caption = s.Substring (idx + 1);
+					sb.Append (String.Format ("<a href=\"{0}/pic.php?name={1}&caption={2}><img border=0 src=\"{1}\"></a>", blog_base, filename, caption));
+					break;
+					
 				}
 				sb.Append (s);
 			}
