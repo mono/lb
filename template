@@ -12,6 +12,8 @@
 		<div id='bloggers'>
 			<h2>RSS</h2>
 		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
+			<h2>Atom</h2>
+		        <a href="@BASEDIR@@RSSFILENAME@.atom">Atom</a>
 
 <p>Email: <a href="mailto:miguel@ximian.com">miguel@ximian.com</a>
 
@@ -46,6 +48,8 @@
 	<a href="http://pages.infinit.net/ctech/poupou.rss"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://pages.infinit.net/ctech/poupou.html">Sebastien Pouliot</a>
 			<p>
+			<a href="http://www.usenix.org/events/usenix04/"><img src="http://www.usenix.org/events/usenix04/art/usenix04_button.gif">
+			</a>
 			<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif"></a>
 		</div>
 		

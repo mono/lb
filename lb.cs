@@ -28,6 +28,8 @@ using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using Rss;
+using Atom.Core;
+using Atom;
 
 class DayEntry : IComparable {
 	public DateTime Date;
@@ -376,7 +378,64 @@ class Blog {
 		w.Write (channel);
 		w.Close ();
 	}
+
+	//
+	// Atom support is still fairly early, I do not know how to use it completely yet
+	//
+	AtomFeed MakeAtomFeed ()
+	{
+		AtomFeed feed = new AtomFeed ();
+		feed.Title = new AtomContentConstruct("title", config.Title);
+		string url = config.BlogWebDirectory + config.BlogFileName;
+		feed.Author = new AtomPersonConstruct("contributor",
+						      config.Copyright, new Uri (url), config.ManagingEditor);
 	
+		feed.Contributors.Add (new AtomPersonConstruct("contributor",
+							       config.Copyright, new Uri (url), config.ManagingEditor));
+		feed.Tagline = new AtomContentConstruct("tagline", config.Description);
+		feed.Id = new Uri (url);
+		feed.Copyright = new AtomContentConstruct("copyright", "Copyright © 2003, 2004");
+		feed.Modified = new AtomDateConstruct("modified", DateTime.Now,
+						      TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now));
+
+		return feed;
+	}
+
+	public void RenderAtom (string output, int start, int end)
+	{
+		AtomFeed feed = MakeAtomFeed();
+
+		Uri url = new Uri(config.BlogWebDirectory + config.BlogFileName);
+		
+		for (int i = start; i < end; i++){
+			int idx = entries.Count - i - 1;
+			if (idx < 0)
+				continue;
+			
+			DayEntry d = (DayEntry) entries [idx];
+
+			AtomEntry entry = new AtomEntry ();
+			entry.Title = new AtomContentConstruct("title", d.Caption);
+			entry.Modified = new AtomDateConstruct("modified", d.Date, TimeZone.CurrentTimeZone.GetUtcOffset (d.Date));
+			entry.Issued = new AtomDateConstruct("issued", d.Date, TimeZone.CurrentTimeZone.GetUtcOffset (d.Date));
+			entry.Summary = new AtomContentConstruct("summary", d.Body);
+			entry.Contents.Add (new AtomContent (d.Body));
+			entry.Contributors.Add(new AtomPersonConstruct("contributor",
+									 config.Copyright, url, config.ManagingEditor));
+			entry.Id = new Uri (config.BlogWebDirectory + "all.html#" + HttpUtility.UrlEncode (d.Date.ToString ()));
+			
+			feed.Entries.Add (entry);
+		}
+
+		using (FileStream o = File.Create (output))
+			feed.Save (o);
+	}
+
+	public void RenderRSS (string output, int start, int end)
+	{
+		RenderRSS (RssVersion.RSS20, output + ".rss2", start, end);
+	}
+
 	public class Article {
 		public string url, caption;
 
@@ -394,10 +453,6 @@ class Blog {
 		articles.Add (new Article (url, caption));
 	}
 	
-	public void RenderRSS (string output, int start, int end)
-	{
-		RenderRSS (RssVersion.RSS20, output + ".rss2", start, end);
-	}
 
 }
 
@@ -414,7 +469,8 @@ class LB {
 		b.RenderArchive ("template");
 		
 		b.RenderRSS (config.RSSFileName, 0, 30);
-
+		b.RenderAtom (config.RSSFileName + ".atom", 0, 30);
+		
 		File.Copy ("log-style.css", "texts/log-style.css", true);
 	}
 }
