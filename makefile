@@ -5,6 +5,9 @@ lb.exe: lb.cs
 b: lb.exe
 	mono --debug lb.exe
 
+clean:
+	rm -f *.exe
+
 push: b
 	chmod 644 archive/*/*.html
 	chmod 644 *html *rss2 *php
