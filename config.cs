@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 
+[XmlRoot("config")]
 public class Config {
 	[XmlAttribute] public string Author;
 	[XmlAttribute] public string BlogDirectory;
