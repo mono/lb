@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>@TITLE@</title>
-		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css' />
+		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css'>
 		<script src='@BASEDIR@prettyprint.js' type='text/javascript'>
 		</script>
 	</head>
@@ -11,7 +11,7 @@
 		
 		<div id='bloggers'>
 			<h2>RSS</h2>
-		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif"></a>
+		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
 
 <p>Email: <a href="mailto:miguel@ximian.com">miguel@ximian.com</a>
 

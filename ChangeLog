@@ -1,6 +1,7 @@
 2003-12-09  Martin Willemoes Hansen  <mwh@sysrq.dk>
 
 	* valid-html40.png: Removed, not used anymore
+	* template: fixed to be HTML 4.01 valid
 
 2003-11-29  Jackson Harper <jackson@ximian.com>
 
