@@ -1,0 +1,11 @@
+<config
+Author="Miguel de Icaza (miguel@ximian.com)"
+BlogDirectory="/home/miguel/activity"
+BlogFileName="activity-log.php"
+BlogWebDirectory="http://primates.ximian.com/~miguel/"
+Copyright="Miguel de Icaza"
+Description="Miguel de Icaza's web log"
+ManagingEditor="miguel@ximian.com"
+Title="Miguel de Icaza"
+RSSFileName="miguel"
+/>

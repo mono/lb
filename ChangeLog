@@ -5,6 +5,10 @@
 	* template: Added correct header, ie not xhtml but html. 
 	  Corrected some xhtml to html bugs.
 	  Added link to check if correct html is used.
+	* lb.cs: Configuration data are now loaded from config.xml
+	* config.cs: Ditto
+	* config.xml: Ditto
+	* TODO: Ditto
 
 2003-11-27  Jackson Harper <jackson@ximian.com>
 

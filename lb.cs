@@ -25,6 +25,8 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Globalization;
 using System.Web;
+using System.Xml;
+using System.Xml.Serialization;
 using Rss;
 
 class DayEntry : IComparable {
@@ -33,13 +35,14 @@ class DayEntry : IComparable {
 	public string Caption;
 	Blog blog;
 	
-	public const string blog_base = "http://primates.ximian.com/~miguel/";
+	public string blog_base;
 	const string code_style = "style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
 	const string shell_style = "style=\"border-style: solid; background: #000000; color: #777777; border-width: 1px; padding: 2pt;\"";
 
 	public DayEntry (Blog blog, string file)
 	{
 		this.blog = blog;
+		blog_base = blog.config.BlogWebDirectory;
 		ParseDate (file);
 
 		using (FileStream i = File.OpenRead (file)){
@@ -200,6 +203,7 @@ class DayEntry : IComparable {
 }
 
 class Blog {
+	public Config config;
 	ArrayList entries = new ArrayList ();
 
 	public int Entries {
@@ -208,9 +212,10 @@ class Blog {
 		}
 	}
 	
-	public Blog ()
+	public Blog (Config config)
 	{
-		string [] years = Directory.GetDirectories ("/home/miguel/activity");
+		this.config = config;
+		string [] years = Directory.GetDirectories (config.BlogDirectory);
 
 		foreach (string year in years){
 			string [] days = Directory.GetFiles (year);
@@ -298,12 +303,12 @@ class Blog {
 	{
 		RssChannel c = new RssChannel ();
 
-		c.Title = "Miguel de Icaza";
-		c.Link = new Uri ("http://primates.ximian.com/~miguel/activity-log.php");
-		c.Description = "Miguel de Icaza's web log";
-		c.Copyright = "Miguel de Icaza";
+		c.Title = config.Title;
+		c.Link = new Uri (config.BlogWebDirectory + config.BlogFileName);
+		c.Description = config.Description;
+		c.Copyright = config.Copyright;
 		c.Generator = "lb#";
-		c.ManagingEditor = "miguel@ximian.com";
+		c.ManagingEditor = config.ManagingEditor;
 		c.PubDate = System.DateTime.Now;
 		
 		return c;
@@ -321,10 +326,10 @@ class Blog {
 			DayEntry d = (DayEntry) entries [idx];
 
 			RssItem item = new RssItem ();
-			item.Author = "Miguel de Icaza (miguel@ximian.com)";
+			item.Author = config.Author;
 			item.Description = d.Body;
 			item.Guid = new RssGuid ();
-			item.Guid.Name = "http://primates.ximian.com/~miguel/all.html#" + HttpUtility.UrlEncode (d.Date.ToString ());
+			item.Guid.Name = config.BlogWebDirectory + "all.html#" + HttpUtility.UrlEncode (d.Date.ToString ());
 			item.Link = new Uri (item.Guid.Name);
 			item.Guid.PermaLink = DBBool.True;
 			item.PubDate = d.Date;
@@ -370,13 +375,15 @@ class LB {
 
 	static void Main ()
 	{
-		Blog b = new Blog ();
+		Config config = (Config) 
+			new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
+		Blog b = new Blog (config);
 
-		b.RenderHtml ("template", "activity-log.php", 0, 30, "");
+		b.RenderHtml ("template", config.BlogFileName, 0, 30, "");
 		b.RenderHtml ("template", "all.html", 0, b.Entries, "");
 		b.RenderArchive ("template");
 		
-		b.RenderRSS ("miguel", 0, 30);
+		b.RenderRSS (config.RSSFileName, 0, 30);
 
 		File.Copy ("log-style.css", "texts/log-style.css", true);
 	}
