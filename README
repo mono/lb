@@ -1,0 +1,37 @@
+This is Lame Blog.
+
+	A small script that I wrote to maintain my blog on the web.  I
+	did not use another blog system, because I had different
+	requirements than other people have.
+
+	I wanted:
+
+		* To support off-line editing.  Since for long periods
+	  	  of time I might not have an internet connection.
+
+		* To be able to edit my blog entries with my choice
+		  editor, not using some integrated tool.
+
+		* To keep my old .txt file format for my entries.
+
+		* To do some minimal processing on the input.
+
+	The script has plenty of data hardcoded, I should make this
+	configurable some day.
+
+	It looks for blog entries in:
+
+		~/activity/YYYY/mmm-dd.{html|txt}
+
+	Ie, for example:
+
+		~/activity/2003/oct-01.html
+
+	For historic reasons, it generates an all.html (compatibility
+	with old permalinks) and also now it generates per-day
+	permalink entries in the archive/ directory.
+
+	The result is then pushed to a server with rsync.
+
+Enjoy,
+Miguel de Icaza (miguel@gnu.org)

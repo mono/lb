@@ -1,0 +1,39 @@
+
+  div#entries {
+       font-size: 12pt;
+	margin-left: 2em;
+	margin-right: 35%;
+	float: left;
+  }
+
+  div#entries h2 {
+	background-color: #ddddff;
+  }
+
+  #sidebar {
+	position: absolute;
+	right:10px;
+	left: 70%;
+	top: 6em;
+  }
+
+  #title {
+	background-color: #ccccff;
+  }
+
+  .code { border-style: solid; background: #ddddff;
+	border-width: 1px; padding: 2pt; }
+
+  .shell { border-style: solid; background: #000000; color: #bbbbbb;
+	#777777; border-width:
+	1px; padding: 2pt; }
+
+A.entryTitle:link {
+text-decoration       : none;
+color                 : 003382;
+}
+
+A.entryTitle:visited {
+text-decoration       : none;
+color: black;
+}
