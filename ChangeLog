@@ -1,7 +1,8 @@
 2003-11-27  Jackson Harper <jackson@ximian.com>
 
 	* template: Close script tag. Fixes rendering with internet
-	explorer.
+	explorer. Put entries below side bar, this fixes the sidebar
+	rendering in internet explorer.
 	
 2003-11-26  Martin Willemoes Hansen  <mwh@sysrq.dk>
 

@@ -9,14 +9,6 @@
 <body>
 <div id="title"><h1>Miguel de Icaza's web log</h1></div>
 
-<div id="entries">
-@BLOG_ENTRIES@
-
-
-<p />
-<a href="all.html">All entries</a>
-</div>
-
 <div id="sidebar">
 <img src="http://www.go-mono.com/images/mono-contributor-static.gif" alt="mono-contributor-static.gif" />
 <p />
@@ -58,6 +50,15 @@
 
 <p />
 <a href="http://msdn.microsoft.com/events/pdc"><img src="http://weblog.ikvm.net/pdc2003.gif" alt="xml.gif" /></a>
+</div>
+
+
+<div id="entries">
+@BLOG_ENTRIES@
+
+
+<p />
+<a href="all.html">All entries</a>
 </div>
 
 <center>
