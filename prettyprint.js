@@ -29,6 +29,16 @@ function paintColors ()
 			format (elems [n], formatXml);
 		}
 	}
+	var elems = document.getElementsByTagName ("pre");
+	for (n=elems.length - 1; n>=0; n--)
+	{
+		if (elems[n].className == "code-csharp") {
+			format (elems [n], formatCs);
+		}
+		else if (elems[n].className == "code-xml") {
+			format (elems [n], formatXml);
+		}
+	}
 }
 
 function format (node, func)

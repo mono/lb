@@ -36,14 +36,19 @@ class DayEntry : IComparable {
 	Blog blog;
 	
 	public string blog_base;
-	const string code_style = "style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
+	const string code_style = "class=\"code\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
+	const string code_csharp_style = "class=\"code-csharp\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
 	const string shell_style = "style=\"border-style: solid; background: #000000; color: #777777; border-width: 1px; padding: 2pt;\"";
 
 	public DayEntry (Blog blog, string file)
 	{
 		this.blog = blog;
 		blog_base = blog.config.BlogWebDirectory;
-		ParseDate (file);
+		try {
+			ParseDate (file);
+		} catch {
+			Console.WriteLine ("Failed to parse date from filename: " + file);
+		}
 
 		using (FileStream i = File.OpenRead (file)){
 			using (StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591))){
@@ -95,7 +100,7 @@ class DayEntry : IComparable {
 			throw new Exception ("Unknown month: " + month_name + " from: " + file);
 		}
 
-		Date = new DateTime (year, month, day, 12, 0, 0);
+		Date = new DateTime (year, month, day, 14, 0, 0);
 		Caption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
 	}
 	
@@ -205,7 +210,7 @@ class DayEntry : IComparable {
 					continue;
 				}
 				line = Regex.Replace (line, "class=\"code\"", code_style);
-				line = Regex.Replace (line, "class=\"code-csharp\"", code_style);
+				line = Regex.Replace (line, "class=\"code-csharp\"", code_csharp_style);
 				line = Regex.Replace (line, "class=\"shell\"", shell_style);
 				r.Append (line);
 				r.Append ("\n");
