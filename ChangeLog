@@ -1,3 +1,7 @@
+2003-12-09  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* valid-html40.png: Removed, not used anymore
+
 2003-11-29  Jackson Harper <jackson@ximian.com>
 
 	* lb.cs: Some changes to get things going with the new template.
