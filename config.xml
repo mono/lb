@@ -1,11 +1,11 @@
 <config
-Author="Miguel de Icaza (miguel@ximian.com)"
+Author="Miguel de Icaza (miguel@novell.com)"
 BlogDirectory="/home/miguel/activity"
 BlogFileName="activity-log.php"
 BlogWebDirectory="http://primates.ximian.com/~miguel/"
 Copyright="Miguel de Icaza"
 Description="Miguel de Icaza's web log"
-ManagingEditor="miguel@ximian.com"
+ManagingEditor="miguel@novell.com"
 Title="Miguel de Icaza"
 RSSFileName="miguel"
 />

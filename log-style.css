@@ -92,3 +92,11 @@ img {
 	border: solid 1px silver;
 	line-height:110%;
 }
+
+.shell { 
+	border-style: solid; background: #000000; color: #bbbbbb;
+	#777777; border-width:
+	1px; padding: 2pt; 
+	margin:15px;
+}
+

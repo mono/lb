@@ -183,7 +183,8 @@ class DayEntry : IComparable {
 		StringBuilder r = new StringBuilder ();
 
 		caption = "";
-		
+
+		Console.WriteLine ("Reading: " + file);
 		using (FileStream i = File.OpenRead (file)){
 			StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591));
 			string line;
@@ -203,8 +204,9 @@ class DayEntry : IComparable {
 					}
 					continue;
 				}
-				line = Regex.Replace (line, "id=\"code\"", code_style);
-				line = Regex.Replace (line, "id=\"shell\"", shell_style);
+				line = Regex.Replace (line, "class=\"code\"", code_style);
+				line = Regex.Replace (line, "class=\"code-csharp\"", code_style);
+				line = Regex.Replace (line, "class=\"shell\"", shell_style);
 				r.Append (line);
 				r.Append ("\n");
 			}

@@ -13,7 +13,11 @@
 			<h2>RSS</h2>
 		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif"></a>
 
-                           			
+<p>Email: <a href="mailto:miguel@ximian.com">miguel@ximian.com</a>
+
+<p><b>Docs:</b></p>
+@BLOG_ARTICLES@
+
 			<h2>Bloggers</h2>
 			<a href="http://codeblogs.ximian.com/blogs/benm/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
                                 <a href="http://codeblogs.ximian.com/blogs/benm/">Ben Maurer</a>
@@ -48,6 +52,8 @@
 <div id='blogs'>
 @BLOG_ENTRIES@
 </div>
+<a href="all.html">All entries</a>
+
 	</body>
 </html>
 
