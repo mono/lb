@@ -38,7 +38,7 @@ class DayEntry : IComparable {
 	public string blog_base;
 	const string code_style = "class=\"code\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
 	const string code_csharp_style = "class=\"code-csharp\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
-	const string shell_style = "style=\"border-style: solid; background: #000000; color: #777777; border-width: 1px; padding: 2pt;\"";
+	const string shell_style = "style=\"border-style: solid; background: #000000; color: #bbbbbb; border-width: 1px; padding: 2pt;\"";
 
 	public DayEntry (Blog blog, string file)
 	{
@@ -100,7 +100,7 @@ class DayEntry : IComparable {
 			throw new Exception ("Unknown month: " + month_name + " from: " + file);
 		}
 
-		Date = new DateTime (year, month, day, 14, 0, 0);
+		Date = new DateTime (year, month, day, 13, 55, 0);
 		Caption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
 	}
 	
@@ -257,25 +257,28 @@ class Blog {
 		entries.Sort ();
 	}
 
-	void Render (StreamWriter o, int idx, string blog_base)
+	static DateTime LastDate = new DateTime (2004, 5, 19, 0, 0, 0);
+	
+	void Render (StreamWriter o, int idx, string blog_base, bool include_daily_anchor)
 	{
 		DayEntry d = (DayEntry) entries [idx];
 
 		string anchor = HttpUtility.UrlEncode (d.Date.ToString ()).Replace ('%','-').Replace ('+', '-');
-		o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
+		if (include_daily_anchor || d.Date < LastDate)
+			o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
 		o.WriteLine ("<h3><a href=\"{2}{0}\" class=\"entryTitle\">{1}</a> <font size=\"-2\">(<a href=\"{2}{0}\">Permalink</a>)</font></h3>",
 			     d.PermaLink, d.Caption, blog_base);
 		o.WriteLine ("<div class='blogentry'>" + d.Body + "</div>");
 	}
 		     
-	void Render (StreamWriter o, int start, int end, string blog_base)
+	void Render (StreamWriter o, int start, int end, string blog_base, bool include_daily_anchor)
 	{
 		for (int i = start; i < end; i++){
 			int idx = entries.Count - i - 1;
 			if (idx < 0)
 				return;
 			
-			Render (o, idx, blog_base);
+			Render (o, idx, blog_base, include_daily_anchor);
 		}
 	}
 
@@ -297,7 +300,7 @@ class Blog {
 			while ((line = s.ReadLine ()) != null){
 				switch (line){
 				case "@BLOG_ENTRIES@":
-					Render (w, start, end, blog_base);
+					Render (w, start, end, blog_base, output == "all.html");
 					break;
 				case "@BLOG_ARTICLES@":
 					RenderArticleList (w);
