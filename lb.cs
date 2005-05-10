@@ -28,8 +28,11 @@ using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using Rss;
+
+#if ATOM
 using Atom.Core;
 using Atom;
+#endif
 
 class DayEntry : IComparable {
 	public DateTime Date;
@@ -42,15 +45,11 @@ class DayEntry : IComparable {
 	const string code_csharp_style = "class=\"code-csharp\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
 	const string shell_style = "style=\"border-style: solid; background: #000000; color: #bbbbbb; border-width: 1px; padding: 2pt;\"";
 
-	public DayEntry (Blog blog, string file)
+	DayEntry (Blog blog, string file)
 	{
 		this.blog = blog;
 		blog_base = blog.config.BlogWebDirectory;
-		try {
-			ParseDate (file);
-		} catch {
-			Console.WriteLine ("Failed to parse date from filename: " + file);
-		}
+		ParseDate (file);
 
 		using (FileStream i = File.OpenRead (file)){
 			using (StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591))){
@@ -62,6 +61,18 @@ class DayEntry : IComparable {
 		}
 	}
 
+	public static DayEntry Load (Blog blog, string file)
+	{
+		DayEntry de = null;
+		
+		try {
+			de = new DayEntry (blog, file);
+		} catch {
+			Console.WriteLine ("Failed to load file: {0}", file);
+		}
+		return de;
+	}
+	
 	void ParseDate (string file)
 	{
 		int p = file.LastIndexOf ("/");
@@ -249,8 +260,10 @@ class Blog {
 			foreach (string file in days){
 				if (!(file.EndsWith (".html") || file.EndsWith (".txt")))
 					continue;
-				
-				entries.Add (new DayEntry (this, file));
+
+				DayEntry de = DayEntry.Load (this, file);
+				if (de != null)
+					entries.Add (de);
 			}
 		}
 
@@ -361,7 +374,7 @@ class Blog {
 			item.Author = config.Author;
 			item.Description = d.Body;
 			item.Guid = new RssGuid ();
-			item.Guid.Name = config.BlogWebDirectory + "all.html#" + HttpUtility.UrlEncode (d.Date.ToString ());
+			item.Guid.Name = config.BlogWebDirectory + d.PermaLink;
 			item.Link = new Uri (item.Guid.Name);
 			item.Guid.PermaLink = DBBool.True;
 			item.PubDate = d.Date;
@@ -382,6 +395,7 @@ class Blog {
 	//
 	// Atom support is still fairly early, I do not know how to use it completely yet
 	//
+#if ATOM
 	AtomFeed MakeAtomFeed ()
 	{
 		AtomFeed feed = new AtomFeed ();
@@ -430,6 +444,7 @@ class Blog {
 		using (FileStream o = File.Create (output))
 			feed.Save (o);
 	}
+#endif
 
 	public void RenderRSS (string output, int start, int end)
 	{
@@ -469,7 +484,9 @@ class LB {
 		b.RenderArchive ("template");
 		
 		b.RenderRSS (config.RSSFileName, 0, 30);
+#if ATOM
 		b.RenderAtom (config.RSSFileName + ".atom", 0, 30);
+#endif
 		
 		File.Copy ("log-style.css", "texts/log-style.css", true);
 	}

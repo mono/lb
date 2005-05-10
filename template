@@ -12,15 +12,14 @@
 		<div id='bloggers'>
 			<h2>RSS</h2>
 		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
-			<h2>Atom</h2>
-		        <a href="@BASEDIR@@RSSFILENAME@.atom">Atom</a>
+			<a href="http://www.bloglines.com/sub/http://primates.ximian.com/~miguel/miguel.rss2"><img src="http://www.bloglines.com/images/sub_modern5.gif"/></a>
 
 <p>Email: <a href="mailto:miguel@ximian.com">miguel@ximian.com</a>
 
 <p><b>Docs:</b></p>
 @BLOG_ARTICLES@
 
-			<h2>Bloggers</h2>
+			<h2>Blogs</h2>
 			<a href="http://codeblogs.ximian.com/blogs/benm/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
                                 <a href="http://codeblogs.ximian.com/blogs/benm/">Ben Maurer</a>
                                 <br />
@@ -48,7 +47,6 @@
 	<a href="http://pages.infinit.net/ctech/poupou.rss"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://pages.infinit.net/ctech/poupou.html">Sebastien Pouliot</a>
 			<p>
-			<a href="http://www.usenix.org/events/usenix04/"><img src="http://www.usenix.org/events/usenix04/art/usenix04_button.gif">
 			</a>
 			<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif"></a>
 		</div>
@@ -56,7 +54,7 @@
 <div id='blogs'>
 @BLOG_ENTRIES@
 </div>
-<a href="all.html">All entries</a>
+<a href="@BASEDIR@all.html">All entries</a>
 
 	<center>
 	This is a personal web page. Things said here do not represent the position of my employer.
