@@ -21,11 +21,16 @@ This is Lame Blog.
 
 	It looks for blog entries in:
 
-		~/activity/YYYY/mmm-dd.{html|txt}
+		~/activity/YYYY/mmm-dd{-N}.{html|txt}
 
 	Ie, for example:
 
 		~/activity/2003/oct-01.html
+
+	To add multiple entries per day, append a -N to the entry:
+
+		~/activity/2003/oct-01-1.html
+		~/activity/2003/oct-01-2.html
 
 	For historic reasons, it generates an all.html (compatibility
 	with old permalinks) and also now it generates per-day

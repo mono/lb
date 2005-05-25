@@ -29,22 +29,29 @@ using System.Xml;
 using System.Xml.Serialization;
 using Rss;
 
-#if ATOM
-using Atom.Core;
-using Atom;
-#endif
-
 class DayEntry : IComparable {
 	public DateTime Date;
 	public string Body;
-	public string Caption;
+	public string Caption = "";
+	public string DateCaption;
+	
 	Blog blog;
+	string extra = "";
 	
 	public string blog_base;
+
+	//
+	// Text to inline CSS for the blog for classes code, code-csharp and shell
+	//
 	const string code_style = "class=\"code\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
 	const string code_csharp_style = "class=\"code-csharp\" style=\"border-style: solid; background: #ddddff; border-width: 1px; padding: 2pt;\"";
 	const string shell_style = "style=\"border-style: solid; background: #000000; color: #bbbbbb; border-width: 1px; padding: 2pt;\"";
 
+	//
+	// The date when we started using filestamps instead of the hardcoded 4pm
+	//
+	public DateTime SwitchDate = new DateTime (2005, 05, 25, 0, 0, 8);
+	
 	DayEntry (Blog blog, string file)
 	{
 		this.blog = blog;
@@ -75,15 +82,15 @@ class DayEntry : IComparable {
 	
 	void ParseDate (string file)
 	{
-		int p = file.LastIndexOf ("/");
 		int month;
 
-		Match match = Regex.Match (file, "(200[0-9])/([a-z]+)-0*([0-9]+)");
+		Match match = Regex.Match (file, "(200[0-9])/([a-z]+)-0*([0-9]+)(-[0-9])?");
 
 		int year = Int32.Parse (file.Substring (match.Groups [1].Index, match.Groups [1].Length));
 		int day = Int32.Parse (file.Substring (match.Groups [3].Index, match.Groups [3].Length));
 		string month_name = file.Substring (match.Groups [2].Index, match.Groups [2].Length);
-		
+		extra = file.Substring (match.Groups [4].Index, match.Groups [4].Length);
+
 		switch (month_name){
 		case "jan":
 			month = 1; break;
@@ -114,7 +121,20 @@ class DayEntry : IComparable {
 		}
 
 		Date = new DateTime (year, month, day, 13, 55, 0);
-		Caption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
+
+		//
+		// Start using the file time stamp as the publishing date, this is 
+		// better than hardcoding a value.  To avoid people sending us long
+		// rants, only do this after today
+		//
+		if (Date > SwitchDate){
+			FileInfo fi = new FileInfo (file);
+			DateTime access_date = fi.LastWriteTime;
+			
+			Date = new DateTime (year, month, day, access_date.Hour, access_date.Minute, 0);
+		}
+					     
+		DateCaption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
 	}
 	
 	void Load (StreamReader i, bool is_html)
@@ -128,7 +148,7 @@ class DayEntry : IComparable {
 			if (!caption_found){
 				if (is_html){
 					if (s.StartsWith ("<h1>")){
-						Caption = Caption + ": " + s.Replace ("<h1>", "").Replace ("</h1>", "");
+						Caption = s.Replace ("<h1>", "").Replace ("</h1>", "");
 						caption_found = true;
 						continue;
 					} else if (s.StartsWith ("#include")){
@@ -138,7 +158,7 @@ class DayEntry : IComparable {
 					}
 				} else {
 					if (s.StartsWith ("@") && !caption_found){
-						Caption = Caption + ": " + s.Substring (1);
+						Caption = s.Substring (1);
 						caption_found = true;
 						continue;
 					}
@@ -234,7 +254,7 @@ class DayEntry : IComparable {
 
 	public string PermaLink {
 		get {
-			return String.Format ("archive/{0:yyyy}/{0:MMM}-{0:dd}.html", Date);
+			return String.Format ("archive/{0:yyyy}/{0:MMM}-{0:dd}{1}.html", Date, extra);
 		}
 	}
 }
@@ -274,26 +294,46 @@ class Blog {
 
 	static DateTime LastDate = new DateTime (2004, 5, 19, 0, 0, 0);
 	
-	void Render (StreamWriter o, int idx, string blog_base, bool include_daily_anchor)
+	void Render (StreamWriter o, int idx, string blog_base, bool include_daily_anchor, bool include_navigation)
 	{
 		DayEntry d = (DayEntry) entries [idx];
 
 		string anchor = HttpUtility.UrlEncode (d.Date.ToString ()).Replace ('%','-').Replace ('+', '-');
 		if (include_daily_anchor || d.Date < LastDate)
 			o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
-		o.WriteLine ("<h3><a href=\"{2}{0}\" class=\"entryTitle\">{1}</a> <font size=\"-2\">(<a href=\"{2}{0}\">Permalink</a>)</font></h3>",
-			     d.PermaLink, d.Caption, blog_base);
+		
+		if (include_navigation){
+			DayEntry prev = (DayEntry) (idx > 0 ? entries [idx-1] : null);
+			DayEntry next = (DayEntry) (idx+1 < Entries ? entries [idx+1] : null);
+
+			o.WriteLine ("<p>");
+			if (prev != null)
+				o.WriteLine ("<a href=\"{0}{1}\">« {2}</a> | ", blog_base, prev.PermaLink, prev.Caption);
+			o.WriteLine ("<a href=\"{0}{1}\">Main</a>", blog_base, config.BlogFileName);
+			if (next != null)
+				o.WriteLine ("| <a href=\"{0}{1}\">{2} »</a> ", blog_base, next.PermaLink, next.Caption);
+			
+			o.WriteLine ("<p>");
+		}
+		
+		o.WriteLine ("<h3><a href=\"{2}/{0}\" class=\"entryTitle\">{3}</a></h3>",
+			     d.PermaLink, d.DateCaption, blog_base, d.Caption);
 		o.WriteLine ("<div class='blogentry'>" + d.Body + "</div>");
+		o.WriteLine ("<div class='footer'>Posted by {2} on <a href=\"{0}{1}\">{3}</a></div><p>",
+			     blog_base, d.PermaLink, config.Copyright, d.DateCaption);
+
 	}
 		     
 	void Render (StreamWriter o, int start, int end, string blog_base, bool include_daily_anchor)
 	{
+		bool navigation = start + 1 == end;
+		
 		for (int i = start; i < end; i++){
 			int idx = entries.Count - i - 1;
 			if (idx < 0)
 				return;
 			
-			Render (o, idx, blog_base, include_daily_anchor);
+			Render (o, idx, blog_base, include_daily_anchor, navigation);
 		}
 	}
 
@@ -306,12 +346,11 @@ class Blog {
 	
 	public void RenderHtml (string template, string output, int start, int end, string blog_base)
 	{
-		
 		using (FileStream i = File.OpenRead (template), o = File.Create (output)){
 			StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591));
 			StreamWriter w = new StreamWriter (o, Encoding.GetEncoding (28591));
 			string line;
-					
+
 			while ((line = s.ReadLine ()) != null){
 				switch (line){
 				case "@BLOG_ENTRIES@":
@@ -326,6 +365,7 @@ class Blog {
 					line = line.Replace ("@TITLE@", config.Title);
 					line = line.Replace ("@DESCRIPTION@", config.Description);
 					line = line.Replace ("@RSSFILENAME@", config.RSSFileName);
+					line = line.Replace ("@EDITOR@", config.ManagingEditor);
 					w.WriteLine (line);
 					break;
 				}
@@ -339,7 +379,7 @@ class Blog {
 	{
 		for (int i = 0; i < Entries; i++){
 			DayEntry d = (DayEntry) entries [i];
-			
+
 			RenderHtml (template, d.PermaLink, Entries - i - 1, Entries - i, "../../");
 		}
 	}
@@ -378,6 +418,10 @@ class Blog {
 			item.Link = new Uri (item.Guid.Name);
 			item.Guid.PermaLink = DBBool.True;
 			item.PubDate = d.Date;
+			if (d.Caption == ""){
+				Console.WriteLine ("No caption for: " + d.DateCaption);
+				d.Caption = d.DateCaption;
+			}
 			item.Title = d.Caption;
 			
 			channel.Items.Add (item);
@@ -391,60 +435,6 @@ class Blog {
 		w.Write (channel);
 		w.Close ();
 	}
-
-	//
-	// Atom support is still fairly early, I do not know how to use it completely yet
-	//
-#if ATOM
-	AtomFeed MakeAtomFeed ()
-	{
-		AtomFeed feed = new AtomFeed ();
-		feed.Title = new AtomContentConstruct("title", config.Title);
-		string url = config.BlogWebDirectory + config.BlogFileName;
-		feed.Author = new AtomPersonConstruct("contributor",
-						      config.Copyright, new Uri (url), config.ManagingEditor);
-	
-		feed.Contributors.Add (new AtomPersonConstruct("contributor",
-							       config.Copyright, new Uri (url), config.ManagingEditor));
-		feed.Tagline = new AtomContentConstruct("tagline", config.Description);
-		feed.Id = new Uri (url);
-		feed.Copyright = new AtomContentConstruct("copyright", "Copyright © 2003, 2004");
-		feed.Modified = new AtomDateConstruct("modified", DateTime.Now,
-						      TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now));
-
-		return feed;
-	}
-
-	public void RenderAtom (string output, int start, int end)
-	{
-		AtomFeed feed = MakeAtomFeed();
-
-		Uri url = new Uri(config.BlogWebDirectory + config.BlogFileName);
-		
-		for (int i = start; i < end; i++){
-			int idx = entries.Count - i - 1;
-			if (idx < 0)
-				continue;
-			
-			DayEntry d = (DayEntry) entries [idx];
-
-			AtomEntry entry = new AtomEntry ();
-			entry.Title = new AtomContentConstruct("title", d.Caption);
-			entry.Modified = new AtomDateConstruct("modified", d.Date, TimeZone.CurrentTimeZone.GetUtcOffset (d.Date));
-			entry.Issued = new AtomDateConstruct("issued", d.Date, TimeZone.CurrentTimeZone.GetUtcOffset (d.Date));
-			entry.Summary = new AtomContentConstruct("summary", d.Body);
-			entry.Contents.Add (new AtomContent (d.Body));
-			entry.Contributors.Add(new AtomPersonConstruct("contributor",
-									 config.Copyright, url, config.ManagingEditor));
-			entry.Id = new Uri (config.BlogWebDirectory + "all.html#" + HttpUtility.UrlEncode (d.Date.ToString ()));
-			
-			feed.Entries.Add (entry);
-		}
-
-		using (FileStream o = File.Create (output))
-			feed.Save (o);
-	}
-#endif
 
 	public void RenderRSS (string output, int start, int end)
 	{
@@ -487,10 +477,6 @@ class LB {
 		b.RenderArchive ("template");
 		
 		b.RenderRSS (config.RSSFileName, 0, 30);
-#if ATOM
-		b.RenderAtom (config.RSSFileName + ".atom", 0, 30);
-#endif
-		
 		File.Copy ("log-style.css", "texts/log-style.css", true);
 	}
 }

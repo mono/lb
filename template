@@ -14,7 +14,7 @@
 		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
 			<a href="http://www.bloglines.com/sub/http://primates.ximian.com/~miguel/miguel.rss2"><img src="http://www.bloglines.com/images/sub_modern5.gif"/></a>
 
-<p>Email: <a href="mailto:miguel@ximian.com">miguel@ximian.com</a>
+<p>Email: <a href="mailto:@EDITOR@">@EDITOR@</a>
 
 <p><b>Docs:</b></p>
 @BLOG_ARTICLES@
@@ -54,7 +54,9 @@
 <div id='blogs'>
 @BLOG_ENTRIES@
 </div>
-<a href="@BASEDIR@all.html">All entries</a>
+<div class='footer'>
+<!--a href="@BASEDIR@all.html">All entries</a-->
+</div>
 
 	<center>
 	This is a personal web page. Things said here do not represent the position of my employer.

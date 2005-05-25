@@ -3,7 +3,7 @@
 Author="Miguel de Icaza (miguel@gnome.org)"
 BlogDirectory="/home/miguel/activity"
 BlogFileName="index.html"
-BlogWebDirectory="http://tirania.org/blog/"
+BlogWebDirectory="http://tirania.org/blog"
 BlogImageBasedir="http://primates.ximian.com/~miguel"
 Copyright="Miguel de Icaza"
 Description="Miguel de Icaza's web log"

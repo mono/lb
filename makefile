@@ -1,9 +1,8 @@
 ASSEMBLIES=	-r:RSS.NET.dll	\
 		-r:System.Web	
-		#-r:Atom.NET.dll
 
 lb.exe: lb.cs
-	mcs $(ASSEMBLIES) -g lb.cs config.cs -out:lb.exe 
+	mcs $(ASSEMBLIES) -debug lb.cs config.cs -out:lb.exe 
 
 b: lb.exe
 	mono --debug lb.exe
