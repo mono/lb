@@ -129,8 +129,9 @@ class DayEntry : IComparable {
 		//
 		if (Date > SwitchDate){
 			FileInfo fi = new FileInfo (file);
-			DateTime access_date = fi.LastWriteTime;
-			
+			DateTime access_date = fi.LastWriteTimeUtc;
+
+			Console.WriteLine ("Hour: {0}", access_date.Hour);
 			Date = new DateTime (year, month, day, access_date.Hour, access_date.Minute, 0);
 		}
 					     
