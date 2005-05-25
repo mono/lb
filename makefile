@@ -15,5 +15,12 @@ push: b
 	chmod 644 archive/*/*.html
 	chmod 644 *html *rss2 *php *atom
 	rsync -pr -v --rsh=ssh texts archive prettyprint.js	\
+	log-style.css *.rss2 *.atom *.php index.html all.html		\
+	miguel@www.tirania.org:tirania/blog
+
+pp: b
+	chmod 644 archive/*/*.html
+	chmod 644 *html *rss2 *php *atom
+	rsync -pr -v --rsh=ssh texts archive prettyprint.js	\
 	log-style.css *.rss2 *.atom *.php all.html		\
 	primates.ximian.com:public_html
