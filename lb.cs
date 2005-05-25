@@ -390,7 +390,7 @@ class Blog {
 		RssChannel c = new RssChannel ();
 
 		c.Title = config.Title;
-		c.Link = new Uri (config.BlogWebDirectory + config.BlogFileName);
+		c.Link = new Uri (config.BlogWebDirectory + "/" + config.BlogFileName);
 		c.Description = config.Description;
 		c.Copyright = config.Copyright;
 		c.Generator = "lb#";
