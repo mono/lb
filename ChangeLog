@@ -1,5 +1,12 @@
 2004-07-23  Jonathan Pryor  <jonpryor@vt.edu>
 
+	* lb.cs: Add entry template support (so each entry can be templated).  
+	  The entry body is also @...@ replaced so that variables can be used within
+	  the message (allowing simple links to other entries, for example).
+	* entry: Added.  Default entry template.
+
+2004-07-23  Jonathan Pryor  <jonpryor@vt.edu>
+
 	* lb.cs: Read input & output file encodings from the config file
 	* config.cs: Add InputEncoding and OutputEncoding fields
 	* config.xml: Add InputEncoding and OutputEncoding attributes

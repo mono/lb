@@ -37,7 +37,7 @@ class DayEntry : IComparable {
 	public string Category = "";
 	
 	Blog blog;
-	string extra = "";
+	public string extra = "";
 	
 	public string blog_base;
 
@@ -268,6 +268,7 @@ class DayEntry : IComparable {
 
 class Blog {
 	public Config config;
+	string entry_template;
 	Hashtable category_entries = new Hashtable ();
 
 	ArrayList entries = new ArrayList ();
@@ -281,6 +282,7 @@ class Blog {
 	public Blog (Config config)
 	{
 		this.config = config;
+		this.entry_template = File.OpenText ("entry").ReadToEnd ();
 
 		LoadDirectory (new DirectoryInfo (config.BlogDirectory));
 
@@ -331,20 +333,40 @@ class Blog {
 		DayEntry d = (DayEntry) entries [idx];
 
 		string anchor = HttpUtility.UrlEncode (d.Date.ToString ()).Replace ('%','-').Replace ('+', '-');
+		string entry_anchor = "";
 		if (include_daily_anchor || d.Date < LastDate)
-			o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
+			entry_anchor = String.Format ("<a name=\"{0}\"></a>", anchor);
 		
+		string navigation = "";
 		if (include_navigation){
-			o.WriteLine ("<p>");
-			o.Write (GetEntryNavigation (entries, idx, blog_base));
-			o.WriteLine ("<p>");
+			navigation = GetEntryNavigation (entries, idx, blog_base);
 		}
-		
-		o.WriteLine ("<h3><a href=\"{2}/{0}\" class=\"entryTitle\">{3}</a></h3>",
-			     d.PermaLink, d.DateCaption, blog_base, d.Caption);
-		o.WriteLine ("<div class='blogentry'>" + d.Body + "</div>");
-		o.WriteLine ("<div class='footer'>Posted by {2} on <a href=\"{0}{1}\">{3}</a></div><p>",
-			     blog_base, d.PermaLink, config.Copyright, d.DateCaption);
+
+		string category_paths = GetCategoryPaths (d, blog_base);
+		string entry_path = string.Format ("{0}archive{1}{2:yyyy}/",
+			blog_base, d.Category, d.Date);
+		string entry_id = string.Format ("entry{0}{1}{2}",
+			d.Category.Replace ('/', '-'), d.Date.ToString ("yyyy-MM-ddThh:mm:sstt"),
+			d.extra);
+
+		Hashtable substitutions = new Hashtable ();
+		substitutions.Add ("@ENTRY_ID@", entry_id);
+		substitutions.Add ("@ENTRY_ANCHOR@", entry_anchor);
+		substitutions.Add ("@ENTRY_PATH@", entry_path);
+		substitutions.Add ("@ENTRY_NAVIGATION@", navigation);
+		substitutions.Add ("@ENTRY_PERMALINK@", d.PermaLink);
+		substitutions.Add ("@ENTRY_CAPTION@", d.Caption);
+		substitutions.Add ("@BASEDIR@", blog_base);
+		substitutions.Add ("@COPYRIGHT@", config.Copyright);
+		substitutions.Add ("@ENTRY_CATEGORY@", d.Category);
+		substitutions.Add ("@ENTRY_DATECAPTION@", d.DateCaption);
+		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
+
+		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
+		Translate (d.Body, body, substitutions);
+
+		substitutions.Add ("@ENTRY_BODY@", body.ToString ());
+		Translate (entry_template, o, substitutions);
 	}
 
 	string GetEntryNavigation (IList entries, int idx, string blog_base)
@@ -364,6 +386,84 @@ class Blog {
 						blog_base, next.PermaLink, next.Caption));
 		
 		return nav.ToString ();
+	}
+
+	string GetCategoryPaths (DayEntry d, string blog_base)
+	{
+		string[] paths = d.Category.Split ('/');
+		// It'll be more common for no category to be used -- the "/" category --
+		// which requires 24 characters.  Optimize for the common case.
+		StringBuilder cat_paths = new StringBuilder (32);
+
+		// Skip the last paths entry, as it's the "" string
+		for (int i = 0; i < paths.Length-1; ++i) {
+			string parent = string.Join ("/", paths, 0, i+1) + "/";
+			cat_paths.AppendFormat ("<a href=\"{0}archive{1}\">{2}/</a>", 
+					blog_base, parent, paths [i]);
+		}
+
+		return cat_paths.ToString ();
+	}
+
+	// Single-pass s/@...@/.../ replacement engine.
+	// `substitutions' contains search text (including @) and replacement text.
+	void Translate (string input, TextWriter o, Hashtable substitutions)
+	{
+		int token = -1;
+		bool escape = false;
+		for (int i = 0; i < input.Length; ++i) {
+			char c = input [i];
+			string subst = null;
+			if (token >= 0)
+				subst = input.Substring (token, i-token+1);
+			switch (c) {
+			case '\\':
+				escape = true;
+				break;
+			case '@':
+				if (escape) {
+					escape = false;
+					// Only write a new @ if not inside @...@.
+					if (token == -1) {
+						escape = false;
+						o.Write ('@');
+					}
+					break;
+				}
+				if (token == -1) {
+					token = i;
+				}
+				else {
+					string rep = (string) substitutions [subst];
+					if (rep == null) {
+						// No match; look for a new match from this point
+						o.Write (subst.Substring (0, subst.Length-1));
+						token = i;
+					}
+					else {
+						o.Write (rep);
+						token = -1;
+					}
+				}
+				break;
+			case '\r': case '\n':
+				if (token != -1) {
+					o.Write (subst);
+					token = -1;
+					escape = false;
+					break;
+				}
+				goto default;
+			default:
+				if (escape && token == -1) {
+					o.Write ('\\');
+				}
+				escape = false;
+				if (token == -1)
+					o.Write (c); 
+				break;
+			}
+		}
 	}
 
 	void Render (StreamWriter o, IList entries, int start, int end, string blog_base, bool include_daily_anchor)
