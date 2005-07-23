@@ -13,4 +13,6 @@ public class Config {
 	[XmlAttribute] public string Link;
 	[XmlAttribute] public string Title;
 	[XmlAttribute] public string RSSFileName;
+	[XmlAttribute] public string InputEncoding;
+	[XmlAttribute] public string OutputEncoding;
 }

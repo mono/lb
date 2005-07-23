@@ -1,4 +1,10 @@
-2004-07-19  Jonathan Pryor  <jonpryor@vt.edu>
+2004-07-23  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* lb.cs: Read input & output file encodings from the config file
+	* config.cs: Add InputEncoding and OutputEncoding fields
+	* config.xml: Add InputEncoding and OutputEncoding attributes
+
+2004-07-23  Jonathan Pryor  <jonpryor@vt.edu>
 
 	* lb.cs: 
 	  - Add post category support: categories are sub-directories, so

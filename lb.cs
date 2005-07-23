@@ -60,7 +60,7 @@ class DayEntry : IComparable {
 		ParseDate (file);
 
 		using (FileStream i = File.OpenRead (file)){
-			using (StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591))){
+			using (StreamReader s = new StreamReader (i, Encoding.GetEncoding (blog.config.InputEncoding))){
 				if (file.EndsWith (".html"))
 					Load (s, true);
 				else if (file.EndsWith (".txt"))
@@ -231,7 +231,7 @@ class DayEntry : IComparable {
 
 		Console.WriteLine ("Reading: " + file);
 		using (FileStream i = File.OpenRead (file)){
-			StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591));
+			StreamReader s = new StreamReader (i, Encoding.GetEncoding (blog.config.InputEncoding));
 			string line;
 			bool output = false;
 			
@@ -391,8 +391,8 @@ class Blog {
 	{
 		Console.WriteLine ("Writing file {0}...", output);
 		using (FileStream i = File.OpenRead (template), o = CreateFile (output)){
-			StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591));
-			StreamWriter w = new StreamWriter (o, Encoding.GetEncoding (28591));
+			StreamReader s = new StreamReader (i, Encoding.GetEncoding (config.InputEncoding));
+			StreamWriter w = new StreamWriter (o, GetOutputEncoding ());
 			string line;
 
 			while ((line = s.ReadLine ()) != null){
@@ -417,6 +417,19 @@ class Blog {
 			}
 			w.Flush ();
 		}
+	}
+
+	// The default Encoding.GetEncoding ("utf-8") includes the BOM, 
+	// which we don't want
+	Encoding GetOutputEncoding ()
+	{
+		string encoding = config.OutputEncoding;
+		Encoding e;
+		if (encoding != null && encoding.ToLower().Replace ("-", "_").Equals ("utf_8"))
+			e = new UTF8Encoding (false);
+		else
+			e = Encoding.GetEncoding (encoding);
+		return e;
 	}
 
 	public void RenderHtml (string template, string output, int start, int end, string blog_base)
