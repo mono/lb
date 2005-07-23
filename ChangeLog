@@ -1,3 +1,12 @@
+2004-07-19  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* lb.cs: 
+	  - Add post category support: categories are sub-directories, so
+	    foo/2005/jul-13.txt is (1) a valid file (previously ignored), and
+	    (2) in the /foo/ category.  Archive index.html files are created for
+	    each category (which includes all sub-categories).
+	  - Create output directory before creating output file.
+
 2004-06-21  Miguel de Icaza  <miguel@ximian.com>
 
 	* lb.cs: Add Atom support.

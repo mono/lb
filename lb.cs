@@ -34,6 +34,7 @@ class DayEntry : IComparable {
 	public string Body;
 	public string Caption = "";
 	public string DateCaption;
+	public string Category = "";
 	
 	Blog blog;
 	string extra = "";
@@ -84,12 +85,17 @@ class DayEntry : IComparable {
 	{
 		int month;
 
-		Match match = Regex.Match (file, "(200[0-9])/([a-z]+)-0*([0-9]+)(-[0-9])?");
+		int idx = file.IndexOf (blog.config.BlogDirectory);
+		string entry = file;
+		if (idx >= 0)
+			entry = file.Substring (blog.config.BlogDirectory.Length);
+		Match match = Regex.Match (entry, "^(.*/)?(200[0-9])/([a-z]+)-0*([0-9]+)(-[0-9])?");
 
-		int year = Int32.Parse (file.Substring (match.Groups [1].Index, match.Groups [1].Length));
-		int day = Int32.Parse (file.Substring (match.Groups [3].Index, match.Groups [3].Length));
-		string month_name = file.Substring (match.Groups [2].Index, match.Groups [2].Length);
-		extra = file.Substring (match.Groups [4].Index, match.Groups [4].Length);
+		Category = match.Groups [1].Value;
+		int year = Int32.Parse (match.Groups [2].Value);
+		int day = Int32.Parse (match.Groups [4].Value);
+		string month_name = match.Groups [3].Value;
+		extra = match.Groups [5].Value;
 
 		switch (month_name){
 		case "jan":
@@ -255,13 +261,15 @@ class DayEntry : IComparable {
 
 	public string PermaLink {
 		get {
-			return String.Format ("archive/{0:yyyy}/{0:MMM}-{0:dd}{1}.html", Date, extra);
+			return String.Format ("archive{2}{0:yyyy}/{0:MMM}-{0:dd}{1}.html", Date, extra, Category);
 		}
 	}
 }
 
 class Blog {
 	public Config config;
+	Hashtable category_entries = new Hashtable ();
+
 	ArrayList entries = new ArrayList ();
 
 	public int Entries {
@@ -273,29 +281,52 @@ class Blog {
 	public Blog (Config config)
 	{
 		this.config = config;
-		string [] years = Directory.GetDirectories (config.BlogDirectory);
 
-		foreach (string year in years){
-			string [] days = Directory.GetFiles (year);
-
-			foreach (string file in days){
-				if (!(file.EndsWith (".html") || file.EndsWith (".txt")))
-					continue;
-
-				DayEntry de = DayEntry.Load (this, file);
-				if (de != null)
-					entries.Add (de);
-			}
-		}
+		LoadDirectory (new DirectoryInfo (config.BlogDirectory));
 
 		Console.WriteLine ("Loaded: {0} days", entries.Count);
 
 		entries.Sort ();
+		foreach (DayEntry de in entries)
+			AddCategory (category_entries, de);
 	}
 
+	void LoadDirectory (DirectoryInfo dir)
+	{
+		foreach (DirectoryInfo subdir in dir.GetDirectories ()) {
+			LoadDirectory (subdir);
+		}
+		foreach (FileInfo file in dir.GetFiles ()) {
+			if (!(file.Name.EndsWith (".html") || file.Name.EndsWith (".txt")))
+				continue;
+			DayEntry de = DayEntry.Load (this, file.FullName);
+			if (de != null)
+				entries.Add (de);
+		}
+	}
+
+	// A category is always of the form "/((.+)/)*", e.g. /, /foo/, /foo/bar/
+	// Add the DayEntry to its category and all parent categories
+	void AddCategory (Hashtable hash, DayEntry day)
+	{
+		string category = day.Category;
+		do {
+			IList entries = (IList) hash [category];
+			if (entries == null) {
+				entries = new ArrayList ();
+				hash [category] = entries;
+			}
+			entries.Add (day);
+			int n = category.Length > 2 
+				? category.LastIndexOf ('/', category.Length-2) 
+				: -1;
+			category = (n == -1) ? null : category.Substring (0, n+1);
+		} while (category != null && category.Length > 0);
+	}
+	
 	static DateTime LastDate = new DateTime (2004, 5, 19, 0, 0, 0);
 	
-	void Render (StreamWriter o, int idx, string blog_base, bool include_daily_anchor, bool include_navigation)
+	void Render (StreamWriter o, IList entries, int idx, string blog_base, bool include_daily_anchor, bool include_navigation)
 	{
 		DayEntry d = (DayEntry) entries [idx];
 
@@ -304,16 +335,8 @@ class Blog {
 			o.WriteLine (String.Format ("<a name=\"{0}\"></a>", anchor));
 		
 		if (include_navigation){
-			DayEntry prev = (DayEntry) (idx > 0 ? entries [idx-1] : null);
-			DayEntry next = (DayEntry) (idx+1 < Entries ? entries [idx+1] : null);
-
 			o.WriteLine ("<p>");
-			if (prev != null)
-				o.WriteLine ("<a href=\"{0}{1}\">« {2}</a> | ", blog_base, prev.PermaLink, prev.Caption);
-			o.WriteLine ("<a href=\"{0}{1}\">Main</a>", blog_base, config.BlogFileName);
-			if (next != null)
-				o.WriteLine ("| <a href=\"{0}{1}\">{2} »</a> ", blog_base, next.PermaLink, next.Caption);
-			
+			o.Write (GetEntryNavigation (entries, idx, blog_base));
 			o.WriteLine ("<p>");
 		}
 		
@@ -322,10 +345,28 @@ class Blog {
 		o.WriteLine ("<div class='blogentry'>" + d.Body + "</div>");
 		o.WriteLine ("<div class='footer'>Posted by {2} on <a href=\"{0}{1}\">{3}</a></div><p>",
 			     blog_base, d.PermaLink, config.Copyright, d.DateCaption);
-
 	}
-		     
-	void Render (StreamWriter o, int start, int end, string blog_base, bool include_daily_anchor)
+
+	string GetEntryNavigation (IList entries, int idx, string blog_base)
+	{
+		DayEntry prev = (DayEntry) (idx > 0 ? entries [idx-1] : null);
+		DayEntry next = (DayEntry) (idx+1 < entries.Count ? entries [idx+1] : null);
+
+		StringBuilder nav = new StringBuilder ();
+
+		if (prev != null)
+			nav.Append (string.Format ("<a href=\"{0}{1}\">&laquo; {2}</a> | \n", 
+						blog_base, prev.PermaLink, prev.Caption));
+		nav.Append (string.Format ("<a href=\"{0}{1}\">Main</a>\n", 
+					blog_base, config.BlogFileName));
+		if (next != null)
+			nav.Append (string.Format (" | <a href=\"{0}{1}\">{2} &raquo;</a> \n", 
+						blog_base, next.PermaLink, next.Caption));
+		
+		return nav.ToString ();
+	}
+
+	void Render (StreamWriter o, IList entries, int start, int end, string blog_base, bool include_daily_anchor)
 	{
 		bool navigation = start + 1 == end;
 		
@@ -334,7 +375,7 @@ class Blog {
 			if (idx < 0)
 				return;
 			
-			Render (o, idx, blog_base, include_daily_anchor, navigation);
+			Render (o, entries, idx, blog_base, include_daily_anchor, navigation);
 		}
 	}
 
@@ -345,9 +386,11 @@ class Blog {
 		}
 	}
 	
-	public void RenderHtml (string template, string output, int start, int end, string blog_base)
+	void RenderHtml (string template, string output, string blog_base, IList entries,
+			int start, int end)
 	{
-		using (FileStream i = File.OpenRead (template), o = File.Create (output)){
+		Console.WriteLine ("Writing file {0}...", output);
+		using (FileStream i = File.OpenRead (template), o = CreateFile (output)){
 			StreamReader s = new StreamReader (i, Encoding.GetEncoding (28591));
 			StreamWriter w = new StreamWriter (o, Encoding.GetEncoding (28591));
 			string line;
@@ -355,7 +398,7 @@ class Blog {
 			while ((line = s.ReadLine ()) != null){
 				switch (line){
 				case "@BLOG_ENTRIES@":
-					Render (w, start, end, blog_base, output == "all.html");
+					Render (w, entries, start, end, blog_base, output == "all.html");
 					break;
 				case "@BLOG_ARTICLES@":
 					RenderArticleList (w);
@@ -376,12 +419,28 @@ class Blog {
 		}
 	}
 
+	public void RenderHtml (string template, string output, int start, int end, string blog_base)
+	{
+		RenderHtml (template, output, blog_base, entries, start, end);
+	}
+
 	public void RenderArchive (string template)
 	{
 		for (int i = 0; i < Entries; i++){
 			DayEntry d = (DayEntry) entries [i];
 
-			RenderHtml (template, d.PermaLink, Entries - i - 1, Entries - i, "../../");
+			string parent_dir = "../..";
+			if (d.Category.Length > 0)
+				parent_dir += Regex.Replace (d.Category, "[^/]+", "..");
+			RenderHtml (template, d.PermaLink, entries.Count - i - 1, entries.Count - i, parent_dir);
+		}
+
+		foreach (DictionaryEntry de in category_entries) {
+			string category = de.Key.ToString ();
+			IList entries = (IList) de.Value;
+			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
+			RenderHtml (template, "archive" + category + "index.html",
+					parent_dir, entries, 0, entries.Count);
 		}
 	}
 	
@@ -428,7 +487,7 @@ class Blog {
 			channel.Items.Add (item);
 		}
 
-		FileStream o = File.Create (output);
+		FileStream o = CreateFile (output);
 		RssWriter w = new RssWriter (o, new UTF8Encoding (false));
 
 		w.Version = version;
@@ -460,6 +519,13 @@ class Blog {
 	}
 	
 
+	FileStream CreateFile (string file)
+	{
+		FileInfo info = new FileInfo (file);
+		if (!info.Directory.Exists)
+			info.Directory.Create ();
+		return File.Create (file);
+	}
 }
 
 class LB {
