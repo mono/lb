@@ -384,7 +384,13 @@ class Blog {
 		if (next != null)
 			nav.Append (string.Format (" | <a href=\"{0}{1}\">{2} &raquo;</a> \n", 
 						blog_base, next.PermaLink, next.Caption));
-		
+#if false	
+		nav.Append (string.Format ("<h3><a href=\"{2}{0}\" class=\"entryTitle\">{3}</a></h3>",
+			     d.PermaLink, d.DateCaption, blog_base, d.Caption));
+		nav.Append ("<div class='blogentry'>" + d.Body + "</div>");
+		nav.Append (string.Format ("<div class='footer'>Posted by {2} on <a href=\"{0}{1}\">{3}</a></div><p>",
+			     blog_base, d.PermaLink, config.Copyright, d.DateCaption));
+#endif
 		return nav.ToString ();
 	}
 
@@ -489,7 +495,6 @@ class Blog {
 	void RenderHtml (string template, string output, string blog_base, IList entries,
 			int start, int end)
 	{
-		Console.WriteLine ("Writing file {0}...", output);
 		using (FileStream i = File.OpenRead (template), o = CreateFile (output)){
 			StreamReader s = new StreamReader (i, Encoding.GetEncoding (config.InputEncoding));
 			StreamWriter w = new StreamWriter (o, GetOutputEncoding ());
