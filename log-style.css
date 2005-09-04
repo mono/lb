@@ -27,6 +27,11 @@ h3 a {
 	text-decoration: none;
 }
 
+blockquote {
+	border-left: 1px solid;
+	padding-left: 1em;
+}
+
 body, table {
 	background-color: #ffffff;
 	font-family: Verdana, sans-serif; 
