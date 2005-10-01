@@ -52,6 +52,7 @@ class DayEntry : IComparable {
 	// The date when we started using filestamps instead of the hardcoded 4pm
 	//
 	public DateTime SwitchDate = new DateTime (2005, 05, 25, 0, 0, 8);
+	public DateTime SecondFix = new DateTime (2005, 09, 30, 0, 0, 8);
 	
 	DayEntry (Blog blog, string file)
 	{
@@ -80,7 +81,9 @@ class DayEntry : IComparable {
 		}
 		return de;
 	}
-	
+
+	TimeSpan h24 = new TimeSpan (24, 0, 0);
+
 	void ParseDate (string file)
 	{
 		int month;
@@ -135,9 +138,13 @@ class DayEntry : IComparable {
 		//
 		if (Date > SwitchDate){
 			FileInfo fi = new FileInfo (file);
-			DateTime access_date = fi.LastWriteTimeUtc;
+			DateTime access_date;
+			
+			if (Date >= SecondFix)
+				access_date = fi.LastWriteTime;
+			else
+				access_date = fi.LastWriteTimeUtc;
 
-			Console.WriteLine ("Hour: {0}", access_date.Hour);
 			Date = new DateTime (year, month, day, access_date.Hour, access_date.Minute, 0);
 		}
 					     
@@ -595,7 +602,7 @@ class Blog {
 			item.Guid.Name = config.BlogWebDirectory + d.PermaLink;
 			item.Link = new Uri (item.Guid.Name);
 			item.Guid.PermaLink = DBBool.True;
-			item.PubDate = d.Date;
+			item.PubDate = d.Date + (DateTime.UtcNow - DateTime.Now);
 			if (d.Caption == ""){
 				Console.WriteLine ("No caption for: " + d.DateCaption);
 				d.Caption = d.DateCaption;
