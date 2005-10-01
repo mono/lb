@@ -602,7 +602,8 @@ class Blog {
 			item.Guid.Name = config.BlogWebDirectory + d.PermaLink;
 			item.Link = new Uri (item.Guid.Name);
 			item.Guid.PermaLink = DBBool.True;
-			item.PubDate = d.Date + (DateTime.UtcNow - DateTime.Now);
+
+			item.PubDate = d.Date.ToUniversalTime ();
 			if (d.Caption == ""){
 				Console.WriteLine ("No caption for: " + d.DateCaption);
 				d.Caption = d.DateCaption;
