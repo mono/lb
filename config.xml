@@ -10,6 +10,6 @@ Description="Miguel de Icaza's web log"
 ManagingEditor="miguel@gnome.org"
 Title="Miguel de Icaza"
 RSSFileName="miguel"
-InputEncoding="latin1"
-OutputEncoding="latin1"
+InputEncoding="utf-8"
+OutputEncoding="utf-8"
 />
