@@ -15,4 +15,5 @@ public class Config {
 	[XmlAttribute] public string RSSFileName;
 	[XmlAttribute] public string InputEncoding;
 	[XmlAttribute] public string OutputEncoding;
+	[XmlAttribute] public string AnalyticsStub;
 }

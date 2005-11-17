@@ -16,9 +16,28 @@ This is Lame Blog.
 
 		* To do some minimal processing on the input.
 
-	The script has plenty of data hardcoded, I should make this
-	configurable some day.
+	To configure LameBlog, you must create a file config.xml, which
+	looks like this:
 
+		<?xml version="1.0"?>
+		<config
+		    Author="Miguel de Icaza (miguel@gnome.org)"
+		    BlogDirectory="/home/miguel/activity"
+		    BlogFileName="index.html"
+		    BlogWebDirectory="http://tirania.org/blog/"
+		    BlogImageBasedir="http://primates.ximian.com/~miguel"
+		    Copyright="Miguel de Icaza"
+		    Description="Miguel de Icaza's web log"
+		    ManagingEditor="miguel@gnome.org"
+		    Title="Miguel de Icaza"
+		    RSSFileName="miguel"
+		    InputEncoding="utf-8"
+		    OutputEncoding="utf-8"
+		    AnalyticsStub="analytics"
+		/>
+
+	The various parameters should be self explanatory.
+		
 	It looks for blog entries in:
 
 		~/activity/YYYY/mmm-dd{-N}.{html|txt}
@@ -35,6 +54,14 @@ This is Lame Blog.
 	For historic reasons, it generates an all.html (compatibility
 	with old permalinks) and also now it generates per-day
 	permalink entries in the archive/ directory.
+
+	To run, you must type:
+
+		make
+
+	To upload, edit the settings on the Makefile, and type:
+
+		make push
 
 	The result is then pushed to a server with rsync.
 

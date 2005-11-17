@@ -12,4 +12,5 @@ Title="Miguel de Icaza"
 RSSFileName="miguel"
 InputEncoding="utf-8"
 OutputEncoding="utf-8"
+AnalyticsStub="analytics"
 />

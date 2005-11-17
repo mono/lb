@@ -276,6 +276,7 @@ class DayEntry : IComparable {
 class Blog {
 	public Config config;
 	string entry_template;
+	string analytics = "";
 	Hashtable category_entries = new Hashtable ();
 
 	ArrayList entries = new ArrayList ();
@@ -298,6 +299,9 @@ class Blog {
 		entries.Sort ();
 		foreach (DayEntry de in entries)
 			AddCategory (category_entries, de);
+
+		if (config.AnalyticsStub != "")
+			analytics = File.OpenText (config.AnalyticsStub).ReadToEnd ();
 	}
 
 	void LoadDirectory (DirectoryInfo dir)
@@ -518,6 +522,7 @@ class Blog {
 
 				default:
 					line = line.Replace ("@BASEDIR@", blog_base);
+					line = line.Replace ("@ANALYTICS@", analytics);
 					line = line.Replace ("@TITLE@", config.Title);
 					line = line.Replace ("@DESCRIPTION@", config.Description);
 					line = line.Replace ("@RSSFILENAME@", config.RSSFileName);
@@ -662,7 +667,7 @@ class LB {
 			new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
 		if (config.BlogImageBasedir == null || config.BlogImageBasedir == "")
 			config.BlogImageBasedir = config.BlogWebDirectory;
-		
+
 		Blog b = new Blog (config);
 
 		b.RenderHtml ("template", config.BlogFileName, 0, 30, "");

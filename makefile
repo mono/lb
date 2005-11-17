@@ -1,3 +1,5 @@
+REMOTE_DIRECTORY=miguel@www.tirania.org:tirania/blog
+
 ASSEMBLIES=	-r:RSS.NET.dll	\
 		-r:System.Web	
 
@@ -15,11 +17,5 @@ push: b
 	chmod 644 *html *rss2 *php 
 	rsync -pr -v --rsh=ssh texts archive prettyprint.js	\
 	log-style.css *.rss2 *.php index.html all.html		\
-	miguel@www.tirania.org:tirania/blog
+	$(REMOTE_DIRECTORY)
 
-pp: b
-	chmod 644 archive/*/*.html
-	chmod 644 *html *rss2 *php *atom
-	rsync -pr -v --rsh=ssh texts archive prettyprint.js	\
-	log-style.css *.rss2 *.atom *.php all.html		\
-	primates.ximian.com:public_html
