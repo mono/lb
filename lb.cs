@@ -300,7 +300,7 @@ class Blog {
 		foreach (DayEntry de in entries)
 			AddCategory (category_entries, de);
 
-		if (config.AnalyticsStub != "")
+		if (config.AnalyticsStub != null && config.AnalyticsStub.Length > 0)
 			analytics = File.OpenText (config.AnalyticsStub).ReadToEnd ();
 	}
 
