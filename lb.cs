@@ -521,9 +521,18 @@ class Blog {
 					break;
 
 				default:
+					string title;
+
+					if (Math.Abs (start - end) == 1){
+						DayEntry d = (DayEntry) entries [entries.Count - start - 1];
+						title = String.Format ("{0} - {1}", d.Caption, config.Title);
+					} else {
+						title = config.Title;
+					}
+					
 					line = line.Replace ("@BASEDIR@", blog_base);
 					line = line.Replace ("@ANALYTICS@", analytics);
-					line = line.Replace ("@TITLE@", config.Title);
+					line = line.Replace ("@TITLE@", title);
 					line = line.Replace ("@DESCRIPTION@", config.Description);
 					line = line.Replace ("@RSSFILENAME@", config.RSSFileName);
 					line = line.Replace ("@EDITOR@", config.ManagingEditor);
