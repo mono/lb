@@ -1,3 +1,4 @@
+using System;
 using System.Xml.Serialization;
 
 [XmlRoot("config")]
@@ -16,4 +17,110 @@ public class Config {
 	[XmlAttribute] public string InputEncoding;
 	[XmlAttribute] public string OutputEncoding;
 	[XmlAttribute] public string AnalyticsStub;
+	[XmlAttribute] public string Prefix;
+	[XmlAttribute] public string BlogTemplate;
+	[XmlAttribute] public string EntryTemplate;
+
+	public bool Parse (string[] args)
+	{
+		for (int i = 0; i < args.Length; ++i) {
+			string arg = args [i];
+			switch (arg) {
+			case "-h": case "--help":
+				PrintHelp ();
+				return false;
+			case "-p": case "--prefix":
+				if (NextArgument (args, ref i, ref Prefix))
+					break;
+				return false;
+			case "-d": case "--blog-directory":
+				if (NextArgument (args, ref i, ref BlogDirectory))
+					break;
+				return false;
+			case "-b": case "--blog-template":
+				if (NextArgument (args, ref i, ref BlogTemplate))
+					break;
+				return false;
+			case "-e": case "--entry-template":
+				if (NextArgument (args, ref i, ref EntryTemplate))
+					break;
+				return false;
+			case "-x": case "--rss-filename":
+				if (NextArgument (args, ref i, ref RSSFileName))
+					break;
+				return false;
+			default:
+				if (ExtractArgument ("-p", arg, ref Prefix))
+					break;
+				if (ExtractArgument ("--prefix", arg, ref Prefix))
+					break;
+				if (ExtractArgument ("-b", arg, ref BlogTemplate))
+					break;
+				if (ExtractArgument ("--blog-template", arg, ref BlogTemplate))
+					break;
+				if (ExtractArgument ("-e", arg, ref EntryTemplate))
+					break;
+				if (ExtractArgument ("--entry-template", arg, ref EntryTemplate))
+					break;
+				if (ExtractArgument ("-d", arg, ref BlogDirectory))
+					break;
+				if (ExtractArgument ("--blog-directory", arg, ref BlogDirectory))
+					break;
+				if (ExtractArgument ("-x", arg, ref RSSFileName))
+					break;
+				if (ExtractArgument ("--rss-filename", arg, ref RSSFileName))
+					break;
+				Error ("unrecognized option `{0}'", arg);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static void PrintHelp ()
+	{
+		Console.WriteLine ("Usage: lb [OPTION]*");
+		Console.WriteLine ("lb (Lame Blog) is a blog engine.");
+		Console.WriteLine (@"
+Options:
+  -p, --prefix=DIR            Root directory for generated files.
+  -d, --blog-directory=DIR    Where to find blog entry files (*.txt, *.html).
+  -b, --blog-template=FILE    Blog template file .
+  -e, --entry-template=FILE   Entry template file.
+  -x, --rss-filename=FILE     Basename for RSS filename.
+  -h, --help                  Display this message and exit.
+");
+	}
+
+	private void Error (string format, params object[] args)
+	{
+		Console.Write ("lb: ");
+		Console.WriteLine (format, args);
+		Console.WriteLine ("Try `lb --help' for more information.");
+	}
+
+	private bool ExtractArgument (string prefix, string argument, ref string value)
+	{
+		if (argument.Length - 1 <= prefix.Length)
+			return false;
+		if (!argument.StartsWith (prefix))
+			return false;
+
+		char delim = argument [prefix.Length];
+		if (delim != '=' && delim != ':')
+			return false;
+
+		value = argument.Substring (prefix.Length+1);
+		return true;
+	}
+
+	private bool NextArgument (string[] args, ref int i, ref string value)
+	{
+		if ((i+1) >= args.Length) {
+			Error ("missing argument for `{0}'", args [i]);
+			return false;
+		}
+		value = args [++i];
+		return true;
+	}
 }

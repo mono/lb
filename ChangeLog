@@ -1,3 +1,31 @@
+2006-01-19  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* config.cs: Add Prefix (base directory for output), BlogTemplate
+	  (previously hardcoded as the "template" file), EntryTemplate properties
+	  (previously hardcoded as the "entry" file).  Add support for command-line
+	  handling (used for regression tests).
+	* entry.test, template.test: Test input files (used for regression tests).
+	* lb.cs: 
+	  - Use new Config fields to control entry & file templates, prefix for 
+	    output directory; 
+	  - Change the RSS publication date to be the latest file time found, not the
+	    current time (helps make regression tests more consistent, as the
+	    pubdate won't be changing all the time in the RSS file).
+	  - Move entry_id handling into DayEntry.Id property (it's used in 2 places).
+	  - Permit rendering to a TextWriter
+	  - Don't open/read/close the file template all the time, but cache the file
+	    in memory (slight performance improvement).
+	  - Change RenderHtml() to use Translate().  Allows greater code sharing,
+	    consistency, easily adding new variables for replacement.
+	  - Add @BLOG_ENTRY_INDEX@ variable, a <ul/> list of all entries in a given
+	    page.
+	  - Create a .rss2 file for each category.
+	* makefile: Add check and check-update targets.  `check' runs the regression
+	  tests, while `check-update' updates the expected output.
+	* test/in/2005/jul-20.txt, test/in/foo/bar/2005/jul-14.html: test input
+	  files for regression tests.
+	* test/out/**: expected output for regression tests.
+
 2006-01-03  Miguel de Icaza  <miguel@novell.com>
 
 	* lb.cs: The THML title for individual archive blogs is now set to

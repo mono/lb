@@ -1,0 +1,30 @@
+<p>@ENTRY_NAVIGATION@</p>
+<h2 id="@ENTRY_ID@" name="@ENTRY_ANCHOR@">@ENTRY_CAPTION</h2>
+@ENTRY_BODY@
+<hr>
+<p>Test Variables:</p>
+<dl>
+  <dt>\@BASEDIR\@:</dt>
+  <dd>@BASEDIR@</dd>
+  <dt>\@COPYRIGHT\@:</dt>
+  <dd>@COPYRIGHT@</dd>
+  <dt>\@ENTRY_ANCHOR\@:</dt>
+  <dd>@ENTRY_ANCHOR@</dd>
+  <dt>\@ENTRY_CAPTION\@:</dt>
+  <dd>@ENTRY_CAPTION@</dd>
+  <dt>\@ENTRY_CATEGORY\@:</dt>
+  <dd>@ENTRY_CATEGORY@</dd>
+  <dt>\@ENTRY_CATEGORY_PATHS\@:</dt>
+  <dd>@ENTRY_CATEGORY_PATHS@</dd>
+  <dt>\@ENTRY_DATECAPTION\@:</dt>
+  <dd>@ENTRY_DATECAPTION@</dd>
+  <dt>\@ENTRY_ID\@:</dt>
+  <dd>@ENTRY_ID@</dd>
+  <dt>\@ENTRY_NAVIGATION\@:</dt>
+  <dd>@ENTRY_NAVIGATION@</dd>
+  <dt>\@ENTRY_PATH\@:</dt>
+  <dd>@ENTRY_PATH@</dd>
+  <dt>\@ENTRY_PERMALINK\@:</dt>
+  <dd>@ENTRY_PERMALINK@</dd>
+</dl>
+

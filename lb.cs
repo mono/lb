@@ -271,10 +271,18 @@ class DayEntry : IComparable {
 			return String.Format ("archive{2}{0:yyyy}/{0:MMM}-{0:dd}{1}.html", Date, extra, Category);
 		}
 	}
+
+	public string Id {
+		get {
+			return string.Format ("entry{0}{1}{2}",
+				Category.Replace ('/', '-'), Date.ToString ("yyyy-MM-ddThh:mm:sstt"), extra);
+		}
+	}
 }
 
 class Blog {
 	public Config config;
+	public DateTime pubDate = new DateTime (1, 1, 1);
 	string entry_template;
 	string analytics = "";
 	Hashtable category_entries = new Hashtable ();
@@ -290,7 +298,7 @@ class Blog {
 	public Blog (Config config)
 	{
 		this.config = config;
-		this.entry_template = File.OpenText ("entry").ReadToEnd ();
+		this.entry_template = File.OpenText (config.EntryTemplate).ReadToEnd ();
 
 		LoadDirectory (new DirectoryInfo (config.BlogDirectory));
 
@@ -313,8 +321,11 @@ class Blog {
 			if (!(file.Name.EndsWith (".html") || file.Name.EndsWith (".txt")))
 				continue;
 			DayEntry de = DayEntry.Load (this, file.FullName);
-			if (de != null)
+			if (de != null) {
 				entries.Add (de);
+				if (de.Date > pubDate)
+					pubDate = de.Date;
+			}
 		}
 	}
 
@@ -339,7 +350,7 @@ class Blog {
 	
 	static DateTime LastDate = new DateTime (2004, 5, 19, 0, 0, 0);
 	
-	void Render (StreamWriter o, IList entries, int idx, string blog_base, bool include_daily_anchor, bool include_navigation)
+	void Render (TextWriter o, IList entries, int idx, string blog_base, bool include_daily_anchor, bool include_navigation)
 	{
 		DayEntry d = (DayEntry) entries [idx];
 
@@ -356,12 +367,9 @@ class Blog {
 		string category_paths = GetCategoryPaths (d, blog_base);
 		string entry_path = string.Format ("{0}archive{1}{2:yyyy}/",
 			blog_base, d.Category, d.Date);
-		string entry_id = string.Format ("entry{0}{1}{2}",
-			d.Category.Replace ('/', '-'), d.Date.ToString ("yyyy-MM-ddThh:mm:sstt"),
-			d.extra);
 
 		Hashtable substitutions = new Hashtable ();
-		substitutions.Add ("@ENTRY_ID@", entry_id);
+		substitutions.Add ("@ENTRY_ID@", d.Id);
 		substitutions.Add ("@ENTRY_ANCHOR@", entry_anchor);
 		substitutions.Add ("@ENTRY_PATH@", entry_path);
 		substitutions.Add ("@ENTRY_NAVIGATION@", navigation);
@@ -483,7 +491,7 @@ class Blog {
 		}
 	}
 
-	void Render (StreamWriter o, IList entries, int start, int end, string blog_base, bool include_daily_anchor)
+	void Render (TextWriter o, IList entries, int start, int end, string blog_base, bool include_daily_anchor)
 	{
 		bool navigation = start + 1 == end;
 		
@@ -496,7 +504,7 @@ class Blog {
 		}
 	}
 
-	void RenderArticleList (StreamWriter o)
+	void RenderArticleList (TextWriter o)
 	{
 		foreach (Article a in articles){
 			o.WriteLine ("<a href=\"{0}\">{1}</a><br>", a.url, a.caption);
@@ -506,41 +514,35 @@ class Blog {
 	void RenderHtml (string template, string output, string blog_base, IList entries,
 			int start, int end)
 	{
-		using (FileStream i = File.OpenRead (template), o = CreateFile (output)){
-			StreamReader s = new StreamReader (i, Encoding.GetEncoding (config.InputEncoding));
+		using (FileStream o = CreateFile (output)){
 			StreamWriter w = new StreamWriter (o, GetOutputEncoding ());
-			string line;
 
-			while ((line = s.ReadLine ()) != null){
-				switch (line){
-				case "@BLOG_ENTRIES@":
-					Render (w, entries, start, end, blog_base, output == "all.html");
-					break;
-				case "@BLOG_ARTICLES@":
-					RenderArticleList (w);
-					break;
+			StringWriter blog_entries = new StringWriter ();
+			Render (blog_entries, entries, start, end, blog_base, output == "all.html");
 
-				default:
-					string title;
+			StringWriter blog_articles = new StringWriter ();
+			RenderArticleList (blog_articles);
 
-					if (Math.Abs (start - end) == 1){
-						DayEntry d = (DayEntry) entries [entries.Count - start - 1];
-						title = String.Format ("{0} - {1}", d.Caption, config.Title);
-					} else {
-						title = config.Title;
-					}
-					
-					line = line.Replace ("@BASEDIR@", blog_base);
-					line = line.Replace ("@ANALYTICS@", analytics);
-					line = line.Replace ("@TITLE@", title);
-					line = line.Replace ("@DESCRIPTION@", config.Description);
-					line = line.Replace ("@RSSFILENAME@", config.RSSFileName);
-					line = line.Replace ("@EDITOR@", config.ManagingEditor);
-					w.WriteLine (line);
-					break;
-				}
-
+			string title;
+			if (Math.Abs (start - end) == 1){
+				DayEntry d = (DayEntry) entries [entries.Count - start - 1];
+				title = String.Format ("{0} - {1}", d.Caption, config.Title);
+			} else {
+				title = config.Title;
 			}
+
+			Hashtable substitutions = new Hashtable ();
+			substitutions.Add ("@BLOG_ENTRIES@", blog_entries.ToString ());
+			substitutions.Add ("@BLOG_ENTRY_INDEX@", CreateEntryIndex (entries, start, end));
+			substitutions.Add ("@BLOG_ARTICLES@", blog_articles.ToString ());
+			substitutions.Add ("@BASEDIR@", blog_base);
+			substitutions.Add ("@TITLE@", title);
+			substitutions.Add ("@DESCRIPTION@", config.Description);
+			substitutions.Add ("@RSSFILENAME@", config.RSSFileName);
+			substitutions.Add ("@EDITOR@", config.ManagingEditor);
+
+			Translate (template, w, substitutions);
+
 			w.Flush ();
 		}
 	}
@@ -558,6 +560,22 @@ class Blog {
 		return e;
 	}
 
+	string CreateEntryIndex (IList entries, int start, int end)
+	{
+		StringBuilder sb = new StringBuilder ();
+		sb.Append ("<ul class=\"blog-index\">\n");
+		for (int i = start; i < end; ++i) {
+			int idx = entries.Count - i - 1;
+			if (idx < 0)
+				break;
+			DayEntry d = (DayEntry) entries [idx];
+			sb.AppendFormat ("  <li class=\"blog-index-item\"><a href=\"#{0}\">{1}</a></li>\n",
+					d.Id, d.Caption);
+		}
+		sb.Append ("</ul>\n");
+		return sb.ToString ();
+	}
+
 	public void RenderHtml (string template, string output, int start, int end, string blog_base)
 	{
 		RenderHtml (template, output, blog_base, entries, start, end);
@@ -571,14 +589,16 @@ class Blog {
 			string parent_dir = "../..";
 			if (d.Category.Length > 0)
 				parent_dir += Regex.Replace (d.Category, "[^/]+", "..");
-			RenderHtml (template, d.PermaLink, entries.Count - i - 1, entries.Count - i, parent_dir);
+			RenderHtml (template, Path.Combine (config.Prefix, d.PermaLink), 
+					entries.Count - i - 1, entries.Count - i, parent_dir);
 		}
 
 		foreach (DictionaryEntry de in category_entries) {
 			string category = de.Key.ToString ();
 			IList entries = (IList) de.Value;
 			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
-			RenderHtml (template, "archive" + category + "index.html",
+			RenderHtml (template, 
+					Path.Combine (config.Prefix, "archive" + category + "index.html"),
 					parent_dir, entries, 0, entries.Count);
 		}
 	}
@@ -593,12 +613,25 @@ class Blog {
 		c.Copyright = config.Copyright;
 		c.Generator = "lb#";
 		c.ManagingEditor = config.ManagingEditor;
-		c.PubDate = System.DateTime.Now;
+		// c.PubDate = System.DateTime.Now;
+		c.PubDate = pubDate;
 		
 		return c;
 	}
 
-	public void RenderRSS (RssVersion version, string output, int start, int end)
+	public void RenderArchiveRss (RssVersion version, string output, int end)
+	{
+		foreach (DictionaryEntry de in category_entries) {
+			string category = de.Key.ToString ();
+			IList entries = (IList) de.Value;
+			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
+			RenderRSS (version, 
+					Path.Combine (config.Prefix, "archive" + category + output),
+					entries, 0, Math.Min (end, entries.Count));
+		}
+	}
+
+	public void RenderRSS (RssVersion version, string output, IList entries, int start, int end)
 	{
 		RssChannel channel = MakeChannel ();
 
@@ -638,7 +671,7 @@ class Blog {
 
 	public void RenderRSS (string output, int start, int end)
 	{
-		RenderRSS (RssVersion.RSS20, output + ".rss2", start, end);
+		RenderRSS (RssVersion.RSS20, output + ".rss2", entries, start, end);
 	}
 
 	public class Article {
@@ -670,20 +703,24 @@ class Blog {
 
 class LB {
 
-	static void Main ()
+	static void Main (string[] args)
 	{
 		Config config = (Config) 
 			new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
 		if (config.BlogImageBasedir == null || config.BlogImageBasedir == "")
 			config.BlogImageBasedir = config.BlogWebDirectory;
-
+		if (!config.Parse (args))
+			return;
 		Blog b = new Blog (config);
 
-		b.RenderHtml ("template", config.BlogFileName, 0, 30, "");
-		b.RenderHtml ("template", "all.html", 0, b.Entries, "");
-		b.RenderArchive ("template");
+		string template = File.OpenText (config.BlogTemplate).ReadToEnd ();
+		b.RenderHtml (template, Path.Combine (config.Prefix, config.BlogFileName), 0, 30, "");
+		b.RenderHtml (template, Path.Combine (config.Prefix, "all.html"), 0, b.Entries, "");
+		b.RenderArchive (template);
 		
-		b.RenderRSS (config.RSSFileName, 0, 30);
+		b.RenderRSS (Path.Combine (config.Prefix, config.RSSFileName), 0, 30);
+		b.RenderArchiveRss (RssVersion.RSS20, config.RSSFileName + ".rss2", 30);
+
 		File.Copy ("log-style.css", "texts/log-style.css", true);
 	}
 }
