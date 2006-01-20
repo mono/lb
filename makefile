@@ -30,5 +30,5 @@ check:
 	mono --debug lb.exe --blog-directory=`pwd`/test/in --prefix=test/tmp \
 		--blog-template=template.test --entry-template=entry.test \
 		--rss-filename=test
-	diff -ru test/out test/tmp 
+	diff -ru --exclude=\.svn test/out test/tmp 
 

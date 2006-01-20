@@ -1,5 +1,9 @@
 2006-01-19  Jonathan Pryor  <jonpryor@vt.edu>
 
+	* makefile: Exlude the .svn directories during `make check'.
+
+2006-01-19  Jonathan Pryor  <jonpryor@vt.edu>
+
 	* config.cs: Add Prefix (base directory for output), BlogTemplate
 	  (previously hardcoded as the "template" file), EntryTemplate properties
 	  (previously hardcoded as the "entry" file).  Add support for command-line
