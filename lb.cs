@@ -709,6 +709,13 @@ class LB {
 			new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
 		if (config.BlogImageBasedir == null || config.BlogImageBasedir == "")
 			config.BlogImageBasedir = config.BlogWebDirectory;
+		if (config.Prefix == null)
+			config.Prefix = "";
+		if (config.BlogTemplate == null || config.BlogTemplate == "")
+			config.BlogTemplate = "template";
+		if (config.EntryTemplate == null || config.EntryTemplate == "")
+			config.EntryTemplate = "entry";
+
 		if (!config.Parse (args))
 			return;
 		Blog b = new Blog (config);
