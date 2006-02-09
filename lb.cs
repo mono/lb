@@ -533,6 +533,7 @@ class Blog {
 
 			Hashtable substitutions = new Hashtable ();
 			substitutions.Add ("@BLOG_ENTRIES@", blog_entries.ToString ());
+			substitutions.Add ("@ANALYTICS@", analytics);
 			substitutions.Add ("@BLOG_ENTRY_INDEX@", CreateEntryIndex (entries, start, end));
 			substitutions.Add ("@BLOG_ARTICLES@", blog_articles.ToString ());
 			substitutions.Add ("@BASEDIR@", blog_base);
