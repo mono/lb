@@ -390,6 +390,7 @@ class Blog {
 		substitutions.Add ("@ENTRY_PERMALINK@", d.PermaLink);
 		substitutions.Add ("@ENTRY_CAPTION@", d.Caption);
 		substitutions.Add ("@BASEDIR@", blog_base);
+		substitutions.Add ("@BASEIMAGES@", config.BlogImageBasedir);
 		substitutions.Add ("@COPYRIGHT@", config.Copyright);
 		substitutions.Add ("@ENTRY_CATEGORY@", d.Category);
 		substitutions.Add ("@ENTRY_DATECAPTION@", d.DateCaption);
@@ -532,7 +533,7 @@ class Blog {
 			StreamWriter w = new StreamWriter (o, GetOutputEncoding ());
 
 			StringWriter blog_entries = new StringWriter ();
-			Render (blog_entries, entries, start, end, blog_base, output == "all.html");
+			Render (blog_entries, entries, start, end, blog_base, Path.GetFileName (output) == "all.html");
 
 			StringWriter blog_articles = new StringWriter ();
 			RenderArticleList (blog_articles);

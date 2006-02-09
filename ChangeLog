@@ -1,5 +1,10 @@
 2006-02-09 Gonzalo Paniagua Javier <gonzalo@ximian.com>
 
+	* lb.cs: substitute BASEIMAGES too and fix file name comparison
+	to "all.html".
+
+2006-02-09 Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
 	* lb.cs: provide details on the error when failing to load a file.
 	Add my '#date' hack, just in case you don't trust date handling based
 	on file time stamps Removed unused variables. Combine with the base
@@ -111,4 +116,5 @@
 	* makefile: Use the RSS.NET.dll supplied
 	* RSS.NET.dll: Added
 	* valid-xhtml10.png: Added
+
 
