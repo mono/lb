@@ -76,13 +76,11 @@ class DayEntry : IComparable {
 		
 		try {
 			de = new DayEntry (blog, file);
-		} catch {
-			Console.WriteLine ("Failed to load file: {0}", file);
+		} catch (Exception e) {
+			Console.WriteLine ("Failed to load file: {0}. Reason: {1}", file, e.Message);
 		}
 		return de;
 	}
-
-	TimeSpan h24 = new TimeSpan (24, 0, 0);
 
 	void ParseDate (string file)
 	{
@@ -178,6 +176,22 @@ class DayEntry : IComparable {
 					}
 				}
 			}
+
+			// '#date' followed by the output of:
+			//	LC_TIME=C date -u +"%a, %d %b %Y %T GMT"
+			// will set the publication date.
+			// Example:
+			// #date Thu, 09 Feb 2006 18:42:56 GMT
+			if (s.StartsWith ("#date ")) {
+				try {
+					Date = DateTime.ParseExact (s.Substring (6), "r", null);
+				} catch (Exception e) {
+					Console.WriteLine ("Error parsing: '{0}'\n{1}", s.Substring (5), e);
+					Environment.Exit (1);
+				}
+				continue;
+			}
+			
 			if (!is_html){
 				if (s == "" && !in_pre)
 					sb.Append ("<p>");
@@ -599,7 +613,7 @@ class Blog {
 			IList entries = (IList) de.Value;
 			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
 			RenderHtml (template, 
-					Path.Combine (config.Prefix, "archive" + category + "index.html"),
+					Path.Combine (config.Prefix, "archive" + category + config.BlogFileName),
 					parent_dir, entries, 0, entries.Count);
 		}
 	}
@@ -625,7 +639,6 @@ class Blog {
 		foreach (DictionaryEntry de in category_entries) {
 			string category = de.Key.ToString ();
 			IList entries = (IList) de.Value;
-			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
 			RenderRSS (version, 
 					Path.Combine (config.Prefix, "archive" + category + output),
 					entries, 0, Math.Min (end, entries.Count));
@@ -710,8 +723,8 @@ class LB {
 			new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
 		if (config.BlogImageBasedir == null || config.BlogImageBasedir == "")
 			config.BlogImageBasedir = config.BlogWebDirectory;
-		if (config.Prefix == null)
-			config.Prefix = "";
+		if (config.Prefix == null || config.Prefix == "")
+			config.Prefix = Environment.CurrentDirectory;
 		if (config.BlogTemplate == null || config.BlogTemplate == "")
 			config.BlogTemplate = "template";
 		if (config.EntryTemplate == null || config.EntryTemplate == "")
@@ -729,6 +742,6 @@ class LB {
 		b.RenderRSS (Path.Combine (config.Prefix, config.RSSFileName), 0, 30);
 		b.RenderArchiveRss (RssVersion.RSS20, config.RSSFileName + ".rss2", 30);
 
-		File.Copy ("log-style.css", "texts/log-style.css", true);
+		File.Copy ("log-style.css", Path.Combine (config.Prefix, "texts/log-style.css"), true);
 	}
 }

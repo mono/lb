@@ -1,6 +1,14 @@
+2006-02-09 Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* lb.cs: provide details on the error when failing to load a file.
+	Add my '#date' hack, just in case you don't trust date handling based
+	on file time stamps Removed unused variables. Combine with the base
+	prefix when writing log-style.css too.
+	* RSS.NET.dll: updated.
+
 2006-01-19  Jonathan Pryor  <jonpryor@vt.edu>
 
-	* makefile: Exlude the .svn directories during `make check'.
+	* makefile: Exclude the .svn directories during `make check'.
 
 2006-01-19  Jonathan Pryor  <jonpryor@vt.edu>
 
