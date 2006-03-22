@@ -34,6 +34,7 @@ class DayEntry : IComparable {
 	public string Body;
 	public string Caption = "";
 	public string DateCaption;
+	public string TimeCaption;
 	public string Category = "";
 	
 	Blog blog;
@@ -189,6 +190,8 @@ class DayEntry : IComparable {
 					Console.WriteLine ("Error parsing: '{0}'\n{1}", s.Substring (5), e);
 					Environment.Exit (1);
 				}
+				DateCaption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
+				TimeCaption = String.Format ("{0:hh}:{0:mm} {0:tt} GMT", Date);
 				continue;
 			}
 			
@@ -322,8 +325,11 @@ class Blog {
 		foreach (DayEntry de in entries)
 			AddCategory (category_entries, de);
 
-		if (config.AnalyticsStub != null && config.AnalyticsStub.Length > 0)
-			analytics = File.OpenText (config.AnalyticsStub).ReadToEnd ();
+		if (config.AnalyticsStub != null && config.AnalyticsStub.Length > 0) {
+			using (StreamReader reader = File.OpenText (config.AnalyticsStub)) {
+				analytics = reader.ReadToEnd ();
+			}
+		}
 	}
 
 	void LoadDirectory (DirectoryInfo dir)
@@ -394,6 +400,7 @@ class Blog {
 		substitutions.Add ("@COPYRIGHT@", config.Copyright);
 		substitutions.Add ("@ENTRY_CATEGORY@", d.Category);
 		substitutions.Add ("@ENTRY_DATECAPTION@", d.DateCaption);
+		substitutions.Add ("@ENTRY_TIMECAPTION@", d.TimeCaption);
 		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
 
 		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
@@ -611,6 +618,11 @@ class Blog {
 
 		foreach (DictionaryEntry de in category_entries) {
 			string category = de.Key.ToString ();
+			string cat_no_slash = "-" + category.Trim ('/');
+			if (cat_no_slash == "-") {
+				cat_no_slash = "";
+				continue;
+			}
 			IList entries = (IList) de.Value;
 			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
 			RenderHtml (template, 
@@ -637,12 +649,18 @@ class Blog {
 
 	public void RenderArchiveRss (RssVersion version, string output, int end)
 	{
+		string base_fn = Path.ChangeExtension (output, null);
 		foreach (DictionaryEntry de in category_entries) {
 			string category = de.Key.ToString ();
+			string cat_no_slash = "-" + category.Trim ('/');
+			if (cat_no_slash == "-") {
+				cat_no_slash = "";
+				continue;
+			}
 			IList entries = (IList) de.Value;
-			RenderRSS (version, 
-					Path.Combine (config.Prefix, "archive" + category + output),
-					entries, 0, Math.Min (end, entries.Count));
+			string filename = String.Format ("{0}{1}.rss2", base_fn, cat_no_slash);
+			string full_path = Path.Combine (config.Prefix, filename);
+			RenderRSS (version, full_path, entries, 0, Math.Min (end, entries.Count));
 		}
 	}
 
@@ -742,7 +760,5 @@ class LB {
 		
 		b.RenderRSS (Path.Combine (config.Prefix, config.RSSFileName), 0, 30);
 		b.RenderArchiveRss (RssVersion.RSS20, config.RSSFileName + ".rss2", 30);
-
-		File.Copy ("log-style.css", Path.Combine (config.Prefix, "texts/log-style.css"), true);
 	}
 }

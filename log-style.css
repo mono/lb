@@ -1,16 +1,17 @@
 h1 {
 	color: #efefef;
 	font-size: 14pt;
-	font-family: "Trebuchet MS";
+	font-family: "Trebuchet MS", sans-serif;
 	border: 0;
-	margin: 0;
+	margin: 0px;
 	padding: 1em;
-	background: #666666;
+	background: #666;
 }
 
 h2, h3, h4, h5, h6 {
 	font-family: Verdana,sans-serif;
 	font-weight: bold;
+	margin: 9pt;
 }
 
 h2 {
@@ -18,44 +19,34 @@ h2 {
 }
 
 h3 {
-	font-size: 13px;
-	border-bottom: 2px solid #dddddd;
+	font-size: 16px;
+	border-bottom: 2px solid #ddd;
 }
 
 h3 a {
 	color: black;
 	text-decoration: none;
 }
-
-blockquote {
-	border-left: 1px solid;
-	padding-left: 1em;
-}
-
+a:hover		{ color: #000;  background: #85adfc;}
 body, table {
-	background-color: #ffffff;
-	font-family: Verdana, sans-serif; 
+	background-color: #fff;
+	font-family: Verdana, sans-serif; font-size: 14px;
 	color: black;
-	margin: 0;
+	margin: 0px;
 	padding: 0;
 	border: 0;
 }
 
 .blogentry {
-	margin-left: 1em;
+	margin-left: 2em;
 	margin-right: 2em;
 }
 
 .blogentry h1, .blogentry h2, .blogentry h3 {
 	padding: 0;
-	margin: 0;
+	margin: 0px;
 	border: 0;
 }	
-
-.footer {
-	margin-left: 0em;
-	margin-bottom: 1em;
-}
 
 img {
 	border: 0;
@@ -67,8 +58,8 @@ img {
 	margin:15px;
 	padding:15px;
 	font-size: small;
-	font-family: "Courier New", Courier;
-	background:whitesmoke;
+	font-family: "Courier New", Courier, monospace;
+	background: whitesmoke;
 	border: solid 1px silver;
 	line-height:110%;
 }
@@ -80,10 +71,11 @@ img {
 #bloggers {
 	float: right;
 	width: 120pt;
+	font-size: 12px;
 }
 
 #bloggers h2 {
-	margin-left:0;
+	margin-left:0px;
 	font-size: 12px;
 }
 #bloggers ul {
@@ -91,21 +83,28 @@ img {
 	list-style-type:none;
 }
 
-.code-xml, .code-csharp
-{
+.shell { 
+	border-style: solid; background: #000; color: #eee;
+	border-width: 1px;
+	padding: 2pt; 
 	margin:15px;
-	padding:15px;
-	font-size: small;
-	font-family: "Courier New", Courier;
-	background:whitesmoke;
-	border: solid 1px silver;
-	line-height:110%;
 }
 
-.shell { 
-	border-style: solid; background: #000000; color: #eeeeee;
-	#777777; border-width:
-	1px; padding: 2pt; 
-	margin:15px;
+/* Disclaimer */
+#disclaimer {
+	text-align: center;
+	font-size: small;
+	clear: both;
+	margin-top: 10px;
+	padding: 5px 0px 15px 0px;
+	color: #aaa;
+}
+
+#disclaimer a {
+	color: #aaf;
+}
+
+#disclaimer a:visited {
+	color: #faa;
 }
 
