@@ -396,6 +396,7 @@ class Blog {
 		substitutions.Add ("@ENTRY_PERMALINK@", d.PermaLink);
 		substitutions.Add ("@ENTRY_CAPTION@", d.Caption);
 		substitutions.Add ("@BASEDIR@", blog_base);
+		substitutions.Add ("@BASEFILES@", blog_base + "files");
 		substitutions.Add ("@BASEIMAGES@", config.BlogImageBasedir);
 		substitutions.Add ("@COPYRIGHT@", config.Copyright);
 		substitutions.Add ("@ENTRY_CATEGORY@", d.Category);
@@ -559,6 +560,8 @@ class Blog {
 			substitutions.Add ("@BLOG_ENTRY_INDEX@", CreateEntryIndex (entries, start, end));
 			substitutions.Add ("@BLOG_ARTICLES@", blog_articles.ToString ());
 			substitutions.Add ("@BASEDIR@", blog_base);
+			substitutions.Add ("@BASEFILES@", blog_base + "files");
+			substitutions.Add ("@BASEIMAGES@", config.BlogImageBasedir);
 			substitutions.Add ("@TITLE@", title);
 			substitutions.Add ("@DESCRIPTION@", config.Description);
 			substitutions.Add ("@RSSFILENAME@", config.RSSFileName);
@@ -677,7 +680,14 @@ class Blog {
 
 			RssItem item = new RssItem ();
 			item.Author = config.Author;
-			item.Description = d.Body;
+			Hashtable substitutions = new Hashtable ();
+			string blog_base = config.BlogWebDirectory;
+			substitutions.Add ("@BASEDIR@", blog_base);
+			substitutions.Add ("@BASEFILES@", blog_base + "files");
+			substitutions.Add ("@BASEIMAGES@", config.BlogImageBasedir);
+			StringWriter sw = new StringWriter ();
+			Translate (d.Body, sw, substitutions);
+			item.Description = sw.ToString ();
 			item.Guid = new RssGuid ();
 			item.Guid.Name = config.BlogWebDirectory + d.PermaLink;
 			item.Link = new Uri (item.Guid.Name);
