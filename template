@@ -31,8 +31,8 @@
 	<a href="http://primates.ximian.com/~duncan/blog/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://primates.ximian.com/~duncan/blog">Duncan Mak</a>
 	<br />
-	<a href="http://primates.ximian.com/~gonzalo/mono/blog/index.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
-	<a href="http://primates.ximian.com/~gonzalo/mono/blog/">Gonzalo Paniagua</a>
+	<a href="http://gonzalo.name/blog/gonzalo.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+	<a href="http://gonzalo.name/blog/">Gonzalo Paniagua</a>
 	<br />
 	<a href="http://www.jacksonh.net/jackson/blog/jackson.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a> 
 	<a href="http://www.jacksonh.net/jackson/blog/">Jackson Harper</a>
