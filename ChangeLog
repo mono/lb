@@ -1,3 +1,7 @@
+2006-08-08 Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* RSS.NET.dll: updated.
+
 2006-02-09 Gonzalo Paniagua Javier <gonzalo@ximian.com>
 
 	* lb.cs: substitute BASEIMAGES too and fix file name comparison
