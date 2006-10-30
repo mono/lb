@@ -328,6 +328,8 @@ class Blog {
 
 	void LoadDirectory (DirectoryInfo dir)
 	{
+		if (dir.Name.EndsWith ("drafts"))
+			return;
 		foreach (DirectoryInfo subdir in dir.GetDirectories ()) {
 			LoadDirectory (subdir);
 		}
@@ -389,12 +391,14 @@ class Blog {
 		substitutions.Add ("@ENTRY_NAVIGATION@", navigation);
 		substitutions.Add ("@ENTRY_PERMALINK@", d.PermaLink);
 		substitutions.Add ("@ENTRY_CAPTION@", d.Caption);
-		substitutions.Add ("@BASEDIR@", blog_base);
+		substitutions.Add ("@BASEDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@BASEIMAGES@", config.BlogImageBasedir);
 		substitutions.Add ("@COPYRIGHT@", config.Copyright);
 		substitutions.Add ("@ENTRY_CATEGORY@", d.Category);
 		substitutions.Add ("@ENTRY_DATECAPTION@", d.DateCaption);
 		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
+		substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
+		substitutions.Add ("@ENTRY_URL_PERMALINK@", Path.Combine (config.BlogWebDirectory, d.PermaLink));
 
 		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
 		Translate (d.Body, body, substitutions);

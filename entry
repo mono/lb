@@ -4,4 +4,8 @@
 <p>
 <h3><a href="@BASEDIR@@ENTRY_PERMALINK@" class="entryTitle">@ENTRY_CAPTION@</a></h3>
 <div class='blogentry'>@ENTRY_BODY@</div>
-<div class='footer'>Posted by @COPYRIGHT@ on <a href="@BASEDIR@@ENTRY_PERMALINK@">@ENTRY_DATECAPTION@</a></div><p>
+<div class='footer'>Posted by @COPYRIGHT@ on <a href="@ENTRY_URL_PERMALINK@">@ENTRY_DATECAPTION@</a> |
+        <a href="http://www.digg.com/submit?phase=2&url=@ENTRY_URL_PERMALINK@">Digg It</a> |
+        <a href="http://reddit.com/submit?url=@ENTRY_URL_PERMALINK@">Reddit</a>
+
+</div><p>

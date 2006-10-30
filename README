@@ -65,5 +65,9 @@ This is Lame Blog.
 
 	The result is then pushed to a server with rsync.
 
+	The AnalyticsStub is the file provided to you by google as the
+	stub that you must insert
+
+
 Enjoy,
 Miguel de Icaza (miguel@gnu.org)
