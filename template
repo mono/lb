@@ -9,33 +9,46 @@
 		@ANALYTICS@
 	</head>
 	
-	<body onload='paintColors();'>
-		<h1>@DESCRIPTION@</h1>
-		
-		<div id='bloggers'>
-			<h2>RSS</h2>
-		        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
-			<a href="http://www.bloglines.com/sub/http://primates.ximian.com/~miguel/miguel.rss2"><img src="http://www.bloglines.com/images/sub_modern5.gif"/></a>
+<body onload='paintColors();'>
 
-<p>Email: <a href="mailto:@EDITOR@">@EDITOR@</a>
+<h1>@DESCRIPTION@</h1>
 
-	<h2>Blogs - Mono</h2>
-	<a href="http://gonzalo.name/blog/gonzalo.rss2"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+<div id='bloggers'>
+   <h2>RSS</h2>
+        <a href="@BASEDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
+	<a href="http://www.bloglines.com/sub/http://primates.ximian.com/~miguel/miguel.rss2">
+	<img src="http://www.bloglines.com/images/sub_modern5.gif"/></a>
+
+	<p>Email: <a href="mailto:@EDITOR@">@EDITOR@</a>
+	<p>Pictures:
+	<br><a href="http://picasaweb.google.com/miguel.de.icaza/?pli=1">Picassa</a>
+	<br><a href="http://www.flickr.com/photos/migueldeicaza/">Flickr</a>
+
+    <h2>Blogs - Mono</h2>
+	<a href="http://gonzalo.name/blog/gonzalo.rss2">
+	<img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://gonzalo.name/blog/">Gonzalo Paniagua</a>
 	<br />
-	<a href="http://primates.ximian.com/~lluis/blog/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+
+	<a href="http://primates.ximian.com/~lluis/blog/index.rdf">
+	<img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://primates.ximian.com/~lluis/blog/">Lluis Sanchez</a>
 	<br />
-	<a href="http://primates.ximian.com/~martin/blog/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+
+	<a href="http://primates.ximian.com/~martin/blog/index.rdf">
+	<img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+
 	<a href="http://primates.ximian.com/~martin/blog/">Martin Baulig</a>
 	<br />
-	<a href="http://primates.ximian.com/~mkestner/blog/index.rdf"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+	<a href="http://primates.ximian.com/~mkestner/blog/index.rdf">
+	<img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://primates.ximian.com/~mkestner/blog/">Mike Kestner</a>
 	<br />
-	<a href="http://pages.infinit.net/ctech/poupou.rss"><img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+	<a href="http://pages.infinit.net/ctech/poupou.rss">
+	<img align="middle" src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 	<a href="http://pages.infinit.net/ctech/poupou.html">Sebastien Pouliot</a>
 
-	<h2>Fundamental</h2>
+    <h2>Fundamental</h2>
 	<a href="http://www.nat.org">Nat.org</a><br/>
 	<a href="http://www.go-mono.com/monologue">Monologue</a><br/>
 	<a href="http://www.commondreams.org">CommonDreams</a><br/>
@@ -49,7 +62,7 @@
 	<a href="http://sadlyno.com/">Sadly No</a>
 	<a href="http://world-o-crap.com/blog/">World-o-Crap</a>
 
-	<h2>Friends, Spanish</h2>
+    <h2>Friends, Spanish</h2>
 
 	<a href="http://el-blog-de-alejandra.blogspot.com/">Alejandra's blog</a><br/>
 	<a href="http://caserola.homelinux.org/~mancha/blog/blosxom.cgi">La_Mancha</a><br/>
@@ -57,25 +70,26 @@
 	<a href="http://www.juantomas.net/">Juantomás</a><br/>
 	<a href="http://olea.org/diario/">Ismael Olea</a><br/>
 
-			<p>
-			</a>
-			<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif"></a>
+	<p>
+	</a>
+	<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif"></a>
 
-<p><b>Docs:</b></p>
-@BLOG_ARTICLES@
-		</div>
-		
-<div id='blogs'>
-@BLOG_ENTRIES@
+	<p><b>Docs:</b></p>
+	@BLOG_ARTICLES@
 </div>
+
+<div id='blogs'>
+	@BLOG_ENTRIES@
+</div>
+
 <div class='footer'>
 <!--a href="@BASEDIR@all.html">All entries</a-->
 </div>
 
-	<center>
-	This is a personal web page. Things said here do not represent the position of my employer.
-	</center>
+<center>
+This is a personal web page. Things said here do not represent the position of my employer.
+</center>
 
-	</body>
+</body>
 </html>
 
