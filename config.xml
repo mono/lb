@@ -13,4 +13,5 @@ RSSFileName="miguel"
 InputEncoding="utf-8"
 OutputEncoding="utf-8"
 AnalyticsStub="analytics"
+CommentsStub="comments"
 />

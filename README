@@ -34,6 +34,7 @@ This is Lame Blog.
 		    InputEncoding="utf-8"
 		    OutputEncoding="utf-8"
 		    AnalyticsStub="analytics"
+		    CommentsStub="comments"
 		/>
 
 	The various parameters should be self explanatory.
@@ -45,6 +46,14 @@ This is Lame Blog.
 	Ie, for example:
 
 		~/activity/2003/oct-01.html
+
+	For files with the HTML ending, it assumes that the title for
+	the blog entry will be the first line (which should be tagged
+	with <h1>title</h1>).
+
+	For text files, the first line should be formatted like this:
+
+		@This is my Title
 
 	To add multiple entries per day, append a -N to the entry:
 
@@ -68,6 +77,26 @@ This is Lame Blog.
 	The AnalyticsStub is the file provided to you by google as the
 	stub that you must insert
 
+* Commands
+
+	The following commands can be used in your individual blog entries:
+
+	#include file
+
+		Will include the contents of "file" into the blog entry
+
+	#pic filename,caption
+
+		Will generate the code to center the image stored in
+		filename with the given caption.
+
+	#comment, #comments
+
+		Will enable the entry to have comments.   To activate
+		comments, you need to get a comment hosting provider,
+	  	and then paste the stub into the file `comments', or
+	  	the file referenced in the config.xml CommentsStub 
+		field
 
 Enjoy,
 Miguel de Icaza (miguel@gnu.org)

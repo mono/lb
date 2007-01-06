@@ -1,0 +1,2 @@
+| <a href="javascript:HaloScan('@ENTRY_PERMALINK@');" target="_self">
+<script type="text/javascript">postCount('@ENTRY_PERMALINK@');</script>Comments</a>

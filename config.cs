@@ -20,6 +20,7 @@ public class Config {
 	[XmlAttribute] public string Prefix;
 	[XmlAttribute] public string BlogTemplate;
 	[XmlAttribute] public string EntryTemplate;
+	[XmlAttribute] public string CommentsStub;
 
 	public bool Parse (string[] args)
 	{

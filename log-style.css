@@ -41,7 +41,7 @@ blockquote {
 }
 
 .blogentry h1 {
-	font-family: Verdana
+	font-family: Verdana;
 	font-size: smaller;
 	margin-left: -1em;
 	border-bottom: 2px solid #dddddd;

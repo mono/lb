@@ -35,6 +35,7 @@ class DayEntry : IComparable {
 	public string Caption = "";
 	public string DateCaption;
 	public string Category = "";
+	public bool Comments;
 	
 	Blog blog;
 	public string extra = "";
@@ -220,6 +221,9 @@ class DayEntry : IComparable {
 					sb.Append (String.Format ("<p><center><a href=\"{0}pic.php?name={1}&caption={2}\"><img border=0 src=\"{3}/pictures/small-{1}\"></a><p>{2}</center></p>", blog_base, filename, caption, blog.config.BlogImageBasedir));
 					continue;
 					
+				} else if (s.StartsWith ("#comment")){
+					Comments = true;
+					continue;
 				}
 				sb.Append (s);
 			}
@@ -299,6 +303,7 @@ class Blog {
 	public DateTime pubDate = new DateTime (1, 1, 1);
 	string entry_template;
 	string analytics = "";
+	string comments = "";
 	Hashtable category_entries = new Hashtable ();
 
 	ArrayList entries = new ArrayList ();
@@ -324,6 +329,9 @@ class Blog {
 
 		if (config.AnalyticsStub != null && config.AnalyticsStub.Length > 0)
 			analytics = File.OpenText (config.AnalyticsStub).ReadToEnd ();
+		if (config.CommentsStub != null && config.CommentsStub.Length > 0){
+			comments = File.OpenText (config.CommentsStub).ReadToEnd ();
+		}
 	}
 
 	void LoadDirectory (DirectoryInfo dir)
@@ -399,6 +407,12 @@ class Blog {
 		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
 		substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@ENTRY_URL_PERMALINK@", Path.Combine (config.BlogWebDirectory, d.PermaLink));
+		if (d.Comments){
+			StringWriter rendered_comment = new StringWriter (new StringBuilder (comments.Length));
+			Translate (comments, rendered_comment, substitutions);
+			substitutions.Add ("@COMMENTS@", rendered_comment.ToString ());
+		} else
+			substitutions.Add ("@COMMENTS@", "");
 
 		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
 		Translate (d.Body, body, substitutions);
