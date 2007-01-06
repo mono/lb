@@ -1,2 +1,1 @@
-| <a href="javascript:HaloScan('@ENTRY_PERMALINK@');" target="_self">
-<script type="text/javascript">postCount('@ENTRY_PERMALINK@');</script>Comments</a>
+| <a href="http://groups-beta.google.com/group/tiraniaorg-blog-comments/post?subject=@ENTRY_CAPTION@ on @ENTRY_DATECAPTION@">Post Comment</a>
