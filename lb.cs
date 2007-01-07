@@ -574,6 +574,7 @@ class Blog {
 			substitutions.Add ("@DESCRIPTION@", config.Description);
 			substitutions.Add ("@RSSFILENAME@", config.RSSFileName);
 			substitutions.Add ("@EDITOR@", config.ManagingEditor);
+			substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 
 			Translate (template, w, substitutions);
 

@@ -50,7 +50,7 @@ blockquote {
 
 body, table {
 	background-color: #ffffff;
-	font-family: Verdana, Georgia, "Times New Roman", Times, serif;
+	font-family: Verdana, Georgia, "Times New Roman", Times, sans-serif;
 	color: black;
 	margin: 0;
 	padding: 0;
@@ -78,20 +78,25 @@ img {
 	line-height:110%;
 }
 
-#blogs { 
+#main { 
 	margin-left: 2em;
-	margin-right: 140pt;
-}
-#bloggers {
-	float: right;
-	width: 120pt;
+	position: absolute;
+	width: 62%;
 }
 
-#bloggers h2 {
+#sidebar {
+	width: 28%;
+	left: 66%;
+	padding:1em 0pt 1em 2em;
+	position: absolute;
+	border-left:1px dotted #AAAAAA;
+}
+
+#sidebar h2 {
 	margin-left:0;
 	font-size: 12px;
 }
-#bloggers ul {
+#sidebar ul {
 	padding:0;
 	list-style-type:none;
 }
@@ -113,3 +118,6 @@ img {
 	margin:15px;
 }
 
+.separator {
+	border-bottom: 1px dotted #aaaaaa; padding-top: 1em; padding-bottom: 1em;
+}
