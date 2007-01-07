@@ -1,11 +1,11 @@
 <html>
 	<head>
 		<title>@TITLE@</title>
-		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css'>
-		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://tirania.org/blog/miguel.rss2"/>
+		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css' />
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://tirania.org/blog/miguel.rss2" />
 		<script src='@BASEDIR@prettyprint.js' type='text/javascript'></script>
 		<script type="text/javascript" src="http://www.haloscan.com/load/migueldeicaza"> </script>
-		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		@ANALYTICS@
 	</head>
 	
@@ -15,13 +15,13 @@
 
 <div id='sidebar'>
    <h2>RSS</h2>
-        <a href="@BLOGWEBDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif"></a>
+        <a href="@BLOGWEBDIR@@RSSFILENAME@.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
 
 	<a href="http://fusion.google.com/add?feedurl=@BLOGWEBDIR@@RSSFILENAME@.rss2">
-	<img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif"></a>
+	<img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif" alt="addgoogle2.gif" /></a>
 
 	<a href="http://www.bloglines.com/sub/http://primates.ximian.com/~miguel/miguel.rss2">
-	<img src="http://www.bloglines.com/images/sub_modern5.gif"/></a>
+	<img src="http://www.bloglines.com/images/sub_modern5.gif" alt="sub_modern5.gif" /></a>
 
     <h2>Comments</h2>
 
@@ -29,11 +29,12 @@
 	Email: <a href="mailto:@EDITOR@">@EDITOR@</a>.
 
     <h2>Pictures:</h2>
-	<a href="http://picasaweb.google.com/miguel.de.icaza/?pli=1">Picassa</a><br>
+	<a href="http://picasaweb.google.com/miguel.de.icaza/?pli=1">Picasa</a><br/>
 	<a href="http://www.flickr.com/photos/migueldeicaza/">Flickr</a>
 
 	<p>
-	<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif"></a>
+	<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif" alt="mono-contributor-static.gif" /></a>
+	</p>
 
     <div class="separator">
     </div>
@@ -57,7 +58,7 @@
 	<a href="http://sadlyno.com/">Sadly No</a><br/>
 	<a href="http://world-o-crap.com/blog/">World-o-Crap</a><br/>
 	<a href="http://patriotboy.blogspot.com">Jesus' General</a><br/>
-	<a href="http://billmon.org">Billmon</a><BR/>
+	<a href="http://billmon.org">Billmon</a><br/>
 	<a href="http://www.crooksandliars.com">Crooks and Liars</a><br/>
 
     <h2>Friends</h2>
