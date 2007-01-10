@@ -35,7 +35,8 @@ class DayEntry : IComparable {
 	public string Caption = "";
 	public string DateCaption;
 	public string Category = "";
-	public bool Comments;
+	public bool Comments = DateTime.Now > new DateTime (2007, 1, 1);
+	public string RenderedComment;
 	
 	Blog blog;
 	public string extra = "";
@@ -411,7 +412,8 @@ class Blog {
 			StringWriter rendered_comment = new StringWriter (new StringBuilder (comments.Length));
 			Translate (comments, rendered_comment, substitutions);
 			substitutions.Add ("@COMMENTS@", rendered_comment.ToString ());
-		} else
+			d.RenderedComment = rendered_comment.ToString ();
+		} else 
 			substitutions.Add ("@COMMENTS@", "");
 
 		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
@@ -678,7 +680,7 @@ class Blog {
 
 			RssItem item = new RssItem ();
 			item.Author = config.Author;
-			item.Description = d.Body;
+			item.Description = d.Body + (d.RenderedComment ?? "nothing");
 			item.Guid = new RssGuid ();
 			item.Guid.Name = config.BlogWebDirectory + d.PermaLink;
 			item.Link = new Uri (item.Guid.Name);

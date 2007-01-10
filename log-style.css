@@ -26,7 +26,7 @@ blockquote {
 	padding-top: 2em;
 	margin-left: 1em;
 	margin-right: 2em;
-	width: 45em;
+
 }
 
 .blogentry h1, .blogentry h2 {
@@ -45,7 +45,7 @@ blockquote {
 	font-size: smaller;
 	margin-left: -1em;
 	border-bottom: 2px solid #dddddd;
-	background: #ffffff;
+	background: transparent;
 }
 
 body, table {
@@ -81,12 +81,12 @@ img {
 #main { 
 	margin-left: 2em;
 	position: absolute;
-	width: 62%;
+	width: 66%;
 }
 
 #sidebar {
-	width: 28%;
-	left: 66%;
+	width: 26%;
+	left: 70%;
 	padding:1em 0pt 1em 2em;
 	position: absolute;
 	border-left:1px dotted #AAAAAA;

@@ -5,7 +5,7 @@ ASSEMBLIES=	-r:RSS.NET.dll	\
 		-r:System.Web	
 
 lb.exe: lb.cs config.cs
-	mcs $(ASSEMBLIES) -debug lb.cs config.cs -out:lb.exe 
+	gmcs $(ASSEMBLIES) -debug lb.cs config.cs -out:lb.exe 
 
 b: lb.exe
 	mono --debug lb.exe
