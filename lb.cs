@@ -400,6 +400,7 @@ class Blog {
 		substitutions.Add ("@ENTRY_NAVIGATION@", navigation);
 		substitutions.Add ("@ENTRY_PERMALINK@", d.PermaLink);
 		substitutions.Add ("@ENTRY_CAPTION@", d.Caption);
+		substitutions.Add ("@ENTRY_CAPTION_ENC@", HttpUtility.UrlEncode (d.Caption));
 		substitutions.Add ("@BASEDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@BASEIMAGES@", config.BlogImageBasedir);
 		substitutions.Add ("@COPYRIGHT@", config.Copyright);
