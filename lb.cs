@@ -384,9 +384,11 @@ class Blog {
 		if (include_daily_anchor || d.Date < LastDate)
 			entry_anchor = String.Format ("<a name=\"{0}\"></a>", anchor);
 		
+		string entry_specific = "";
 		string navigation = "";
 		if (include_navigation){
 			navigation = GetEntryNavigation (entries, idx, blog_base);
+			entry_specific = config.EntrySpecific;
 		}
 
 		string category_paths = GetCategoryPaths (d, blog_base);
@@ -409,6 +411,8 @@ class Blog {
 		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
 		substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@ENTRY_URL_PERMALINK@", Path.Combine (config.BlogWebDirectory, d.PermaLink));
+		substitutions.Add ("@ENTRY_SPECIFIC@", entry_specific);
+		
 		if (d.Comments){
 			StringWriter rendered_comment = new StringWriter (new StringBuilder (comments.Length));
 			Translate (comments, rendered_comment, substitutions);
@@ -578,7 +582,7 @@ class Blog {
 			substitutions.Add ("@RSSFILENAME@", config.RSSFileName);
 			substitutions.Add ("@EDITOR@", config.ManagingEditor);
 			substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
-
+			
 			Translate (template, w, substitutions);
 
 			w.Flush ();

@@ -21,6 +21,7 @@ public class Config {
 	[XmlAttribute] public string BlogTemplate;
 	[XmlAttribute] public string EntryTemplate;
 	[XmlAttribute] public string CommentsStub;
+	[XmlAttribute] public string EntrySpecific;
 
 	public bool Parse (string[] args)
 	{

@@ -4,12 +4,42 @@
 		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css' />
 		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://tirania.org/blog/miguel.rss2" />
 		<script src='@BASEDIR@prettyprint.js' type='text/javascript'></script>
-		<script type="text/javascript" src="http://www.haloscan.com/load/migueldeicaza"> </script>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<script type="text/javascript">
+function getFeed(feed)
+{
+  var newScript = document.createElement('script');
+  newScript.type = 'text/javascript';
+  newScript.src = 
+     'http://pipes.yahoo.com/pipes/9oyONQzA2xGOkM4FqGIyXQ/run?&_render=json&_callback=piper&feed='+feed;
+  document.getElementsByTagName("head")[0].appendChild(newScript);
+}
+function piper(feed)
+{
+   var tmp='';
+   for (var i=0; i<feed.value.items.length; i++) {
+      tmp+='<div class="comment">';
+      tmp+='<a href="'+feed.value.items[i].link+'">';
+      tmp+=feed.value.items[i].title+'</a><br>';
+      if (feed.value.items[i].description) {
+         tmp+='<blockquote>' + feed.value.items[i].description + '</blockquote>';
+      }
+      tmp+='</div>';
+   }
+   document.getElementById('rssLayer').innerHTML=tmp;
+}
+
+function startup()
+{
+	paintColors ();
+ 	if (document.getElementById('rssLayer'))
+	     getFeed("http://groups.google.com/group/tiraniaorg-blog-comments/feed/rss_v2_0_msgs.xml");
+}
+		</script>
 		@ANALYTICS@
 	</head>
 	
-<body onload='paintColors();'>
+<body onload='startup ();'>
 
 <h1>@DESCRIPTION@</h1>
 
@@ -36,6 +66,9 @@
 	<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif" alt="mono-contributor-static.gif" /></a>
 	</p>
 
+	<script type="text/javascript" src="http://www.google.com/reader/ui/publisher.js"></script>
+	<script type="text/javascript" src="http://www.google.com/reader/public/javascript/user/13685641577668204834/state/com.google/broadcast?n=10&callback=GRC_p(%7Bc%3A'blue'%2Ct%3A'Miguel%5C047s%20shared%20items'%2Cs%3A'true'%7D)%3Bnew%20GRC"></script>
+
     <div class="separator">
     </div>
 
@@ -52,6 +85,7 @@
 	<a href="http://www.commondreams.org">CommonDreams</a><br/>
 	<a href="http://www.jroller.com/page/fate">Bileblog</a><br/>
 	<a href="http://jwz.livejournal.com">Jamie Zawinski</a><br/>
+	<a href="http://planet.go-oo.org/">Planet OOo</a><br/>
 
     <h2>Politics</h2>
 	<a href="http://tbogg.blogspot.com/">TBogg</a><br/>
