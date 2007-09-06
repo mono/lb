@@ -23,6 +23,8 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Web;
 using System.Xml;
@@ -37,6 +39,7 @@ class DayEntry : IComparable {
 	public string Category = "";
 	public bool Comments = DateTime.Now > new DateTime (2007, 1, 1);
 	public string RenderedComment;
+	public List<string> Images;
 	
 	Blog blog;
 	public string extra = "";
@@ -225,6 +228,20 @@ class DayEntry : IComparable {
 				} else if (s.StartsWith ("#comment")){
 					Comments = true;
 					continue;
+				} else if (s.StartsWith ("#thumbnail")) {
+					Match m = Regex.Match (s, @"^#thumbnail\s+(?<filename>[^\s]+)\s+(?<desc>.*)$");
+					if (m.Groups.Count > 0) {
+						string filename = Path.GetFileName (m.Groups ["filename"].Value);
+						string thumbnail = LB.GetThumbnailName (filename);
+						sb.AppendFormat ("<blockquote><p><a href=\"@ENTRY_PATH@{0}\"><img " +
+								"src=\"@ENTRY_PATH@{1}\" title=\"{2}\" " + 
+								"alt=\"{2}\" /></a></p></blockquote>\n",
+								filename, thumbnail, 
+								m.Groups.Count == 1 ? "" : m.Groups ["desc"].Value);
+						Images = Images ?? new List<string> ();
+						Images.Add (m.Groups ["filename"].Value);
+						continue;
+					}
 				}
 				sb.Append (s);
 			}
@@ -391,15 +408,27 @@ class Blog {
 			entry_specific = config.EntrySpecific;
 		}
 
-		string category_paths = GetCategoryPaths (d, blog_base);
-		string entry_path = string.Format ("{0}archive{1}{2:yyyy}/",
-			blog_base, d.Category, d.Date);
-
 		Hashtable substitutions = new Hashtable ();
-		substitutions.Add ("@ENTRY_ID@", d.Id);
 		substitutions.Add ("@ENTRY_ANCHOR@", entry_anchor);
-		substitutions.Add ("@ENTRY_PATH@", entry_path);
 		substitutions.Add ("@ENTRY_NAVIGATION@", navigation);
+		substitutions.Add ("@ENTRY_SPECIFIC@", entry_specific);
+
+		FillEntrySubstitutions (substitutions, d, blog_base);
+
+		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
+		Translate (d.Body, body, substitutions);
+
+		substitutions.Add ("@ENTRY_BODY@", body.ToString ());
+		Translate (entry_template, o, substitutions);
+	}
+
+	void FillEntrySubstitutions (Hashtable substitutions, DayEntry d, string blog_base)
+	{
+		string category_paths = GetCategoryPaths (d, blog_base);
+		string entry_path = LB.GetEntryPath (blog_base, d);
+
+		substitutions.Add ("@ENTRY_ID@", d.Id);
+		substitutions.Add ("@ENTRY_PATH@", entry_path);
 		substitutions.Add ("@ENTRY_PERMALINK@", d.PermaLink);
 		substitutions.Add ("@ENTRY_CAPTION@", d.Caption);
 		substitutions.Add ("@ENTRY_CAPTION_ENC@", HttpUtility.UrlEncode (d.Caption));
@@ -411,7 +440,6 @@ class Blog {
 		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
 		substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@ENTRY_URL_PERMALINK@", Path.Combine (config.BlogWebDirectory, d.PermaLink));
-		substitutions.Add ("@ENTRY_SPECIFIC@", entry_specific);
 		
 		if (d.Comments){
 			StringWriter rendered_comment = new StringWriter (new StringBuilder (comments.Length));
@@ -420,12 +448,6 @@ class Blog {
 			d.RenderedComment = rendered_comment.ToString ();
 		} else 
 			substitutions.Add ("@COMMENTS@", "");
-
-		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
-		Translate (d.Body, body, substitutions);
-
-		substitutions.Add ("@ENTRY_BODY@", body.ToString ());
-		Translate (entry_template, o, substitutions);
 	}
 
 	string GetEntryNavigation (IList entries, int idx, string blog_base)
@@ -633,6 +655,32 @@ class Blog {
 				parent_dir += Regex.Replace (d.Category, "[^/]+", "..");
 			RenderHtml (template, Path.Combine (config.Prefix, d.PermaLink), 
 					entries.Count - i - 1, entries.Count - i, parent_dir);
+			if (d.Images == null)
+				continue;
+			foreach (string filename in d.Images) {
+				string file = Path.GetFileName (filename);
+				string thumbnail = Path.Combine (LB.GetEntryPath (config.Prefix + "/", d), LB.GetThumbnailName (file));
+				string thumbnail_target = Path.Combine (
+						LB.GetEntryPath (config.Prefix + "/", d), file);
+
+				file = Path.Combine (config.ImageDirectory, filename);
+				if (!File.Exists (file)) {
+					Console.Error.WriteLine ("lb: Missing file for #thumbnail {0}, ({1}).", 
+							filename, file);
+					continue;
+				}
+				if (!File.Exists (thumbnail_target))
+					File.Copy (file, thumbnail_target);
+				if (!File.Exists (thumbnail)) {
+					ProcessStartInfo psi = new ProcessStartInfo (config.ThumbnailCommandFileName);
+					psi.Arguments = string.Format (config.ThumbnailCommandArguments, file, thumbnail);
+					Process p = Process.Start (psi);
+					p.WaitForExit ();
+					if (p.ExitCode != 0)
+						Console.Error.WriteLine ("lb: error running command: {0} {1}", 
+								psi.FileName, psi.Arguments);
+				}
+			}
 		}
 
 		foreach (DictionaryEntry de in category_entries) {
@@ -683,9 +731,16 @@ class Blog {
 			
 			DayEntry d = (DayEntry) entries [idx];
 
+			Hashtable substitutions = new Hashtable ();
+			FillEntrySubstitutions (substitutions, d, config.BlogWebDirectory);
+			StringWriter description = new StringWriter (new StringBuilder (d.Body.Length));
+			Translate (d.Body, description, substitutions);
+
+			StringWriter sw = new StringWriter (new StringBuilder (d.Body.Length));
+			Render (sw, entries, idx, "", false, false);
 			RssItem item = new RssItem ();
 			item.Author = config.Author;
-			item.Description = d.Body + (d.RenderedComment ?? "nothing");
+			item.Description = description.ToString ();
 			item.Guid = new RssGuid ();
 			item.Guid.Name = config.BlogWebDirectory + d.PermaLink;
 			item.Link = new Uri (item.Guid.Name);
@@ -769,6 +824,19 @@ class LB {
 		b.RenderRSS (Path.Combine (config.Prefix, config.RSSFileName), 0, 30);
 		b.RenderArchiveRss (RssVersion.RSS20, config.RSSFileName + ".rss2", 30);
 
-		File.Copy ("log-style.css", Path.Combine (config.Prefix, "texts/log-style.css"), true);
+		if (File.Exists ("log-style.css")) {
+			File.Copy ("log-style.css", "texts/log-style.css", true);
+		}
+	}
+
+	public static string GetThumbnailName (string filename)
+	{
+		return Regex.Replace (filename, @"\.(.*?)$", @"-web.$1");
+	}
+
+	public static string GetEntryPath (string blog_base, DayEntry d)
+	{
+		return string.Format ("{0}archive{1}{2:yyyy}/", blog_base, 
+				d.Category, d.Date);
 	}
 }

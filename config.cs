@@ -22,6 +22,11 @@ public class Config {
 	[XmlAttribute] public string EntryTemplate;
 	[XmlAttribute] public string CommentsStub;
 	[XmlAttribute] public string EntrySpecific;
+	[XmlAttribute] public string ImageDirectory;
+	[XmlAttribute] public string ThumbnailCommand;
+
+	internal string ThumbnailCommandFileName;
+	internal string ThumbnailCommandArguments;
 
 	public bool Parse (string[] args)
 	{
@@ -51,6 +56,10 @@ public class Config {
 				if (NextArgument (args, ref i, ref RSSFileName))
 					break;
 				return false;
+			case "-t": case "--thumbnail-command":
+				if (NextArgument (args, ref i, ref ThumbnailCommand))
+					break;
+				return false;
 			default:
 				if (ExtractArgument ("-p", arg, ref Prefix))
 					break;
@@ -72,9 +81,17 @@ public class Config {
 					break;
 				if (ExtractArgument ("--rss-filename", arg, ref RSSFileName))
 					break;
+				if (ExtractArgument ("-t", arg, ref ThumbnailCommand))
+					break;
+				if (ExtractArgument ("--thumbnail-command", arg, ref ThumbnailCommand))
+					break;
 				Error ("unrecognized option `{0}'", arg);
 				return false;
 			}
+		}
+		if (ThumbnailCommand != null) {
+			ThumbnailCommandFileName  = ThumbnailCommand.Split (' ')[0];
+			ThumbnailCommandArguments = ThumbnailCommand.Substring (ThumbnailCommandFileName.Length+1);
 		}
 		return true;
 	}
@@ -90,6 +107,9 @@ Options:
   -b, --blog-template=FILE    Blog template file .
   -e, --entry-template=FILE   Entry template file.
   -x, --rss-filename=FILE     Basename for RSS filename.
+  -t, --thumbnail-command=CMD Command to use to generate thumbnails.
+                                {0} is the input file.
+                                {1} is the input file.
   -h, --help                  Display this message and exit.
 ");
 	}

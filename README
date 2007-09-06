@@ -35,6 +35,8 @@ This is Lame Blog.
 		    OutputEncoding="utf-8"
 		    AnalyticsStub="analytics"
 		    CommentsStub="comments"
+		    ImageDirectory="/path/to/images"
+		    ThumbnailCommand="shell-command-for-thumbnail source={0} thumbnail={1}"
 		/>
 
 	The various parameters should be self explanatory.
@@ -90,6 +92,9 @@ This is Lame Blog.
 		Will generate the code to center the image stored in
 		filename with the given caption.
 
+		This emits an HTML anchor to "pic.php" providing filename and
+		caption as GET parameters.
+
 	#comment, #comments
 
 		Will enable the entry to have comments.   To activate
@@ -97,6 +102,22 @@ This is Lame Blog.
 	  	and then paste the stub into the file `comments', or
 	  	the file referenced in the config.xml CommentsStub 
 		field
+
+	#thumbnail filename caption
+
+		A static alternative to #pic.  This looks for `filename'
+		underneath ImageDirectory, copies `filename' into the archive
+		directory, creates a thumbnail for `filename' by invoking
+		ThumbnailCommand, and generates HTML that is an <a><img/></a> to 
+		the thumbnail which targets the full-size image.
+
+		Caption is used as the alt and title text of the <img/>.
+
+		A possible ThumbnailCommand value is:
+
+			convert -size 400x300 {0} -resize 400x300 +profile '&quot;*&quot;' {1}
+
+		which generates a 400x300 pixel thumbnail of the input file.
 
 Enjoy,
 Miguel de Icaza (miguel@gnu.org)

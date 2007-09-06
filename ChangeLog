@@ -1,3 +1,13 @@
+2007-09-06  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* lb.cs: .rss descriptions should be Translate()d and Render()d.  
+	  The entry can contain @...@ strings which need to be substituted; 
+	  the RSS description is incorrect if this isn't done.  Make sure
+	  log-style.css exists before trying to copy it.  Add a #thumbnail
+	  command to simplify thumbnail graphic generation.
+	* config.cs: Add -t and -thumbnail-command command-line arguments.
+	* README: Document #thumbnail.
+
 2007-01-07 Alp Toker <alp@atoker.com>
 
 	* template: Make it valid XML, fix 'Picassa' spelling.
