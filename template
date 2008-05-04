@@ -16,7 +16,7 @@ function startup()
 	
 <body onload='startup ();'>
 
-<h1>@DESCRIPTION@</h1>
+<h1><a href="@BLOGWEBDIR@">@DESCRIPTION@</a></h1>
 
 <div id='sidebar'>
    <h2>RSS</h2>

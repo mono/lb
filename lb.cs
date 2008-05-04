@@ -322,9 +322,10 @@ class Blog {
 	string entry_template;
 	string analytics = "";
 	string comments = "";
+	string archive;
 	Hashtable category_entries = new Hashtable ();
 
-	ArrayList entries = new ArrayList ();
+	List<DayEntry> entries = new List<DayEntry> ();
 
 	public int Entries {
 		get {
@@ -350,8 +351,15 @@ class Blog {
 		if (config.CommentsStub != null && config.CommentsStub.Length > 0){
 			comments = File.OpenText (config.CommentsStub).ReadToEnd ();
 		}
+
 	}
 
+	void GenerateArchiveGadget ()
+	{
+		//var x = from be in entries
+		//group be by be.
+	}
+	
 	void LoadDirectory (DirectoryInfo dir)
 	{
 		if (dir.Name.EndsWith ("drafts"))
@@ -394,7 +402,7 @@ class Blog {
 	
 	static DateTime LastDate = new DateTime (2004, 5, 19, 0, 0, 0);
 	
-	void Render (TextWriter o, IList entries, int idx, string blog_base, bool include_daily_anchor, bool include_navigation)
+	void Render (TextWriter o, IList entries, int idx, string blog_base, bool include_daily_anchor, bool single_entry)
 	{
 		DayEntry d = (DayEntry) entries [idx];
 
@@ -405,7 +413,8 @@ class Blog {
 		
 		string entry_specific = "";
 		string navigation = "";
-		if (include_navigation){
+
+		if (single_entry){
 			navigation = GetEntryNavigation (entries, idx, blog_base);
 			if (config.EntrySpecific != null && config.EntrySpecific != String.Empty)
 			    entry_specific = File.OpenText (config.EntrySpecific).ReadToEnd ();
@@ -416,7 +425,7 @@ class Blog {
 		substitutions.Add ("@ENTRY_NAVIGATION@", navigation);
 		substitutions.Add ("@ENTRY_SPECIFIC@", entry_specific);
 
-		FillEntrySubstitutions (substitutions, d, blog_base);
+		FillEntrySubstitutions (substitutions, d, blog_base, single_entry);
 
 		StringWriter body = new StringWriter (new StringBuilder (d.Body.Length));
 		Translate (d.Body, body, substitutions);
@@ -425,7 +434,7 @@ class Blog {
 		Translate (entry_template, o, substitutions);
 	}
 
-	void FillEntrySubstitutions (Hashtable substitutions, DayEntry d, string blog_base)
+	void FillEntrySubstitutions (Hashtable substitutions, DayEntry d, string blog_base, bool single_entry)
 	{
 		string category_paths = GetCategoryPaths (d, blog_base);
 		string entry_path = LB.GetEntryPath (blog_base, d);
@@ -444,7 +453,7 @@ class Blog {
 		substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@ENTRY_URL_PERMALINK@", Path.Combine (config.BlogWebDirectory, d.PermaLink));
 
-		if (d.Comments && include_navigation){
+		if (d.Comments && single_entry){
 			StringWriter rendered_comment = new StringWriter (new StringBuilder (comments.Length));
 			Translate (comments, rendered_comment, substitutions);
 			substitutions.Add ("@COMMENTS@", rendered_comment.ToString ());
@@ -757,7 +766,7 @@ class Blog {
 			DayEntry d = (DayEntry) entries [idx];
 
 			Hashtable substitutions = new Hashtable ();
-			FillEntrySubstitutions (substitutions, d, config.BlogWebDirectory);
+			FillEntrySubstitutions (substitutions, d, config.BlogWebDirectory, false);
 			StringWriter description = new StringWriter (new StringBuilder (d.Body.Length));
 			Translate (d.Body, description, substitutions);
 
