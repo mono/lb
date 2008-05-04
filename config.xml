@@ -14,5 +14,7 @@ InputEncoding="utf-8"
 OutputEncoding="utf-8"
 AnalyticsStub="analytics"
 CommentsStub="comments"
-EntrySpecific="&lt;p&gt;Current Group Comments:&lt;div id='rssLayer'&gt;&lt;/div&gt;"
+EntrySpecific="entry-specific"
+ImageDirectory="/home/miguel/upload/pictures"
+ThumbnailCommand="convert -scale 400 {0} {1}"
 />

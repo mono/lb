@@ -16,8 +16,8 @@ clean:
 push: b
 	chmod 644 archive/*/*.html
 	chmod 644 *html *rss2 *php 
-	rsync -pr -v --rsh=ssh texts archive prettyprint.js	\
-	log-style.css *.rss2 *.php index.html all.html		\
+	rsync -pr -v --rsh=ssh texts archive prettyprint.js		\
+	log-style.css *.rss2 *.php index.html page*.html all.html	\
 	$(REMOTE_DIRECTORY)
 
 check-update:

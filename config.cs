@@ -24,6 +24,7 @@ public class Config {
 	[XmlAttribute] public string EntrySpecific;
 	[XmlAttribute] public string ImageDirectory;
 	[XmlAttribute] public string ThumbnailCommand;
+	static public int EntriesPerPage = 15;
 
 	internal string ThumbnailCommandFileName;
 	internal string ThumbnailCommandArguments;

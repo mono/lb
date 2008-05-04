@@ -119,5 +119,64 @@ This is Lame Blog.
 
 		which generates a 400x300 pixel thumbnail of the input file.
 
+* Templates
+
+	The main blog template is the file "template", this contains
+	the general layout of the file and will do substitutious on a
+	number of fields:
+
+        Main template: "template" file
+
+		@TITLE@
+
+			The title of the blog, this becomes the
+			<title>
+	
+		@DESCRIPTION@
+			
+		@ANALYTICS@
+
+			Substituted with the contents specified in the
+			config file for "Analytics"
+	
+		@BASEDIR@
+	
+		@BLOGWEBDIR@
+	
+		@RSSFILENAME@
+	
+		@EDITOR@
+
+			Replaced with the string in ManagingEditor
+			from the config file
+	
+		@BLOG_ARTICLES@
+
+			Lists the articles that you want to link,
+			these are not the blog entries, but thinks
+			that you want on your sidebar.
+	
+		@BLOG_ENTRIES@
+			The blog entries rendered.
+	
+	Per entry template: "entry" file.
+
+		@ENTRY_ID@
+		@ENTRY_ANCHOR@
+		@ENTRY_PATH@
+		@ENTRY_NAVIGATION@
+		@ENTRY_PERMALINK@
+		@ENTRY_CAPTION@
+		@ENTRY_CAPTION_ENC@
+		@BASEDIR@
+		@BASEIMAGES@
+		@COPYRIGHT@
+		@ENTRY_CATEGORY@
+		@ENTRY_DATECAPTION@
+		@ENTRY_CATEGORY_PATHS@
+		@BLOGWEBDIR@
+		@ENTRY_URL_PERMALINK@
+		@ENTRY_SPECIFIC@
+
 Enjoy,
 Miguel de Icaza (miguel@gnu.org)

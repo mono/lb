@@ -37,7 +37,7 @@ class DayEntry : IComparable {
 	public string Caption = "";
 	public string DateCaption;
 	public string Category = "";
-	public bool Comments = DateTime.Now > new DateTime (2007, 1, 1);
+	public bool Comments = true; // DateTime.Now > new DateTime (2007, 1, 1);
 	public string RenderedComment;
 	public List<string> Images;
 	
@@ -356,9 +356,11 @@ class Blog {
 	{
 		if (dir.Name.EndsWith ("drafts"))
 			return;
+		Console.WriteLine ("dir:" + dir);
 		foreach (DirectoryInfo subdir in dir.GetDirectories ()) {
 			LoadDirectory (subdir);
 		}
+
 		foreach (FileInfo file in dir.GetFiles ()) {
 			if (!(file.Name.EndsWith (".html") || file.Name.EndsWith (".txt")))
 				continue;
@@ -405,7 +407,8 @@ class Blog {
 		string navigation = "";
 		if (include_navigation){
 			navigation = GetEntryNavigation (entries, idx, blog_base);
-			entry_specific = config.EntrySpecific;
+			if (config.EntrySpecific != null && config.EntrySpecific != String.Empty)
+			    entry_specific = File.OpenText (config.EntrySpecific).ReadToEnd ();
 		}
 
 		Hashtable substitutions = new Hashtable ();
@@ -440,8 +443,8 @@ class Blog {
 		substitutions.Add ("@ENTRY_CATEGORY_PATHS@", category_paths);
 		substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 		substitutions.Add ("@ENTRY_URL_PERMALINK@", Path.Combine (config.BlogWebDirectory, d.PermaLink));
-		
-		if (d.Comments){
+
+		if (d.Comments && include_navigation){
 			StringWriter rendered_comment = new StringWriter (new StringBuilder (comments.Length));
 			Translate (comments, rendered_comment, substitutions);
 			substitutions.Add ("@COMMENTS@", rendered_comment.ToString ());
@@ -572,6 +575,22 @@ class Blog {
 			o.WriteLine ("<a href=\"{0}\">{1}</a><br>", a.url, a.caption);
 		}
 	}
+
+	string GetPageNavigation (int start, int end)
+	{
+		StringBuilder nav = new StringBuilder ();
+		
+		if (start != 0)
+			nav.Append (string.Format ("<a href=\"{0}\">&laquo; Newer entries</a>", LB.GetOutputFileAtOffset (start)));
+		
+		if (end + Config.EntriesPerPage < entries.Count){
+			if (nav.Length > 0)
+				nav.Append (" | ");
+			nav.Append (string.Format ("<a href=\"{0}\">Older entries &raquo;</a>", LB.GetOutputFileAtOffset (end+1)));
+		}
+
+		return nav.ToString ();
+	}
 	
 	void RenderHtml (string template, string output, string blog_base, IList entries,
 			int start, int end)
@@ -585,12 +604,16 @@ class Blog {
 			StringWriter blog_articles = new StringWriter ();
 			RenderArticleList (blog_articles);
 
+			string page_navigation;
+			
 			string title;
 			if (Math.Abs (start - end) == 1){
 				DayEntry d = (DayEntry) entries [entries.Count - start - 1];
 				title = String.Format ("{0} - {1}", d.Caption, config.Title);
+				page_navigation = "";
 			} else {
 				title = config.Title;
+				page_navigation = GetPageNavigation (start, end);
 			}
 
 			Hashtable substitutions = new Hashtable ();
@@ -604,7 +627,9 @@ class Blog {
 			substitutions.Add ("@RSSFILENAME@", config.RSSFileName);
 			substitutions.Add ("@EDITOR@", config.ManagingEditor);
 			substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
-			
+
+			substitutions.Add ("@PAGE_NAVIGATION@", page_navigation);
+				
 			Translate (template, w, substitutions);
 
 			w.Flush ();
@@ -798,11 +823,20 @@ class Blog {
 }
 
 class LB {
+	public static Config config;
+	
+	static public string GetOutputFileAtOffset (int offset)
+	{
+		if (offset == 0)
+			return config.BlogFileName;
+		else
+			return String.Format ("page{0}.html", offset / Config.EntriesPerPage);
+	}
 
 	static void Main (string[] args)
 	{
-		Config config = (Config) 
-			new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
+		config = (Config) new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
+		
 		if (config.BlogImageBasedir == null || config.BlogImageBasedir == "")
 			config.BlogImageBasedir = config.BlogWebDirectory;
 		if (config.Prefix == null || config.Prefix == "")
@@ -814,10 +848,17 @@ class LB {
 
 		if (!config.Parse (args))
 			return;
+
 		Blog b = new Blog (config);
 
 		string template = File.OpenText (config.BlogTemplate).ReadToEnd ();
-		b.RenderHtml (template, Path.Combine (config.Prefix, config.BlogFileName), 0, 30, "");
+
+		for (int start = 0; start < b.Entries; start += Config.EntriesPerPage){
+			string output = GetOutputFileAtOffset (start);
+
+			b.RenderHtml (template, Path.Combine (config.Prefix, output), start, start + Config.EntriesPerPage, "");
+		}
+		     
 		b.RenderHtml (template, Path.Combine (config.Prefix, "all.html"), 0, b.Entries, "");
 		b.RenderArchive (template);
 		
