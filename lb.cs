@@ -29,6 +29,7 @@ using System.Globalization;
 using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Linq;
 using Rss;
 
 class DayEntry : IComparable {
@@ -318,11 +319,12 @@ class DayEntry : IComparable {
 
 class Blog {
 	public Config config;
+	string template;
 	public DateTime pubDate = new DateTime (1, 1, 1);
 	string entry_template;
 	string analytics = "";
 	string comments = "";
-	string archive;
+	string archive_navigator;
 	Hashtable category_entries = new Hashtable ();
 
 	List<DayEntry> entries = new List<DayEntry> ();
@@ -333,8 +335,9 @@ class Blog {
 		}
 	}
 	
-	public Blog (Config config)
+	public Blog (Config config, string template)
 	{
+		this.template = template;
 		this.config = config;
 		this.entry_template = File.OpenText (config.EntryTemplate).ReadToEnd ();
 
@@ -352,12 +355,50 @@ class Blog {
 			comments = File.OpenText (config.CommentsStub).ReadToEnd ();
 		}
 
+		GenerateArchiveNavigation ();
 	}
 
-	void GenerateArchiveGadget ()
+	void GenerateArchiveNavigation ()
 	{
-		//var x = from be in entries
-		//group be by be.
+		StringBuilder ab = new StringBuilder ();
+
+		ab.Append ("<div class=\"archive\">");
+		
+		var grouping = from be in entries
+			group be by be.Date.Year into years
+			orderby years.Key descending
+			select new {
+				Year = years.Key,
+				Months = from ybe in years
+					group ybe by ybe.Date.Month into monthly
+					orderby monthly.Key
+					select new { Month = monthly.Key, Entries = monthly } };
+
+		foreach (var year_group in grouping){
+			ab.Append (String.Format ("\n<br/><b>{0}</b>\n", year_group.Year));
+			int count = 0;
+			foreach (var month in year_group.Months){
+				if ((count++ % 6) == 0){
+					ab.Append ("<br/>\n");
+				}
+				DateTime year_month = new DateTime (year_group.Year, month.Month, 1);
+				string month_archive_path = String.Format ("archive/{0:yyyy}/{0:MMM}.html", year_month);
+				
+				ab.Append (String.Format ("<a href=\"{1}/{2}\">{0:MMM}</a> ", year_month, config.BlogWebDirectory, month_archive_path));
+			}
+		}
+		ab.Append ("</div>");
+		archive_navigator = ab.ToString ();
+
+		foreach (var year_group in grouping){
+			foreach (var month in year_group.Months){
+				DateTime year_month = new DateTime (year_group.Year, month.Month, 1);
+				string month_archive_path = String.Format ("archive/{0:yyyy}/{0:MMM}.html", year_month);
+			
+				IList month_entries = month.Entries.ToList<DayEntry> ();
+				RenderHtml (Path.Combine (LB.config.Prefix, month_archive_path), "../../", month_entries, 0, month_entries.Count, false);
+			}
+		}
 	}
 	
 	void LoadDirectory (DirectoryInfo dir)
@@ -601,8 +642,7 @@ class Blog {
 		return nav.ToString ();
 	}
 	
-	void RenderHtml (string template, string output, string blog_base, IList entries,
-			int start, int end)
+	void RenderHtml (string output, string blog_base, IList entries, int start, int end, bool include_page_navigation)
 	{
 		using (FileStream o = CreateFile (output)){
 			StreamWriter w = new StreamWriter (o, GetOutputEncoding ());
@@ -613,16 +653,17 @@ class Blog {
 			StringWriter blog_articles = new StringWriter ();
 			RenderArticleList (blog_articles);
 
-			string page_navigation;
+			string page_navigation = "";
 			
 			string title;
 			if (Math.Abs (start - end) == 1){
 				DayEntry d = (DayEntry) entries [entries.Count - start - 1];
 				title = String.Format ("{0} - {1}", d.Caption, config.Title);
-				page_navigation = "";
 			} else {
 				title = config.Title;
-				page_navigation = GetPageNavigation (start, end);
+
+				if (include_page_navigation)
+					page_navigation = GetPageNavigation (start, end);
 			}
 
 			Hashtable substitutions = new Hashtable ();
@@ -636,7 +677,7 @@ class Blog {
 			substitutions.Add ("@RSSFILENAME@", config.RSSFileName);
 			substitutions.Add ("@EDITOR@", config.ManagingEditor);
 			substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
-
+			substitutions.Add ("@ARCHIVE_NAVIGATOR@", archive_navigator);
 			substitutions.Add ("@PAGE_NAVIGATION@", page_navigation);
 				
 			Translate (template, w, substitutions);
@@ -674,12 +715,12 @@ class Blog {
 		return sb.ToString ();
 	}
 
-	public void RenderHtml (string template, string output, int start, int end, string blog_base)
+	public void RenderHtml (string output, int start, int end, string blog_base, bool include_page_navigation)
 	{
-		RenderHtml (template, output, blog_base, entries, start, end);
+		RenderHtml (output, blog_base, entries, start, end, include_page_navigation);
 	}
 
-	public void RenderArchive (string template)
+	public void RenderArchive ()
 	{
 		for (int i = 0; i < Entries; i++){
 			DayEntry d = (DayEntry) entries [i];
@@ -687,8 +728,8 @@ class Blog {
 			string parent_dir = "../..";
 			if (d.Category.Length > 0)
 				parent_dir += Regex.Replace (d.Category, "[^/]+", "..");
-			RenderHtml (template, Path.Combine (config.Prefix, d.PermaLink), 
-					entries.Count - i - 1, entries.Count - i, parent_dir);
+			RenderHtml (Path.Combine (config.Prefix, d.PermaLink), 
+				    entries.Count - i - 1, entries.Count - i, parent_dir, false);
 			if (d.Images == null)
 				continue;
 			foreach (string filename in d.Images) {
@@ -721,19 +762,15 @@ class Blog {
 			string category = de.Key.ToString ();
 			IList entries = (IList) de.Value;
 			string parent_dir = ".." + Regex.Replace (category, "[^/]+", "..");
-			RenderHtml (template, 
-					Path.Combine (config.Prefix, "archive" + category + config.BlogFileName),
-					parent_dir, entries, 0, entries.Count);
+			RenderHtml (Path.Combine (config.Prefix, "archive" + category + config.BlogFileName),
+				    parent_dir, entries, 0, entries.Count, false);
 		}
 	}
 	
 	RssChannel MakeChannel ()
 	{
-		RssChannel c = new RssChannel ();
+		RssChannel c = new RssChannel (config.Title, config.Description, new Uri (config.BlogWebDirectory + "/" + config.BlogFileName));
 
-		c.Title = config.Title;
-		c.Link = new Uri (config.BlogWebDirectory + "/" + config.BlogFileName);
-		c.Description = config.Description;
 		c.Copyright = config.Copyright;
 		c.Generator = "lb#";
 		c.ManagingEditor = config.ManagingEditor;
@@ -748,13 +785,12 @@ class Blog {
 		foreach (DictionaryEntry de in category_entries) {
 			string category = de.Key.ToString ();
 			IList entries = (IList) de.Value;
-			RenderRSS (version, 
-					Path.Combine (config.Prefix, "archive" + category + output),
-					entries, 0, Math.Min (end, entries.Count));
+			RenderRSS (Path.Combine (config.Prefix, "archive" + category + output),
+				   entries, 0, Math.Min (end, entries.Count));
 		}
 	}
 
-	public void RenderRSS (RssVersion version, string output, IList entries, int start, int end)
+	public void RenderRSS (string output, IList entries, int start, int end)
 	{
 		RssChannel channel = MakeChannel ();
 
@@ -791,9 +827,8 @@ class Blog {
 		}
 
 		FileStream o = CreateFile (output);
-		RssWriter w = new RssWriter (o, new UTF8Encoding (false));
-
-		w.Version = version;
+		XmlTextWriter xtw = new XmlTextWriter (o, new UTF8Encoding (false));
+		Rss20Writer w = new Rss20Writer (xtw);
 
 		w.Write (channel);
 		w.Close ();
@@ -801,7 +836,7 @@ class Blog {
 
 	public void RenderRSS (string output, int start, int end)
 	{
-		RenderRSS (RssVersion.RSS20, output + ".rss2", entries, start, end);
+		RenderRSS (output + ".rss2", entries, start, end);
 	}
 
 	public class Article {
@@ -858,19 +893,36 @@ class LB {
 		if (!config.Parse (args))
 			return;
 
-		Blog b = new Blog (config);
-
 		string template = File.OpenText (config.BlogTemplate).ReadToEnd ();
 
+		Blog b = new Blog (config, template);
+
+		//
+		// Renders the main page (index.html) and the various pageNN.html
+		//
 		for (int start = 0; start < b.Entries; start += Config.EntriesPerPage){
 			string output = GetOutputFileAtOffset (start);
 
-			b.RenderHtml (template, Path.Combine (config.Prefix, output), start, start + Config.EntriesPerPage, "");
+			b.RenderHtml (Path.Combine (config.Prefix, output), start, start + Config.EntriesPerPage, "", true);
 		}
-		     
-		b.RenderHtml (template, Path.Combine (config.Prefix, "all.html"), 0, b.Entries, "");
-		b.RenderArchive (template);
+
+		//
+		// Renders the year/month dinguses
+		//
 		
+		//
+		// Legacy render: all.html
+		//
+		b.RenderHtml (Path.Combine (config.Prefix, "all.html"), 0, b.Entries, "", false);
+
+		//
+		// Renders each individual blog entry into the archive
+		//
+		b.RenderArchive ();
+
+		//
+		// The RSS feed
+		//
 		b.RenderRSS (Path.Combine (config.Prefix, config.RSSFileName), 0, 30);
 		b.RenderArchiveRss (RssVersion.RSS20, config.RSSFileName + ".rss2", 30);
 

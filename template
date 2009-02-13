@@ -1,22 +1,23 @@
 <html>
-	<head>
-		<title>@TITLE@</title>
-		<link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css' />
-		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://tirania.org/blog/miguel.rss2" />
-		<script src='@BASEDIR@prettyprint.js' type='text/javascript'></script>
-		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<script type="text/javascript">
-function startup()
-{
-	paintColors ();
-}
-		</script>
-		@ANALYTICS@
-	</head>
+    <head>
+        <title>@TITLE@</title>
+	    <link rel='stylesheet' href='@BASEDIR@log-style.css' type='text/css' />
+	    <link rel="alternate" type="application/rss+xml" title="RSS" href="http://tirania.org/blog/miguel.rss2" />
+	    <script src='@BASEDIR@prettyprint.js' type='text/javascript'></script>
+	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	    <script type="text/javascript">
+	       function startup()
+	       {
+	            paintColors ();
+	        }
+	    </script>
+	    @ANALYTICS@
+</head>
 	
 <body onload='startup ();'>
 
-<h1><a href="@BLOGWEBDIR@">@DESCRIPTION@</a></h1>
+<div id='title'><a href="@BLOGWEBDIR@">@DESCRIPTION@</a>
+</div>
 
 <div id='sidebar'>
    <h2>RSS</h2>
@@ -44,13 +45,25 @@ function startup()
         </script>
 <!-- Google CSE Search Box Ends -->
 
+    <h2>Recommended Reading</h2>
+
+        <a href="http://www.amazon.com/gp/product/0321562992?ie=UTF8&tag=tiraniaorg-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0321562992">
+	  <img border="0" src="https://images-na.ssl-images-amazon.com/images/I/51uwyv0A0QL._SL160_.jpg"></a>
+	<img src="http://www.assoc-amazon.com/e/ir?t=tiraniaorg-20&l=as2&o=1&a=0321562992"
+        width="1" height="1" border="0" alt="" style="border:none
+        !important; margin:0px !important;" />
+
+	<p>
+	
+	<a href="http://www.amazon.com/gp/product/0123704901?ie=UTF8&tag=tiraniaorg-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0123704901"><img border="0"
+	src="https://images-na.ssl-images-amazon.com/images/I/517kQTy1i7L._SL160_.jpg"></a><img src="http://www.assoc-amazon.com/e/ir?t=tiraniaorg-20&l=as2&o=1&a=0123704901"
+	width="1" height="1" border="0" alt="" style="border:none
+	!important; margin:0px !important;" />
+    
     <h2>Pictures:</h2>
 	<a href="http://picasaweb.google.com/miguel.de.icaza/?pli=1">Picasa</a><br/>
 	<a href="http://www.flickr.com/photos/migueldeicaza/">Flickr</a>
 
-	<p>
-	<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif" alt="mono-contributor-static.gif" /></a>
-	</p>
 
 	<script type="text/javascript" src="http://www.google.com/reader/ui/publisher.js"></script>
 	<script type="text/javascript" src="http://www.google.com/reader/public/javascript/user/13685641577668204834/state/com.google/broadcast?n=10&callback=GRC_p(%7Bc%3A'blue'%2Ct%3A'Miguel%5C047s%20shared%20items'%2Cs%3A'true'%7D)%3Bnew%20GRC"></script>
@@ -58,9 +71,19 @@ function startup()
     <div class="separator">
     </div>
 
+    @ARCHIVE_NAVIGATOR@
+
+    <div class="separator">
+    </div>
+
+	<p>
+	<a href="http://www.go-mono.com"><img src="http://www.go-mono.com/images/mono-contributor-static.gif" alt="mono-contributor-static.gif" /></a>
+	</p>
+
     <h2>Fundamental</h2>
 	<a href="http://www.go-mono.com/monologue">Monologue</a><br/>
 	<a href="http://www.commondreams.org">CommonDreams</a><br/>
+	<a href="http://grurrah.com/">Grurrah - Green Ideas</a><br/>
 
     <h2>Friends</h2>
 
