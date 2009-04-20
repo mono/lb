@@ -794,6 +794,7 @@ class Blog {
 	{
 		RssChannel channel = MakeChannel ();
 
+		Console.WriteLine ("{0} to {1}", start, end);
 		for (int i = start; i < end; i++){
 			int idx = entries.Count - i - 1;
 			if (idx < 0)
@@ -817,6 +818,7 @@ class Blog {
 			item.Guid.PermaLink = DBBool.True;
 
 			item.PubDate = d.Date.ToUniversalTime ();
+			Console.WriteLine ("{0} to {1}", d.Caption, item.PubDate);
 			if (d.Caption == ""){
 				Console.WriteLine ("No caption for: " + d.DateCaption);
 				d.Caption = d.DateCaption;
