@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config
+Author="Jonathan Pryor (jonpryor@vt.edu)"
+BlogDirectory="/home/test/blog"
+BlogFileName="index.html"
+BlogWebDirectory="http://www.example.com/Blog/"
+BlogImageBasedir="http://www.example.com"
+Copyright="Test Copyright Owner"
+Description="Test web log"
+ManagingEditor="test@example.com"
+Title="Test web log"
+RSSFileName="test"
+BlogTemplate="template"
+EntryTemplate="entry"
+InputEncoding="utf-8"
+OutputEncoding="utf-8"
+/>

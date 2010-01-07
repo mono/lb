@@ -21,15 +21,22 @@ push: b
 	$(REMOTE_DIRECTORY)
 
 check-update:
-	-rm -Rf test/out
+	-mv config.xml ._config.xml
+	cp config.xml.check config.xml
 	mono --debug lb.exe --blog-directory=`pwd`/test/in --prefix=test/out \
 		--blog-template=template.test --entry-template=entry.test \
 		--rss-filename=test
+	-rm config.xml
+	-mv ._config.xml config.xml
 
 check:
 	-rm -Rf test/tmp
+	-mv config.xml ._config.xml
+	cp config.xml.check config.xml
 	mono --debug lb.exe --blog-directory=`pwd`/test/in --prefix=test/tmp \
 		--blog-template=template.test --entry-template=entry.test \
 		--rss-filename=test
 	diff -ru --exclude=\.svn test/out test/tmp 
+	-rm config.xml
+	-mv ._config.xml config.xml
 
