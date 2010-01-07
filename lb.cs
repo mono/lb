@@ -96,7 +96,7 @@ class DayEntry : IComparable {
 		string entry = file;
 		if (idx >= 0)
 			entry = file.Substring (blog.config.BlogDirectory.Length);
-		Match match = Regex.Match (entry, "^(.*/)?(200[0-9])/([a-z]+)-0*([0-9]+)(-[0-9])?");
+		Match match = Regex.Match (entry, "^(.*/)?(20[0-9][0-9])/([a-z]+)-0*([0-9]+)(-[0-9])?");
 
 		Category = match.Groups [1].Value;
 		int year = Int32.Parse (match.Groups [2].Value);
