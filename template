@@ -26,6 +26,11 @@
 	<a href="http://fusion.google.com/add?feedurl=@BLOGWEBDIR@@RSSFILENAME@.rss2">
 	<img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif" alt="addgoogle2.gif" /></a>
 
+    <h2>My Other Blog</h2>
+
+        <p><a href="http://monomac.wordpress.com">MonoMac/MonoTouch
+        blog</a>.
+	
     <h2>Twitter</h2>
 
         <p><a href="http://twitter.com/migueldeicaza">Follow me on

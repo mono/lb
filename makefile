@@ -1,5 +1,5 @@
 #REMOTE_DIRECTORY=miguel@www.tirania.org:tirania/blog
-REMOTE_DIRECTORY=u40995234@s174196906.onlinehome.us:web/tirania.org/blog
+REMOTE_DIRECTORY=u59770950@s338502803.onlinehome.us:web/tirania.org/blog
 
 ASSEMBLIES=	-r:RSS.NET.dll	\
 		-r:System.Web	
