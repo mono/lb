@@ -10,6 +10,10 @@ lb.exe: lb.cs config.cs
 b: lb.exe
 	mono --debug lb.exe -c config.xml -p output
 
+c: lb.exe
+	-mkdir new; cp twentyten/* new
+	mono --debug lb.exe -c config.xml -p new -b twentyten/blog-template -e twentyten/entry-template
+
 clean:
 	rm -fr *.exe output
 

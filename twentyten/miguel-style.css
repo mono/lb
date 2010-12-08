@@ -1,0 +1,21 @@
+.code-xml, .code-csharp
+{
+	margin:15px;
+	padding:15px;
+	font-size: small;
+	font-family: "Courier New", Courier;
+	background:whitesmoke;
+	border: solid 1px silver;
+	line-height:110%;
+}
+
+.shell { 
+	border-style: solid; background: #000000; color: #eeeeee;
+	border-width: 1px; padding: 2pt; 
+	margin:15px;
+}
+
+.separator {
+	border-bottom: 1px dotted #aaaaaa; padding-top: 1em; padding-bottom: 1em;
+}
+

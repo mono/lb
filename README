@@ -51,7 +51,9 @@ This is Lame Blog.
 
 	For files with the HTML ending, it assumes that the title for
 	the blog entry will be the first line (which should be tagged
-	with <h1>title</h1>).
+	with <h1>title</h1>).   This means:
+
+		<h1>This is my Title</h1>
 
 	For text files, the first line should be formatted like this:
 
