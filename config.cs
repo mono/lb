@@ -24,6 +24,9 @@ public class Config {
 	[XmlAttribute] public string EntrySpecific;
 	[XmlAttribute] public string ImageDirectory;
 	[XmlAttribute] public string ThumbnailCommand;
+	public string ConfigFile;
+	public bool Verbose;
+	
 	static public int EntriesPerPage = 15;
 
 	internal string ThumbnailCommandFileName;
@@ -61,6 +64,13 @@ public class Config {
 				if (NextArgument (args, ref i, ref ThumbnailCommand))
 					break;
 				return false;
+			case "-c": case "--config":
+				if (NextArgument (args, ref i, ref ConfigFile))
+					break;
+				return false;
+			case "-v": case "--verbose":
+				Verbose = true;
+				break;
 			default:
 				if (ExtractArgument ("-p", arg, ref Prefix))
 					break;

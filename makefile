@@ -8,16 +8,16 @@ lb.exe: lb.cs config.cs
 	gmcs $(ASSEMBLIES) -debug lb.cs config.cs -out:lb.exe 
 
 b: lb.exe
-	mono --debug lb.exe
+	mono --debug lb.exe -c config.xml -p output
 
 clean:
-	rm -f *.exe
+	rm -fr *.exe output
 
 push: b
-	chmod 644 archive/*/*.html
-	chmod 644 *html *rss2 *php 
-	rsync -zu --checksum -pr -v --rsh=ssh texts archive prettyprint.js		\
-	log-style.css *.rss2 *.php index.html page*.html all.html	\
+	chmod 644 output/archive/*/*.html
+	chmod 644 output/*html output/*rss2 
+	rsync -zu --checksum -pr -v --rsh=ssh texts prettyprint.js log-style.css 		\
+	output/archive output/*.rss2 output/index.html output/page*.html output/all.html	\
 	$(REMOTE_DIRECTORY)
 
 check-update:

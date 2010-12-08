@@ -69,9 +69,9 @@ class DayEntry : IComparable {
 		using (FileStream i = File.OpenRead (file)){
 			using (StreamReader s = new StreamReader (i, Encoding.GetEncoding (blog.config.InputEncoding))){
 				if (file.EndsWith (".html"))
-					Load (s, true);
+					Load (s, true, file);
 				else if (file.EndsWith (".txt"))
-					Load (s, false);
+					Load (s, false, file);
 			}
 		}
 	}
@@ -83,7 +83,8 @@ class DayEntry : IComparable {
 		try {
 			de = new DayEntry (blog, file);
 		} catch (Exception e) {
-			Console.WriteLine ("Failed to load file: {0}. Reason: {1}", file, e.Message);
+			if (blog.Verbose)
+				Console.WriteLine ("Failed to load file: {0}. Reason: {1}", file, e.Message);
 		}
 		return de;
 	}
@@ -155,7 +156,7 @@ class DayEntry : IComparable {
 		DateCaption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
 	}
 	
-	void Load (StreamReader i, bool is_html)
+	void Load (StreamReader i, bool is_html, string file)
 	{
 		bool caption_found = false;
 		bool in_pre = false;
@@ -192,7 +193,7 @@ class DayEntry : IComparable {
 				try {
 					Date = DateTime.ParseExact (s.Substring (6), "r", null);
 				} catch (Exception e) {
-					Console.WriteLine ("Error parsing: '{0}'\n{1}", s.Substring (5), e);
+					Console.WriteLine ("Error parsing: '{0}'\n{1} on {2}", s.Substring (5), e, file);
 					Environment.Exit (1);
 				}
 				continue;
@@ -217,7 +218,7 @@ class DayEntry : IComparable {
 				} else if (s.StartsWith ("#pic")){
 					int idx = s.IndexOf (",");
 					if (idx == -1){
-						Console.WriteLine ("Wrong #pic command");
+						Console.WriteLine ("Wrong #pic command on {0}", file);
 						continue;
 					}
 					
@@ -319,6 +320,7 @@ class DayEntry : IComparable {
 
 class Blog {
 	public Config config;
+	public bool Verbose;
 	string template;
 	public DateTime pubDate = new DateTime (1, 1, 1);
 	string entry_template;
@@ -340,6 +342,7 @@ class Blog {
 		this.template = template;
 		this.config = config;
 		this.entry_template = File.OpenText (config.EntryTemplate).ReadToEnd ();
+		Verbose = config.Verbose;
 
 		LoadDirectory (new DirectoryInfo (config.BlogDirectory));
 
@@ -405,7 +408,8 @@ class Blog {
 	{
 		if (dir.Name.EndsWith ("drafts"))
 			return;
-		Console.WriteLine ("dir:" + dir);
+		if (Verbose)
+			Console.WriteLine ("dir:" + dir);
 		foreach (DirectoryInfo subdir in dir.GetDirectories ()) {
 			LoadDirectory (subdir);
 		}
@@ -794,7 +798,6 @@ class Blog {
 	{
 		RssChannel channel = MakeChannel ();
 
-		Console.WriteLine ("{0} to {1}", start, end);
 		for (int i = start; i < end; i++){
 			int idx = entries.Count - i - 1;
 			if (idx < 0)
@@ -818,7 +821,6 @@ class Blog {
 			item.Guid.PermaLink = DBBool.True;
 
 			item.PubDate = d.Date.ToUniversalTime ();
-			Console.WriteLine ("{0} to {1}", d.Caption, item.PubDate);
 			if (d.Caption == ""){
 				Console.WriteLine ("No caption for: " + d.DateCaption);
 				d.Caption = d.DateCaption;
@@ -873,15 +875,19 @@ class LB {
 	
 	static public string GetOutputFileAtOffset (int offset)
 	{
-		if (offset == 0)
-			return config.BlogFileName;
-		else
-			return String.Format ("page{0}.html", offset / Config.EntriesPerPage);
+		return offset == 0 ? config.BlogFileName : String.Format ("page{0}.html", offset / Config.EntriesPerPage);
 	}
 
 	static void Main (string[] args)
 	{
-		config = (Config) new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader ("config.xml"));
+		var basicConfig = new Config ();
+		if (!basicConfig.Parse (args))
+			return;
+		
+		config = (Config) new XmlSerializer (typeof (Config)).Deserialize (new XmlTextReader (basicConfig.ConfigFile));
+
+		if (args.Length > 1)
+			config.Prefix = args [1];
 		
 		if (config.BlogImageBasedir == null || config.BlogImageBasedir == "")
 			config.BlogImageBasedir = config.BlogWebDirectory;
@@ -930,6 +936,7 @@ class LB {
 
 		if (File.Exists ("log-style.css")) {
 			File.Copy ("log-style.css", "texts/log-style.css", true);
+			File.Copy ("log-style.css", Path.Combine (config.Prefix, "log-style.css"), true);
 		}
 	}
 
