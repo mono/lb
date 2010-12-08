@@ -24,7 +24,7 @@
         <div id="branding" role="banner"> 
 	  <h1 id="site-title"> 
 	  <span> 
-            <a href="@BLOGWEBDIR@" title="@DESCRIPTION@" rel="home">@DESCRIPTION@</a> 
+            <a href="@BLOGWEBDIR@" title="@DESCRIPTION@" rel="home">http://tirania.org</a> 
 	  </span> 
 	  </h1> 
 	  <div id="site-description">Personal blog of Miguel de Icaza</div> 
