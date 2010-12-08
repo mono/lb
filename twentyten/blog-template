@@ -20,17 +20,48 @@
   <div id="wrapper">
 
     <div id="header">
-      <a href="@BLOGWEBDIR@">@DESCRIPTION@</a>
+      <div id="masthead"> 
+        <div id="branding" role="banner"> 
+	  <h1 id="site-title"> 
+	  <span> 
+            <a href="@BLOGWEBDIR@" title="@DESCRIPTION@" rel="home">@DESCRIPTION@</a> 
+	  </span> 
+	  </h1> 
+	  <div id="site-description">Personal blog of Miguel de Icaza</div> 
+
+	  <img src="@BLOGWEBDIR@/pic2.jpg" width="940" height="236" alt="" /> 
+	</div><!-- #branding --> 
+      
+	<div id="access" role="navigation"> 
+	<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div> 
+
+	<div class="menu">
+	  <ul>
+	    <li class="current_page_item">
+	      <a href="https://monomac.wordpress.com/" title="Home">Home</a>
+	    </li>
+	    
+	    <li class="page_item page-item-2" style="display: none;">
+	      <a href="https://tirania.org/about/" title="About">About</a>
+	    </li>
+	  </ul>
+	</div>
+	
+      </div><!-- #access --> 
+      </div><!-- #masthead -->
     </div><!-- header -->
 
     <div id="main">
       <div id="container">
-	@BLOG_ENTRIES@
+        <div id="content" role="main">
+	  @BLOG_ENTRIES@
 
-	@PAGE_NAVIGATION@
-	<center>
-	This is a personal web page. Things said here do not represent the position of my employer.
-	</center>
+	  @PAGE_NAVIGATION@
+
+	  <center>
+	    This is a personal web page. Things said here do not represent the position of my employer.
+	  </center>
+	</div>
       </div>
 
       <div id="primary" class="widget-area" role="complementary">

@@ -165,8 +165,13 @@ This is Lame Blog.
 
 		@ENTRY_ID@
 		@ENTRY_ANCHOR@
+			Anchor used to target an entry.
+
 		@ENTRY_PATH@
 		@ENTRY_NAVIGATION@
+			Produces HTML to move to the previous/main/next blog
+			entries
+
 		@ENTRY_PERMALINK@
 		@ENTRY_CAPTION@
 		@ENTRY_CAPTION_ENC@

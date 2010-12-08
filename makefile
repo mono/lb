@@ -17,11 +17,23 @@ c: lb.exe
 clean:
 	rm -fr *.exe output
 
-push: b
-	chmod 644 output/archive/*/*.html
-	chmod 644 output/*html output/*rss2 
+push:
+	echo select pushb or pushc
+
+pushb: b
+	make do-push DIR=output
+
+pushc: c
+	make do-push DIR=new
+
+r:
+	rsync twentyten/* $(REMOTE_DIRECTORY)
+
+do-push:
+	chmod 644 $(DIR)/archive/*/*.html
+	chmod 644 $(DIR)/*html output/*rss2 
 	rsync -zu --checksum -pr -v --rsh=ssh texts prettyprint.js log-style.css 		\
-	output/archive output/*.rss2 output/index.html output/page*.html output/all.html	\
+	$(DIR)/archive $(DIR)/*.rss2 $(DIR)/index.html $(DIR)/page*.html $(DIR)/all.html	\
 	$(REMOTE_DIRECTORY)
 
 check-update:
