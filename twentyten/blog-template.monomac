@@ -1,0 +1,123 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>@TITLE@</title>
+	    <link rel='stylesheet' href='@BASEDIR@style.css' type='text/css' />
+	    <link rel='stylesheet' href='@BASEDIR@miguel-style.css' type='text/css' />
+	    <link rel="alternate" type="application/rss+xml" title="RSS" href="@BLOGWEBDIR@@RSSFILENAME@.rss2" />
+	    <script src='@BASEDIR@prettyprint.js' type='text/javascript'></script>
+	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	    <script type="text/javascript">
+	       function startup()
+	       {
+	            paintColors ();
+	        }
+	    </script>
+	    @ANALYTICS@
+</head>
+	
+<body class="home blog" onload='startup ();'>
+  <div id="wrapper">
+
+    <div id="header">
+      <div id="masthead"> 
+        <div id="branding" role="banner"> 
+	  <h1 id="site-title"> 
+	  <span> 
+            <a href="@BLOGWEBDIR@" title="@DESCRIPTION@" rel="home">@BLOGWEBDIR@</a> 
+	  </span> 
+	  </h1> 
+	  <div id="site-description">@DESCRIPTION@</div> 
+
+	  <img src="https://monomac.wordpress.com/wp-content/themes/pub/twentyten/images/headers/sunset.jpg" width="940" height="236" alt="" /> 
+	</div><!-- #branding --> 
+      
+	<div id="access" role="navigation"> 
+	<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div> 
+
+	<div class="menu">
+	  <ul>
+	    <li class="current_page_item">
+	      <a href="https://monomac.wordpress.com/" title="Home">Home</a>
+	    </li>
+	    
+	    <li class="page_item page-item-2" style="display: none;">
+	      <a href="https://tirania.org/about/" title="About">About</a>
+	    </li>
+	  </ul>
+	</div>
+	
+      </div><!-- #access --> 
+      </div><!-- #masthead -->
+    </div><!-- header -->
+
+    <div id="main">
+      <div id="container">
+        <div id="content" role="main">
+	  @BLOG_ENTRIES@
+
+	  @PAGE_NAVIGATION@
+
+	  <center>
+	    This is a personal web page. Things said here do not represent the position of my employer.
+	  </center>
+	</div>
+      </div>
+
+      <div id="primary" class="widget-area" role="complementary">
+        <ul class="xoxo">
+	  <li class="widget-container">
+            <h3 class="widget-title">RSS</h3>
+	    <div>
+              <a href="http://feeds.feedburner.com/MiguelsOsxAndIosBlog"><img src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+	      <a href="http://fusion.google.com/add?feedurl=http://feeds.feedburner.com/MiguelsOsxAndIosBlog">
+	      <img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif" alt="addgoogle2.gif" /></a>
+	    </div>
+	  </li>
+
+	  <li class="widget-container">
+	    <h3 class="widget-title">Other Blog</h3>
+	    <div>
+              <p><a href="http://tirania.org/blog">Standard blog</a>.
+	    </div>
+	  </li>
+	  
+	  <li class="widget-container">
+	    <h3 class="widget-title">Twitter</h3>
+	    <div>
+            <p><a href="http://twitter.com/migueldeicaza">Follow me on twitter</a>.
+	    </div>
+	  </li>
+	  
+          <li class="widget-container">
+	    <h3 class="widget-title">Comments</h3>
+	    <div>Email: <a href="mailto:@EDITOR@">@EDITOR@</a>.
+	  </div>
+
+	  <li class="widget-container">
+	    <h3 class="widget-title">Recommended Reading</h3>
+	    <div>
+	    </div>
+	  </li>
+	  
+	  <li class="widget-container">
+	  </li>
+	</ul>
+	
+	<div class="separator"> </div>
+	
+	@ARCHIVE_NAVIGATOR@
+	  
+	  
+      </div> <!-- container -->
+    </div> <!-- main -->
+
+    <div id="footer">
+    </div> <!-- footer -->
+  </div> <!-- wrapper -->
+</body>
+</html>
+
+<div id='sidebar'>
+</div>

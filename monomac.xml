@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config
+Author="miguel@gnome.org (Miguel de Icaza)"
+BlogDirectory="/cvs/blog-monomac"
+BlogFileName="index.html"
+BlogWebDirectory="http://tirania.org/monomac/"
+BlogImageBasedir="http://tirania.org/monomac/images"
+Copyright="Miguel de Icaza"
+Description="Miguel's OSX and iOS blog"
+ManagingEditor="miguel@gnome.org"
+Title="Miguel de Icaza"
+RSSFileName="monomac"
+InputEncoding="utf-8"
+OutputEncoding="utf-8"
+AnalyticsStub="analytics"
+CommentsStub="comments"
+EntrySpecific="entry-specific"
+ImageDirectory="/cvs/blog-monomac/images"
+ThumbnailCommand="convert -scale 400 {0} {1}"
+/>
