@@ -1,4 +1,4 @@
-<html>
+1;2c<html>
     <head>
         <meta charset="UTF-8">
         <title>@TITLE@</title>
@@ -38,7 +38,7 @@
 	<div class="menu">
 	  <ul>
 	    <li class="current_page_item">
-	      <a href="https://monomac.wordpress.com/" title="Home">Home</a>
+	      <a href="https://tirania.org/monomac" title="Home">Home</a>
 	    </li>
 	    
 	    <li class="page_item page-item-2" style="display: none;">

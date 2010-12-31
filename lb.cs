@@ -230,6 +230,9 @@ class DayEntry : IComparable {
 				} else if (s.StartsWith ("#comment")){
 					Comments = true;
 					continue;
+				} else if (s.StartsWith ("#nocomment")){
+					Comments = false;
+					continue;
 				} else if (s.StartsWith ("#thumbnail")) {
 					Match m = Regex.Match (s, @"^#thumbnail\s+(?<filename>[^\s]+)\s+(?<desc>.*)$");
 					if (m.Groups.Count > 0) {
