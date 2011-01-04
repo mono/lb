@@ -1,5 +1,14 @@
+        <ul class="xoxo">
 	  <li class="widget-container">
-	    <h3 class="widget-title">My sBlog</h3>
+            <h3 class="widget-title">RSS</h3>
+	    <div>
+              <a href="http://tirania.org/blog/miguel.rss2"><img src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+	      <a href="http://fusion.google.com/add?feedurl=http://feeds.feedburner.com/MiguelsOsxAndIosBlog">
+	      <img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif" alt="addgoogle2.gif" /></a>
+	    </div>
+	  </li>
+	  <li class="widget-container">
+	    <h3 class="widget-title">My Blogs</h3>
 	    <div>
               <p><a href="http://tirania.org/monomac">MonoMac/MonoTouch blog</a>.
 	    </div>

@@ -38,7 +38,7 @@
 	<div class="menu">
 	  <ul>
 	    <li class="current_page_item">
-	      <a href="https://tirania.org/monomac" title="Home">Home</a>
+	      <a href="@BLOGWEBDIR@" title="Home">Home</a>
 	    </li>
 	    
 	    <li class="page_item page-item-2" style="display: none;">
@@ -65,15 +65,6 @@
       </div>
 
       <div id="primary" class="widget-area" role="complementary">
-        <ul class="xoxo">
-	  <li class="widget-container">
-            <h3 class="widget-title">RSS</h3>
-	    <div>
-              <a href="http://feeds.feedburner.com/MiguelsOsxAndIosBlog"><img src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
-	      <a href="http://fusion.google.com/add?feedurl=http://feeds.feedburner.com/MiguelsOsxAndIosBlog">
-	      <img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif" alt="addgoogle2.gif" /></a>
-	    </div>
-	  </li>
 
 	  @WIDGETS@
 	  
