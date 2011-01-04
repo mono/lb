@@ -29,9 +29,9 @@ twentyten/blog-template.monomac: twentyten/blog-template twentyten/widgets.monom
 clean:
 	rm -fr *.exe output
 
-push:
-	echo select pushb or pushc
+push: pushc
 
+# pushb is deprecated
 pushb: b
 	make do-push DIR=output REMOTE_DIRECTORY=$(REMOTE_BLOG)
 
