@@ -46,7 +46,7 @@ r:
 
 do-push:
 	chmod 644 $(DIR)/archive/*/*.html
-	chmod 644 $(DIR)/*html output/*rss2 
+	chmod 644 $(DIR)/*html $(DIR)/*rss2 
 	rsync -zu --checksum -pr -v --rsh=ssh texts prettyprint.js log-style.css 		\
 	$(DIR)/archive $(DIR)/*.rss2 $(DIR)/index.html $(DIR)/page*.html $(DIR)/all.html	\
 	$(DIR)/*.css $(DIR)/*.gif \
