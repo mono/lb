@@ -113,7 +113,7 @@ input,
 textarea,
 .page-title span,
 .pingback a.url {
-	font-family: Georgia, "Bitstream Charter", serif;
+	font-family: Helvetica, Arial, "Bitstream Charter", sans-serif;
 }
 h3#comments-title,
 h3#reply-title,
@@ -269,7 +269,7 @@ ins {
 }
 blockquote {
 	font-style: italic;
-	padding: 0 3em;
+	padding: 0 3em 1em 3em;
 }
 blockquote cite,
 blockquote em,
@@ -460,8 +460,8 @@ div.menu li {
 #content input,
 #content textarea {
 	color: #333;
-	font-size: 16px;
-	line-height: 24px;
+	font-size: 12pt;
+	line-height: 1.5;
 }
 #content p,
 #content ul,
