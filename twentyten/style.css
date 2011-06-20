@@ -113,7 +113,7 @@ input,
 textarea,
 .page-title span,
 .pingback a.url {
-	font-family: Helvetica, Arial, "Bitstream Charter", sans-serif;
+	font-family: Candara, Helvetica, Arial, "Bitstream Charter", sans-serif;
 }
 h3#comments-title,
 h3#reply-title,
@@ -469,7 +469,7 @@ div.menu li {
 #content dd,
 #content pre,
 #content hr {
-	margin-bottom: 24px;
+	margin-bottom: 8pt;
 }
 #content ul ul,
 #content ol ol,

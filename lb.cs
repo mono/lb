@@ -869,7 +869,12 @@ class Blog {
 		FileInfo info = new FileInfo (file);
 		if (!info.Directory.Exists)
 			info.Directory.Create ();
-		return File.Create (file);
+		try {
+			return File.Create (file);
+		} catch (Exception e){
+			Console.WriteLine (e);
+			return null;
+		}
 	}
 }
 
