@@ -83,10 +83,10 @@ This is Lame Blog.
 
 	Lame Blog also now supports Markdown-formatted files as blog
 	entries. They take the .md extension, and are regular Markdown
-        format. You can use the h1 Markdown tag (#) to denote the title
-        on the first line as well, because Markdown files are first
-        processed by MarkdownSharp into HTML, and then loaded as .html
-        files would be. MarkdownSharp is courtesy of Stack Overflow,
+	format. You can use the h1 Markdown tag (#) to denote the title
+	on the first line as well, because Markdown files are first
+	processed by MarkdownSharp into HTML, and then loaded as .html
+	files would be. MarkdownSharp is courtesy of Stack Overflow,
 	and can be found at http://code.google.com/p/markdownsharp/.
 
 * Commands
