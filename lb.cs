@@ -82,9 +82,7 @@ class DayEntry : IComparable {
 						LinkEmails = true,
 						StrictBoldItalic = true
 					});
-					MemoryStream ms = new MemoryStream (Encoding.GetEncoding (blog.config.InputEncoding).GetBytes (m.Transform (s.ReadToEnd ())));
-					using (StreamReader sr = new StreamReader (ms))
-						Load (sr, true, file);
+					using (TextReader tr = new StringReader (m.Transform (s.ReadToEnd ()))) Load (tr, true, file);
 				}
 					
 			}
@@ -171,7 +169,7 @@ class DayEntry : IComparable {
 		DateCaption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
 	}
 	
-	void Load (StreamReader i, bool is_html, string file)
+	void Load (TextReader i, bool is_html, string file)
 	{
 		bool caption_found = false;
 		bool in_pre = false;
