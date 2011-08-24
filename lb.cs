@@ -82,7 +82,7 @@ class DayEntry : IComparable {
 						LinkEmails = true,
 						StrictBoldItalic = true
 					});
-					MemoryStream ms = new MemoryStream (Encoding.Unicode.GetBytes (m.Transform (s.ReadToEnd ())));
+					MemoryStream ms = new MemoryStream (Encoding.GetEncoding (blog.config.InputEncoding).GetBytes (m.Transform (s.ReadToEnd ())));
 					using (StreamReader sr = new StreamReader (ms))
 						Load (sr, true, file);
 				}
