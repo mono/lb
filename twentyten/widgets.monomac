@@ -14,6 +14,12 @@
 	  </li>
 	  
 	  <li class="widget-container">
+	  <a href="http://xamarin.com">
+	  <img src="http://tirania.org/images/blog-ad.jpg">
+	  </a>
+	  </li>
+
+	  <li class="widget-container">
 	    <h3 class="widget-title">Twitter</h3>
 	    <div>
             <p><a href="http://twitter.com/migueldeicaza">Follow me on twitter</a>.

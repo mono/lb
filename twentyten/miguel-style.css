@@ -7,6 +7,7 @@
 	background:whitesmoke;
 	border: solid 1px silver;
 	line-height:110%;
+	overflow: auto;
 }
 
 .shell { 

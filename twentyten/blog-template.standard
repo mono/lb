@@ -97,6 +97,12 @@
 	  </div>
 
 	  <li class="widget-container">
+	  <a href="http://xamarin.com">
+	  <img src="http://tirania.org/images/blog-ad.jpg">
+	  </a>
+	  </li>
+
+	  <li class="widget-container">
 	      <h3 class="widget-title">Search this Blog</h3>
 	      <!-- Google CSE Search Box Begins  -->
 	      <div><form action="http://google.com/cse" id="searchbox_017740955003523021154:1z0nz3i1mbw">
@@ -147,6 +153,7 @@
 	    <div><a href="http://www.go-mono.com/monologue">Mono Blogs</a><br>
 	    <a href="http://www.commondreams.org">CommonDreams</a><br/>
 	    </div>
+	    <a href="http://stackoverflow.com/questions/459833/which-open-source-licenses-are-compatible-with-the-iphone-and-app-store/9070734">StackOverflow</a>
 	  </li>
 	</ul>
 	
