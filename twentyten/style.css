@@ -144,7 +144,8 @@ input[type=submit] {
 	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
 }
 pre {
-	font-family: "Courier 10 Pitch", Courier, monospace;
+	font-family: "Consolas", "Courier 10 Pitch", Courier, monospace;
+	font-size: 10pt
 }
 code {
 	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
@@ -485,7 +486,7 @@ div.menu li {
 	line-height: 21px;
 }
 #content code {
-	font-size: 13px;
+	font-size: 11pt;
 }
 #content dt,
 #content th {
@@ -558,7 +559,6 @@ div.menu li {
 }
 #content .entry-title {
 	color: #000;
-	font-size: 21px;
 	font-weight: bold;
 	line-height: 1.3em;
 	margin-bottom: 0;

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config
 Author="miguel@gnome.org (Miguel de Icaza)"
-BlogDirectory="/home/miguel/activity"
+BlogDirectory="/Users/miguel/activity"
 BlogFileName="index.html"
 BlogWebDirectory="http://tirania.org/blog/"
 BlogImageBasedir="http://primates.ximian.com/~miguel"
@@ -15,6 +15,6 @@ OutputEncoding="utf-8"
 AnalyticsStub="analytics"
 CommentsStub="comments"
 EntrySpecific="entry-specific"
-ImageDirectory="/home/miguel/upload/pictures"
+ImageDirectory="/Users/miguel/upload/pictures"
 ThumbnailCommand="convert -scale 400 {0} {1}"
 />

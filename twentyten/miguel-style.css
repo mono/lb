@@ -1,9 +1,9 @@
 .code-xml, .code-csharp
 {
-	margin:15px;
-	padding:15px;
-	font-size: small;
-	font-family: "Courier New", Courier;
+        margin: 1em 0;
+	padding:.5em 1em;
+	font-size: 10pt;
+	font-family: "Consolas", "Courier New", Courier;
 	background:whitesmoke;
 	border: solid 1px silver;
 	line-height:110%;
