@@ -113,7 +113,7 @@ input,
 textarea,
 .page-title span,
 .pingback a.url {
-	font-family: Candara, Helvetica, Arial, "Bitstream Charter", sans-serif;
+	font-family: Optima, Candara, Helvetica, Arial, "Bitstream Charter", sans-serif;
 }
 h3#comments-title,
 h3#reply-title,
@@ -141,7 +141,7 @@ h3#reply-title,
 .widget-title,
 .wp-caption-text,
 input[type=submit] {
-	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+	font-family: "Optima", Arial, Helvetica, "Nimbus Sans L", sans-serif;
 }
 pre {
 	font-family: "Consolas", "Courier 10 Pitch", Courier, monospace;
@@ -163,7 +163,7 @@ div.menu,
 #main,
 #wrapper {
 	margin: 0 auto;
-	width: 940px;
+	width: 1000px;
 }
 #wrapper {
 	background: #fff;
@@ -461,8 +461,8 @@ div.menu li {
 #content input,
 #content textarea {
 	color: #333;
-	font-size: 12pt;
-	line-height: 1.5;
+	font-size: 14pt;
+	line-height: 1.4em;
 }
 #content p,
 #content ul,
@@ -482,8 +482,8 @@ div.menu li {
 #content kbd,
 #content tt,
 #content var {
-	font-size: 15px;
-	line-height: 21px;
+	font-size: 10pt;
+	line-height: 1.4em;
 }
 #content code {
 	font-size: 11pt;
