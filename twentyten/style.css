@@ -500,7 +500,7 @@ div.menu li {
 #content h6 {
 	color: #000;
 	line-height: 1.5em;
-	margin: 0 0 20px 0;
+	margin: 1m0 0 .5em 0;
 }
 #content table {
 	border: 1px solid #e7e7e7;
@@ -574,7 +574,7 @@ div.menu li {
 }
 .entry-meta {
 	color: #888;
-	font-size: 12px;
+	font-size: .8em;
 }
 .entry-meta abbr,
 .entry-utility abbr {
@@ -691,7 +691,7 @@ body.page .edit-link {
 .entry-utility {
 	clear: both;
 	color: #888;
-	font-size: 12px;
+	font-size: .8em;
 	line-height: 18px;
 }
 .entry-meta a,
