@@ -11,8 +11,8 @@
 }
 
 .shell { 
-	border-style: solid; background: #000000; color: #eeeeee;
-	border-width: 1px; padding: 2pt; 
+	border-style: solid; background: #554f55; color: #eee;
+	border-width: 1px; padding: 1em; 
 	margin:15px;
 }
 

@@ -12,9 +12,16 @@ lb.exe: lb.cs config.cs
 b: lb.exe
 	mono --debug lb.exe -c config.xml -p output
 
+#
+# Builds the standard blog
+#
 c: lb.exe twentyten/blog-template.standard
 	-mkdir new; cp twentyten/* new
 	mono --debug lb.exe -c config.xml -p new -b twentyten/blog-template.standard -e twentyten/entry-template
+
+#
+# Builds the MonoMac blog
+#
 
 m: lb.exe twentyten/blog-template.monomac
 	-mkdir monomac; cp twentyten/* monomac
