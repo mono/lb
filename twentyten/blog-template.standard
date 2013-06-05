@@ -1,6 +1,10 @@
+
 <html>
     <head>
-        <meta charset="UTF-8">
+      <script type="text/javascript" src="//use.typekit.net/rhi4otd.js"></script>
+      <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+      <meta charset="UTF-8">
         <title>@TITLE@</title>
 	    <link rel='stylesheet' href='@BASEDIR@style.css' type='text/css' />
 	    <link rel='stylesheet' href='@BASEDIR@miguel-style.css' type='text/css' />
@@ -152,7 +156,6 @@
 	    <div><a href="http://www.go-mono.com/monologue">Mono Blogs</a><br>
 	    <a href="http://www.commondreams.org">CommonDreams</a><br/>
 	    </div>
-	    <a href="http://stackoverflow.com/questions/459833/which-open-source-licenses-are-compatible-with-the-iphone-and-app-store/9070734">StackOverflow</a>
 	  </li>
 	</ul>
 	
