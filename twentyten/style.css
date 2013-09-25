@@ -28,7 +28,14 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 body {
 	line-height: 1;
+	font-family: "krete", serif;
+	font-style: normal;
+	font-weight: 200;
 }
+body b {
+    font-weight: 400;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	clear: both;
 	font-weight: normal;
@@ -430,7 +437,7 @@ div.menu li {
 #content textarea {
 	color: #111;
 	font-size: 14pt;
-	line-height: 1.4em;
+	line-height: 1.6em;
 }
 #content p,
 #content ul,
