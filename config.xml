@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <config
-Author="miguel@gnome.org (Miguel de Icaza)"
+Author="miguel@xamarin.com (Miguel de Icaza)"
 BlogDirectory="/Users/miguel/activity"
 BlogFileName="index.html"
 BlogWebDirectory="http://tirania.org/blog/"
 BlogImageBasedir="http://primates.ximian.com/~miguel"
 Copyright="Miguel de Icaza"
 Description="Personal blog of Miguel de Icaza"
-ManagingEditor="miguel@gnome.org"
+ManagingEditor="miguel@xamarin.com"
 Title="Miguel de Icaza"
 RSSFileName="miguel"
 InputEncoding="utf-8"
