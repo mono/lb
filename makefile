@@ -20,6 +20,13 @@ c: lb.exe twentyten/blog-template.standard
 	mono --debug lb.exe -c config.xml -p new -b twentyten/blog-template.standard -e twentyten/entry-template
 
 #
+# Builds the standard blog, with bootstrap style
+#
+d: lb.exe bootstrap/blog-template.standard
+	-mkdir newb; cp bootstrap/* newb
+	mono --debug lb.exe -c config.xml -p newb -b bootstrap/blog-template.standard -e bootstrap/entry-template
+
+#
 # Builds the MonoMac blog
 #
 

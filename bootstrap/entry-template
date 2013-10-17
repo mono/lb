@@ -1,0 +1,33 @@
+@ENTRY_ANCHOR@
+<div class="post hentry">
+  <div class="navigation">
+    @ENTRY_NAVIGATION@
+  </div>
+
+  <p>
+  <div class='post hentry'>
+    <h1 class="entry-title"><a href="@BASEDIR@@ENTRY_PERMALINK@">@ENTRY_CAPTION@</a></h1>
+
+    <div class="entry-meta">
+      Posted on <a href="@ENTRY_URL_PERMALINK@">@ENTRY_DATECAPTION@</a> by  @COPYRIGHT@
+    </div> <!-- entry-meta -->
+
+    <div class="entry-content">
+      @ENTRY_BODY@
+    </div>
+
+    <div class="entry-utility">
+      Posted on <a href="@ENTRY_URL_PERMALINK@">@ENTRY_DATECAPTION@</a> by  @COPYRIGHT@
+      @ENTRY_SPECIFIC@
+    </div>
+  </div><!-- post-->
+
+  <div class="navigation">
+    @ENTRY_NAVIGATION@
+  </div>
+
+  <div id="comments">
+    @COMMENTS@
+  </div>
+
+</div> <!--divpost-->

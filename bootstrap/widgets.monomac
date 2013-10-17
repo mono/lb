@@ -1,0 +1,46 @@
+        <ul class="xoxo">
+	  <li class="widget-container">
+            <h3 class="widget-title">RSS</h3>
+	    <div>
+              <a href="http://feeds.feedburner.com/MiguelsOsxAndIosBlog"><img src="@BASEDIR@xml.gif" alt="xml.gif" /></a>
+	      <a href="http://fusion.google.com/add?feedurl=http://feeds.feedburner.com/MiguelsOsxAndIosBlog">
+	      <img src="http://primates.ximian.com/~miguel/pictures/addgoogle2.gif" alt="addgoogle2.gif" /></a>
+	    </div>
+	  </li>	  <li class="widget-container">
+	    <h3 class="widget-title">Other Blog</h3>
+	    <div>
+              <p><a href="http://tirania.org/blog">Standard blog</a>.
+	    </div>
+	  </li>
+	  
+	  <li class="widget-container">
+	  <a href="http://xamarin.com">
+	  <img src="http://tirania.org/images/blog-ad.jpg">
+	  </a>
+	  </li>
+
+	  <li class="widget-container">
+	    <h3 class="widget-title">Twitter</h3>
+	    <div>
+            <p><a href="http://twitter.com/migueldeicaza">Follow me on twitter</a>.
+	    </div>
+	  </li>
+	  
+          <li class="widget-container">
+	    <h3 class="widget-title">Comments</h3>
+	    <div>Email: <a href="mailto:@EDITOR@">@EDITOR@</a>.
+	  </div>
+
+	  <li class="widget-container">
+	    <h3 class="widget-title">Recommended Reading</h3>
+	    <div>
+	    </div>
+	  </li>
+	  
+	  <li class="widget-container">
+	  </li>
+	</ul>
+	
+	<div class="separator"> </div>
+	
+	@ARCHIVE_NAVIGATOR@
