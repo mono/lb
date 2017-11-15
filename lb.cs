@@ -380,22 +380,32 @@ class Blog {
 					orderby monthly.Key
 					select new { Month = monthly.Key, Entries = monthly } };
 
+		string prefix = "<div class=\"col-lg-6\">\n<ul class=\"list-unstyled\">";
+		string suffix = "</ul></div>";
+		var first_column = new StringBuilder (prefix);
+		var second_column = new StringBuilder (prefix);
+		bool first = true;
+		
 		foreach (var year_group in grouping){
-			ab.Append (String.Format ("\n<br/><b>{0}</b>\n", year_group.Year));
+			var target = first ? first_column : second_column;
+			first = !first;
+			
+			target.Append (String.Format ("\n<li><b>{0}</b><br/>\n", year_group.Year));
 			int count = 0;
 			foreach (var month in year_group.Months){
-				if ((count++ % 6) == 0){
-					ab.Append ("<br/>\n");
-				}
 				DateTime year_month = new DateTime (year_group.Year, month.Month, 1);
 				string month_archive_path = String.Format ("archive/{0:yyyy}/{0:MMM}.html", year_month);
 				
-				ab.Append (String.Format ("<a href=\"{1}/{2}\">{0:MMM}</a> ", year_month, config.BlogWebDirectory, month_archive_path));
+				target.Append (String.Format ("<a href=\"{1}/{2}\">{0:MMM}</a> ", year_month, config.BlogWebDirectory, month_archive_path));
 			}
+			target.Append ("</li>");
 		}
+		first_column.Append (suffix);
+		second_column.Append (suffix);
+		ab.Append (first_column.ToString ());
+		ab.Append (second_column.ToString ());
 		ab.Append ("</div>");
 		archive_navigator = ab.ToString ();
-
 		foreach (var year_group in grouping){
 			foreach (var month in year_group.Months){
 				DateTime year_month = new DateTime (year_group.Year, month.Month, 1);

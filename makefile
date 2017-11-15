@@ -7,7 +7,7 @@ ASSEMBLIES=	-r:RSS.NET.dll	\
 		-r:System.Web	
 
 lb.exe: lb.cs config.cs
-	gmcs $(ASSEMBLIES) -debug lb.cs config.cs -out:lb.exe 
+	mcs $(ASSEMBLIES) -debug lb.cs config.cs -out:lb.exe 
 
 b: lb.exe
 	mono --debug lb.exe -c config.xml -p output
@@ -25,6 +25,21 @@ c: lb.exe twentyten/blog-template.standard
 d: lb.exe bootstrap/blog-template.standard
 	-mkdir newb; cp bootstrap/* newb
 	mono --debug lb.exe -c config.xml -p newb -b bootstrap/blog-template.standard -e bootstrap/entry-template
+
+#
+# Builds the standard blog, with stellar
+#
+s: lb.exe stellar/blog-template.stellar
+	-mkdir snew; cp -pr stellar/* snew
+	mono --debug lb.exe -c config.xml -p snew -b stellar/blog-template.stellar -e stellar/entry-template
+
+#
+# Builds the standard blog, with bootstrap
+#
+k: lb.exe startbootstrap/blog-template.start
+	-mkdir sb-gen; rsync -a startbootstrap/css startbootstrap/js startbootstrap/fonts sb-gen
+	mono --debug lb.exe -c config.xml -p sb-gen -b startbootstrap/blog-template.start -e startbootstrap/entry-template.start
+
 
 #
 # Builds the MonoMac blog
