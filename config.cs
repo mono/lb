@@ -24,6 +24,7 @@ public class Config {
 	[XmlAttribute] public string EntrySpecific;
 	[XmlAttribute] public string ImageDirectory;
 	[XmlAttribute] public string ThumbnailCommand;
+	[XmlAttribute] public string Widgets;
 	public string ConfigFile;
 	public bool Verbose;
 	
@@ -56,6 +57,10 @@ public class Config {
 				if (NextArgument (args, ref i, ref EntryTemplate))
 					break;
 				return false;
+			case "-w": case "--widgets":
+				if (NextArgument (args, ref i, ref Widgets))
+					break;
+				return false;
 			case "-x": case "--rss-filename":
 				if (NextArgument (args, ref i, ref RSSFileName))
 					break;
@@ -75,6 +80,10 @@ public class Config {
 				if (ExtractArgument ("-p", arg, ref Prefix))
 					break;
 				if (ExtractArgument ("--prefix", arg, ref Prefix))
+					break;
+				if (ExtractArgument ("-w", arg, ref Widgets))
+					break;
+				if (ExtractArgument ("--widgets", arg, ref Widgets))
 					break;
 				if (ExtractArgument ("-b", arg, ref BlogTemplate))
 					break;
@@ -100,6 +109,8 @@ public class Config {
 				return false;
 			}
 		}
+		if (Widgets != null)
+			Widgets = System.IO.File.ReadAllText (Widgets);
 		if (ThumbnailCommand != null) {
 			ThumbnailCommandFileName  = ThumbnailCommand.Split (' ')[0];
 			ThumbnailCommandArguments = ThumbnailCommand.Substring (ThumbnailCommandFileName.Length+1);

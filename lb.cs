@@ -696,6 +696,7 @@ class Blog {
 			substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 			substitutions.Add ("@ARCHIVE_NAVIGATOR@", archive_navigator);
 			substitutions.Add ("@PAGE_NAVIGATION@", page_navigation);
+			substitutions.Add ("@WIDGETS@", config.Widgets);
 				
 			Translate (template, w, substitutions);
 

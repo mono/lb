@@ -36,9 +36,9 @@ s: lb.exe stellar/blog-template.stellar
 #
 # Builds the standard blog, with bootstrap
 #
-k: lb.exe startbootstrap/blog-template.standard
+k: lb.exe startbootstrap/blog-template
 	-mkdir sb-gen; rsync -a startbootstrap/css startbootstrap/js startbootstrap/fonts sb-gen
-	mono --debug lb.exe -c config.xml -p sb-gen -b startbootstrap/blog-template.standard -e startbootstrap/entry-template.start
+	mono --debug lb.exe -c config.xml -p sb-gen -w startbootstrap/widgets -b startbootstrap/blog-template -e startbootstrap/entry-template.start
 
 
 #
@@ -54,12 +54,6 @@ twentyten/blog-template.standard: twentyten/blog-template twentyten/widgets.stan
 
 twentyten/blog-template.monomac: twentyten/blog-template twentyten/widgets.monomac makefile
 	sed -e '/@WIDGETS@/r twentyten/widgets.monomac' -e 'x;$G' -e 's/@WIDGETS@//' -e 's,@BLOGWEBDIR@/pic2.jpg,https://monomac.wordpress.com/wp-content/themes/pub/twentyten/images/headers/sunset.jpg,' twentyten/blog-template > $@
-
-startbootstrap/blog-template.standard: startbootstrap/blog-template startbootstrap/widgets
-	sed -e '/@WIDGETS@/r startbootstrap/widgets' -e 'x;$G' -e 's/@WIDGETS@//' startbootstrap/blog-template > $@
-
-startbootstrap/blog-template.monomac: startbootstrap/blog-template startbootstrap/widgets
-	sed -e '/@WIDGETS@/r startbootstrap/widgets' -e 'x;$G' -e 's/@WIDGETS@//' startbootstrap/blog-template > $@
 
 clean:
 	rm -fr *.exe output
