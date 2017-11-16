@@ -27,7 +27,7 @@ public class Config {
 	public string ConfigFile;
 	public bool Verbose;
 	
-	static public int EntriesPerPage = 15;
+	static public int EntriesPerPage = 10;
 
 	internal string ThumbnailCommandFileName;
 	internal string ThumbnailCommandArguments;

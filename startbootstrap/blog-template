@@ -8,8 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="@DESCRIPTION@">
     <meta name="author" content="@COPYRIGHT@">
+    <script type="text/javascript" src="//use.typekit.net/rhi4otd.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
     <title>@TITLE@</title>
+    <link rel='stylesheet' href='@BASEDIR@css/miguel-style.css' type='text/css' />
+    <script src='@BASEDIR@js/prettyprint.js' type='text/javascript'></script>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -67,6 +71,8 @@
 	<!-- Blog Post Content Column -->
 	<div class="col-lg-8">
             @BLOG_ENTRIES@
+
+	    @PAGE_NAVIGATION@
 	</div>
         <hr>
 
@@ -76,24 +82,25 @@
                 <!-- Blog Search Well -->
                 <div class="well">
                     <h4>Blog Search</h4>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                        </span>
+ 
+                   <!-- Google CSE Search Box Begins  -->
+                    <div><form action="http://google.com/cse" id="searchbox_017740955003523021154:1z0nz3i1mbw">
+                        <input type="hidden" name="cx" value="017740955003523021154:1z0nz3i1mbw" />
+                        <input type="text" name="q" size="25" />
+                        <input type="submit" name="sa" value="Search" />
+                      </form>
+                      <script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_017740955003523021154%3A1z0nz3i1mbw">
+                      </script>
                     </div>
+                    <!-- Google CSE Search Box Ends -->
+
                     <!-- /.input-group -->
                 </div>
 
-                <div class="well">
-                    <h4>Widgets</h4>
-		</div>
-
+		@WIDGETS@
                 <!-- Blog Categories Well -->
                 <div class="well">
-                    <h4>Blog Categories</h4>
+                    <h4>Archive</h4>
                     <div class="row">
 		    @ARCHIVE_NAVIGATOR@
                     </div>
@@ -101,9 +108,8 @@
                 </div>
 
                 <!-- Side Widget Well -->
-                <div class="well">
-                    <h4>Side Widget Well</h4>
-                </div>
+                <!--div class="well">-->
+                <!--/div>-->
 
             </div>
 	</div> <!-- row -->
@@ -112,7 +118,8 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+		  This is a personal web page. Things said here do not
+		  represent the position of my employer. (C) 2001-2017.
                 </div>
             </div>
             <!-- /.row -->

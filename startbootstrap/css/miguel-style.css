@@ -1,20 +1,3 @@
-.post {
-    font-family: "ff-tisa-web-pro";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 200;
-}
-
-.post p { margin-top: 0.5em; }
-
-
-.post h1, .post h2, .post h3, .post h4, .post h5 {
-	font-family: "krete", serif;
-/*	font-style: normal;
-	font-weight: 200; */
-}
-
-
 .code-xml, .code-csharp
 {
         margin: 1em 0;
@@ -27,15 +10,34 @@
 	overflow: auto;
 }
 
-/*
- .shell { 
+.shell { 
 	border-style: solid; background: #554f55; color: #eee;
 	border-width: 1px; padding: 1em; 
 	margin:15px;
 }
-*/
 
 .separator {
 	border-bottom: 1px dotted #aaaaaa; padding-top: 1em; padding-bottom: 1em;
 }
 
+pre {
+	border: solid 1px silver;
+}
+
+p code, li code, tt {
+	white-space: nowrap;
+	border: #d3d3d3 1px solid;
+	padding: 1px 2px 1px 2px;
+	background-color: #eee;
+	font-size: 80%;
+}
+
+.blog-body {
+       font-family: krete, serif; 
+       font-size: 14pt;
+}
+
+h2 {
+	padding-top: .5em;
+	margin-bottom: .5em;
+}
