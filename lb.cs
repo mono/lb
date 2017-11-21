@@ -31,6 +31,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Linq;
 using Rss;
+using MarkdownSharp;
 
 class DayEntry : IComparable {
 	public DateTime Date;
@@ -72,6 +73,18 @@ class DayEntry : IComparable {
 					Load (s, true, file);
 				else if (file.EndsWith (".txt"))
 					Load (s, false, file);
+				else if (file.EndsWith (".md")) {
+					Markdown m = new Markdown (new MarkdownOptions {
+						AutoHyperlink = true,
+						AutoNewlines = false,
+						EmptyElementSuffix = ">",
+						EncodeProblemUrlCharacters = true,
+						LinkEmails = true,
+						StrictBoldItalic = true
+					});
+					using (TextReader tr = new StringReader (m.Transform (s.ReadToEnd ()))) Load (tr, true, file);
+				}
+					
 			}
 		}
 	}
@@ -156,7 +169,7 @@ class DayEntry : IComparable {
 		DateCaption = String.Format ("{0:dd} {0:MMM} {0:yyyy}", Date);
 	}
 	
-	void Load (StreamReader i, bool is_html, string file)
+	void Load (TextReader i, bool is_html, string file)
 	{
 		bool caption_found = false;
 		bool in_pre = false;
@@ -428,7 +441,7 @@ class Blog {
 		}
 
 		foreach (FileInfo file in dir.GetFiles ()) {
-			if (!(file.Name.EndsWith (".html") || file.Name.EndsWith (".txt")))
+			if (!(file.Name.EndsWith (".html") || file.Name.EndsWith (".txt") || file.Name.EndsWith (".md")))
 				continue;
 			DayEntry de = DayEntry.Load (this, file.FullName);
 			if (de != null) {
