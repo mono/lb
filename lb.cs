@@ -696,7 +696,10 @@ class Blog {
 			substitutions.Add ("@BLOGWEBDIR@", config.BlogWebDirectory);
 			substitutions.Add ("@ARCHIVE_NAVIGATOR@", archive_navigator);
 			substitutions.Add ("@PAGE_NAVIGATION@", page_navigation);
-			substitutions.Add ("@WIDGETS@", config.Widgets);
+
+			var processed_widgets = new StringWriter ();
+			Translate (config.Widgets, processed_widgets, substitutions);
+			substitutions.Add ("@WIDGETS@", processed_widgets.ToString ());
 				
 			Translate (template, w, substitutions);
 

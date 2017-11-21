@@ -20,26 +20,11 @@ c: lb.exe twentyten/blog-template.standard
 	mono --debug lb.exe -c config.xml -p new -b twentyten/blog-template.standard -e twentyten/entry-template
 
 #
-# Builds the standard blog, with bootstrap style
-#
-d: lb.exe bootstrap/blog-template.standard
-	-mkdir newb; cp bootstrap/* newb
-	mono --debug lb.exe -c config.xml -p newb -b bootstrap/blog-template.standard -e bootstrap/entry-template
-
-#
-# Builds the standard blog, with stellar
-#
-s: lb.exe stellar/blog-template.stellar
-	-mkdir snew; cp -pr stellar/* snew
-	mono --debug lb.exe -c config.xml -p snew -b stellar/blog-template.stellar -e stellar/entry-template
-
-#
 # Builds the standard blog, with bootstrap
 #
 k: lb.exe startbootstrap/blog-template
 	-mkdir sb-gen; rsync -a startbootstrap/css startbootstrap/js startbootstrap/fonts sb-gen
 	mono --debug lb.exe -c config.xml -p sb-gen -w startbootstrap/widgets -b startbootstrap/blog-template -e startbootstrap/entry-template.start
-
 
 #
 # Builds the MonoMac blog
@@ -64,8 +49,8 @@ push: pushc
 pushb: b
 	make do-push DIR=output REMOTE_DIRECTORY=$(REMOTE_BLOG)
 
-pushc: c
-	make do-push DIR=new REMOTE_DIRECTORY=$(REMOTE_BLOG)
+pushc: k 
+	make do-push DIR=sb-gen REMOTE_DIRECTORY=$(REMOTE_BLOG)
 
 pushm: m
 	make do-push DIR=monomac REMOTE_DIRECTORY=$(REMOTE_MONOMAC)
@@ -78,6 +63,7 @@ do-push:
 	chmod 644 $(DIR)/*html $(DIR)/*rss2 
 	rsync -zu --checksum -pr -v --rsh=ssh texts prettyprint.js log-style.css 		\
 	$(DIR)/archive $(DIR)/*.rss2 $(DIR)/index.html $(DIR)/page*.html $(DIR)/all.html	\
+	$(DIR)/css $(DIR)/js $(DIR)/fonts  \
 	$(DIR)/*.css $(DIR)/*.gif \
 	$(REMOTE_DIRECTORY)
 
