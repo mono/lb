@@ -33,11 +33,21 @@ p code, li code, tt {
 }
 
 .blog-body {
-       font-family: krete, serif; 
-       font-size: 14pt;
+       font-size: 12pt;
 }
 
 h2 {
 	padding-top: .5em;
 	margin-bottom: .5em;
+}
+
+table {
+    border: 1px solid #c1c7cd;
+    padding: 5px 8px;
+    margin: 1em;
+}
+
+td, th {
+    padding: .1em .4em;
+    border: 1px solid #c1c7cd;
 }

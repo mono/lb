@@ -31,8 +31,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Linq;
 using Rss;
-using MarkdownSharp;
-
+using Markdig;
 class DayEntry : IComparable {
 	public DateTime Date;
 	public string Body;
@@ -74,6 +73,9 @@ class DayEntry : IComparable {
 				else if (file.EndsWith (".txt"))
 					Load (s, false, file);
 				else if (file.EndsWith (".md")) {
+					var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+					using (TextReader tr = new StringReader (Markdown.ToHtml (s.ReadToEnd (), pipeline))) Load (tr, true, file);
+#if false
 					Markdown m = new Markdown (new MarkdownOptions {
 						AutoHyperlink = true,
 						AutoNewlines = false,
@@ -83,6 +85,7 @@ class DayEntry : IComparable {
 						StrictBoldItalic = true
 					});
 					using (TextReader tr = new StringReader (m.Transform (s.ReadToEnd ()))) Load (tr, true, file);
+#endif
 				}
 					
 			}
@@ -92,7 +95,7 @@ class DayEntry : IComparable {
 	public static DayEntry Load (Blog blog, string file)
 	{
 		DayEntry de = null;
-		
+
 		try {
 			de = new DayEntry (blog, file);
 		} catch (Exception e) {
@@ -444,6 +447,7 @@ class Blog {
 			if (!(file.Name.EndsWith (".html") || file.Name.EndsWith (".txt") || file.Name.EndsWith (".md")))
 				continue;
 			DayEntry de = DayEntry.Load (this, file.FullName);
+			
 			if (de != null) {
 				entries.Add (de);
 				if (de.Date > pubDate)

@@ -6,8 +6,15 @@ REMOTE_MONOMAC=$(BASE_REMOTE)monomac
 ASSEMBLIES=	-r:RSS.NET.dll	\
 		-r:System.Web	
 
-lb.exe: lb.cs config.cs
-	mcs $(ASSEMBLIES) -debug Markdown.cs lb.cs config.cs -out:lb.exe 
+lb.exe: lb.cs config.cs Markdig.dll
+	mcs $(ASSEMBLIES) -debug Markdown.cs lb.cs config.cs -out:lb.exe -r:Markdig.dll
+
+Markdig.dll: Markdig.nuget
+	unzip -j Markdig.nuget lib/net40/Markdig.dll
+	touch Markdig.dll
+
+Markdig.nuget:
+	curl -L -o Markdig.nuget https://www.nuget.org/api/v2/package/Markdig/0.15.0
 
 b: lb.exe
 	mono --debug lb.exe -c config.xml -p output
