@@ -1,5 +1,5 @@
 #REMOTE_DIRECTORY=miguel@www.tirania.org:tirania/blog
-BASE_REMOTE=miguel@104.131.23.171:web/tirania.org/
+BASE_REMOTE=miguel@45.55.96.137:web/tirania.org/
 REMOTE_BLOG=$(BASE_REMOTE)blog
 REMOTE_MONOMAC=$(BASE_REMOTE)monomac
 
